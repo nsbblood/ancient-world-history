@@ -112,8 +112,9 @@ struct OnboardingView: View {
                         hasCompletedOnboarding = true
                     }
                 }, onDismiss: {
+                    // User dismissed paywall - still mark onboarding as complete
                     withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                        showPaywall = false
+                        hasCompletedOnboarding = true
                     }
                 })
                 .transition(.move(edge: .trailing))
