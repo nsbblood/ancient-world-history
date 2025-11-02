@@ -49,9 +49,20 @@ struct AncientWorldStoriesApp: App {
 }
 
 struct ContentView: View {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var selectedTab = 0
 
     var body: some View {
+        Group {
+            if !hasCompletedOnboarding {
+                OnboardingView()
+            } else {
+                mainTabView
+            }
+        }
+    }
+    
+    private var mainTabView: some View {
         TabView(selection: $selectedTab) {
             HomeView()
                 .tabItem {
@@ -79,6 +90,7 @@ struct ContentView: View {
         }
         .tint(.accentColor)
     }
+    
 }
 
 #Preview {

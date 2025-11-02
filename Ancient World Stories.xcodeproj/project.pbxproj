@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6DCDA9332EB79C1B0012C785 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 6DCDA9322EB79C1B0012C785 /* RevenueCat */; };
+		6DCDA9352EB79C1B0012C785 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6DCDA9342EB79C1B0012C785 /* RevenueCatUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		6DCDA8C92EB6B4EA0012C785 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DCDA9352EB79C1B0012C785 /* RevenueCatUI in Frameworks */,
+				6DCDA9332EB79C1B0012C785 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = "Ancient World Stories";
 			packageProductDependencies = (
+				6DCDA9322EB79C1B0012C785 /* RevenueCat */,
+				6DCDA9342EB79C1B0012C785 /* RevenueCatUI */,
 			);
 			productName = "Ancient World Stories";
 			productReference = 6DCDA8BB2EB6B4E80012C785 /* Ancient World Stories.app */;
@@ -195,6 +204,9 @@
 			);
 			mainGroup = 6DCDA8B22EB6B4E80012C785;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DCDA8BC2EB6B4E80012C785 /* Products */;
 			projectDirPath = "";
@@ -578,6 +590,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.46.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6DCDA9322EB79C1B0012C785 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		6DCDA9342EB79C1B0012C785 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DCDA8B32EB6B4E80012C785 /* Project object */;
 }

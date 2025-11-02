@@ -32,12 +32,34 @@ struct StoriesView: View {
                     .padding(.horizontal)
                     .padding(.top, 8)
                     
-                    if stories.isEmpty {
-                        Text("No stories available yet.")
-                            .font(.serifBody())
-                            .foregroundColor(.secondaryText)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 40)
+                    if content.isLoading {
+                        VStack(spacing: 16) {
+                            ProgressView()
+                                .tint(.accentColor)
+                            Text("Loading stories...")
+                                .font(.serifBody())
+                                .foregroundColor(.secondaryText)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 60)
+                    } else if stories.isEmpty {
+                        VStack(spacing: 20) {
+                            Image(systemName: "book.closed")
+                                .font(.system(size: 60))
+                                .foregroundColor(.accentColor.opacity(0.5))
+                            
+                            Text("Stories Coming Soon")
+                                .font(.serifTitle3())
+                                .foregroundColor(.primaryText)
+                            
+                            Text("New tales from \(civilization.name) will be added here soon. Check back later!")
+                                .font(.serifBody())
+                                .foregroundColor(.secondaryText)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 40)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 60)
                     } else {
                         ForEach(stories) { story in
                             Button {
