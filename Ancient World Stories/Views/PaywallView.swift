@@ -128,89 +128,88 @@ struct PaywallView: View {
                     .padding(.horizontal, 32)
                     
                     Spacer(minLength: 20)
-                    
-                    // Subscription Plans with Try Free toggle
-                    ZStack(alignment: .topTrailing) {
-                        VStack(spacing: 12) {
-                            if let offerings = offerings,
-                               let current = offerings.current {
 
-                                // Yearly Plan
-                                if let yearlyPackage = current.package(identifier: "ancient.year") {
-                                    SubscriptionCard(
-                                        package: yearlyPackage,
-                                        isSelected: selectedPlan == "ancient.year",
-                                        showBadge: true,
-                                        onSelect: { selectedPlan = "ancient.year" }
-                                    )
-                                }
+                    // Try Free Toggle - Independent switch
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Try Free Trial")
+                                .font(.system(size: 16, weight: .semibold, design: .serif))
+                                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
 
-                                // Weekly Plan
-                                if let weeklyPackage = current.package(identifier: "ancient.week") {
-                                    SubscriptionCard(
-                                        package: weeklyPackage,
-                                        isSelected: selectedPlan == "ancient.week",
-                                        showBadge: false,
-                                        onSelect: { selectedPlan = "ancient.week" }
-                                    )
+                            Text("3-day free trial, then billed")
+                                .font(.system(size: 12, design: .serif))
+                                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.7))
+                        }
+
+                        Spacer()
+
+                        Toggle("", isOn: Binding(
+                            get: { selectedPlan == "ancient.week" },
+                            set: { isOn in
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    selectedPlan = isOn ? "ancient.week" : "ancient.year"
                                 }
-                            } else {
-                                // Fallback static plans while loading
-                                StaticSubscriptionCard(
-                                    title: "Yearly",
-                                    price: "$39.99",
-                                    period: "per year",
-                                    pricePerWeek: "$0.77/week",
-                                    badge: "Save 85%",
+                            }
+                        ))
+                        .tint(Color(red: 0.84, green: 0.58, blue: 0.23))
+                    }
+                    .padding(16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.white.opacity(0.3))
+                    )
+                    .padding(.horizontal, 20)
+
+                    Spacer(minLength: 12)
+
+                    // Subscription Plans
+                    VStack(spacing: 12) {
+                        if let offerings = offerings,
+                           let current = offerings.current {
+
+                            // Yearly Plan
+                            if let yearlyPackage = current.package(identifier: "ancient.year") {
+                                SubscriptionCard(
+                                    package: yearlyPackage,
                                     isSelected: selectedPlan == "ancient.year",
+                                    showBadge: true,
                                     onSelect: { selectedPlan = "ancient.year" }
                                 )
+                            }
 
-                                StaticSubscriptionCard(
-                                    title: "Weekly",
-                                    price: "$4.99",
-                                    period: "per week",
-                                    pricePerWeek: "$4.99/week",
-                                    badge: nil,
+                            // Weekly Plan
+                            if let weeklyPackage = current.package(identifier: "ancient.week") {
+                                SubscriptionCard(
+                                    package: weeklyPackage,
                                     isSelected: selectedPlan == "ancient.week",
+                                    showBadge: false,
                                     onSelect: { selectedPlan = "ancient.week" }
                                 )
                             }
-                        }
-                        .padding(.horizontal, 20)
-
-                        // Try Free toggle - positioned on top-right of cards
-                        Button(action: {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                selectedPlan = selectedPlan == "ancient.week" ? "ancient.year" : "ancient.week"
-                            }
-                        }) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "gift.fill")
-                                    .font(.system(size: 11))
-                                Text("Try Free")
-                                    .font(.system(size: 13, weight: .semibold, design: .serif))
-                            }
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(
-                                Capsule()
-                                    .fill(
-                                        LinearGradient(
-                                            colors: [
-                                                Color(red: 0.94, green: 0.82, blue: 0.54),
-                                                Color(red: 0.84, green: 0.58, blue: 0.23)
-                                            ],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                    )
+                        } else {
+                            // Fallback static plans while loading
+                            StaticSubscriptionCard(
+                                title: "Yearly",
+                                price: "$39.99",
+                                period: "per year",
+                                pricePerWeek: "$0.77/week",
+                                badge: "Save 85%",
+                                isSelected: selectedPlan == "ancient.year",
+                                onSelect: { selectedPlan = "ancient.year" }
                             )
-                            .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.4), radius: 6, x: 0, y: 3)
+
+                            StaticSubscriptionCard(
+                                title: "Weekly",
+                                price: "$4.99",
+                                period: "per week",
+                                pricePerWeek: "$4.99/week",
+                                badge: nil,
+                                isSelected: selectedPlan == "ancient.week",
+                                onSelect: { selectedPlan = "ancient.week" }
+                            )
                         }
-                        .offset(x: -8, y: -8)
                     }
+                    .padding(.horizontal, 20)
                     
                     Spacer(minLength: 16)
 
