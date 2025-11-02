@@ -7,6 +7,8 @@ struct ProfileView: View {
     @StateObject private var content = ContentLoader.shared
     @State private var selectedChapter: Chapter?
     @State private var showVoiceSelector = false
+    @State private var showPaywall = false
+    @State private var showSettings = false
 
     var favoriteChapters: [Chapter] {
         favoritesManager.getFavoriteChapters()
@@ -19,10 +21,21 @@ struct ProfileView: View {
             VStack(spacing: 0) {
                 // Fixed Header
                 VStack(spacing: 8) {
-                    Text("Profile")
-                        .font(.serifLargeTitle())
-                        .foregroundColor(.primaryText)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        Text("Profile")
+                            .font(.serifLargeTitle())
+                            .foregroundColor(.primaryText)
+
+                        Spacer()
+
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 24))
+                                .foregroundColor(.accentColor)
+                        }
+                    }
 
                     Divider()
                         .background(Color.appSecondary.opacity(0.3))
@@ -41,7 +54,7 @@ struct ProfileView: View {
                             
                             if !profileManager.isPremium {
                                 Button {
-                                    // TODO: RevenueCat integration
+                                    showPaywall = true
                                 } label: {
                                     HStack {
                                         Image(systemName: "crown.fill")
@@ -172,6 +185,19 @@ struct ProfileView: View {
         }
         .sheet(isPresented: $showVoiceSelector) {
             VoiceSelectorView()
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+        }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(
+                onComplete: {
+                    showPaywall = false
+                },
+                onDismiss: {
+                    showPaywall = false
+                }
+            )
         }
         .fullScreenCover(item: $selectedChapter) { chapter in
             if let story = content.story(for: chapter.storyId),

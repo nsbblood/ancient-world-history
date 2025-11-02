@@ -79,11 +79,11 @@ struct PaywallView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
-                    
-                    Spacer(minLength: 20)
-                    
+
+                    Spacer(minLength: 8)
+
                     // Header with crown icon and radial glow
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         ZStack {
                             // Radial glow
                             Circle()
@@ -106,28 +106,28 @@ struct PaywallView: View {
                         }
                         
                         Text("Unlock Premium")
-                            .font(.system(size: 30, weight: .bold, design: .serif))
+                            .font(.system(size: 28, weight: .bold, design: .serif))
                             .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
-                        
+
                         Text("Get unlimited access to all ancient stories")
-                            .font(.system(size: 15, design: .serif))
+                            .font(.system(size: 14, design: .serif))
                             .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.8))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
-                    
-                    Spacer(minLength: 20)
-                    
+
+                    Spacer(minLength: 8)
+
                     // Features (compact)
-                    VStack(spacing: 12) {
+                    VStack(spacing: 10) {
                         CompactFeature(icon: "book.fill", title: "100+ Stories")
                         CompactFeature(icon: "speaker.wave.3.fill", title: "Audio Narration")
                         CompactFeature(icon: "arrow.down.circle.fill", title: "Offline Mode")
                         CompactFeature(icon: "sparkles", title: "Weekly Updates")
                     }
                     .padding(.horizontal, 32)
-                    
-                    Spacer(minLength: 20)
+
+                    Spacer(minLength: 8)
 
                     // Try Free Toggle - Independent switch
                     HStack {
@@ -160,7 +160,7 @@ struct PaywallView: View {
                     )
                     .padding(.horizontal, 20)
 
-                    Spacer(minLength: 12)
+                    Spacer(minLength: 6)
 
                     // Subscription Plans
                     VStack(spacing: 12) {
@@ -210,8 +210,8 @@ struct PaywallView: View {
                         }
                     }
                     .padding(.horizontal, 20)
-                    
-                    Spacer(minLength: 16)
+
+                    Spacer(minLength: 8)
 
                     // Subscribe Button (always visible)
                     Button(action: subscribe) {
