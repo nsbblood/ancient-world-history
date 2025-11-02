@@ -3,16 +3,16 @@ import SwiftUI
 
 struct StoriesView: View {
     let civilization: Civilization
-    @StateObject private var content = ContentLoader.shared
+    @ObservedObject private var content = ContentLoader.shared
     @State private var selectedStory: Story?
-    
+
     var stories: [Story] {
         content.stories(for: civilization.id)
     }
-    
+
     var body: some View {
         ZStack {
-            Color.backgroundColor.ignoresSafeArea()
+            Color.appBackground.ignoresSafeArea()
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
