@@ -62,7 +62,7 @@ struct PaywallView: View {
                     .blendMode(.overlay)
                 
                 VStack(spacing: 0) {
-                    // Top bar: Close button and Try Free button
+                    // Top bar: Close button only
                     HStack {
                         Button(action: onDismiss) {
                             Image(systemName: "xmark")
@@ -74,40 +74,8 @@ struct PaywallView: View {
                                         .fill(Color.white.opacity(0.4))
                                 )
                         }
-                        
+
                         Spacer()
-                        
-                        // Try Free button (only for weekly)
-                        if selectedPlan == "ancient.week" {
-                            Button(action: subscribe) {
-                                HStack(spacing: 6) {
-                                    if isProcessing {
-                                        ProgressView()
-                                            .tint(.white)
-                                            .scaleEffect(0.8)
-                                    } else {
-                                        Text("Try Free")
-                                            .font(.system(size: 14, weight: .semibold, design: .serif))
-                                            .foregroundColor(.white)
-                                    }
-                                }
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .background(
-                                    LinearGradient(
-                                        colors: [
-                                            Color(red: 0.94, green: 0.82, blue: 0.54),
-                                            Color(red: 0.84, green: 0.58, blue: 0.23)
-                                        ],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .cornerRadius(20)
-                                .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.4), radius: 6, x: 0, y: 3)
-                            }
-                            .disabled(isProcessing)
-                        }
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
@@ -161,94 +129,126 @@ struct PaywallView: View {
                     
                     Spacer(minLength: 20)
                     
-                    // Subscription Plans
-                    VStack(spacing: 12) {
-                        if let offerings = offerings,
-                           let current = offerings.current {
-                            
-                            // Yearly Plan
-                            if let yearlyPackage = current.package(identifier: "ancient.year") {
-                                SubscriptionCard(
-                                    package: yearlyPackage,
+                    // Subscription Plans with Try Free toggle
+                    ZStack(alignment: .topTrailing) {
+                        VStack(spacing: 12) {
+                            if let offerings = offerings,
+                               let current = offerings.current {
+
+                                // Yearly Plan
+                                if let yearlyPackage = current.package(identifier: "ancient.year") {
+                                    SubscriptionCard(
+                                        package: yearlyPackage,
+                                        isSelected: selectedPlan == "ancient.year",
+                                        showBadge: true,
+                                        onSelect: { selectedPlan = "ancient.year" }
+                                    )
+                                }
+
+                                // Weekly Plan
+                                if let weeklyPackage = current.package(identifier: "ancient.week") {
+                                    SubscriptionCard(
+                                        package: weeklyPackage,
+                                        isSelected: selectedPlan == "ancient.week",
+                                        showBadge: false,
+                                        onSelect: { selectedPlan = "ancient.week" }
+                                    )
+                                }
+                            } else {
+                                // Fallback static plans while loading
+                                StaticSubscriptionCard(
+                                    title: "Yearly",
+                                    price: "$39.99",
+                                    period: "per year",
+                                    pricePerWeek: "$0.77/week",
+                                    badge: "Save 85%",
                                     isSelected: selectedPlan == "ancient.year",
-                                    showBadge: true,
                                     onSelect: { selectedPlan = "ancient.year" }
                                 )
-                            }
-                            
-                            // Weekly Plan
-                            if let weeklyPackage = current.package(identifier: "ancient.week") {
-                                SubscriptionCard(
-                                    package: weeklyPackage,
+
+                                StaticSubscriptionCard(
+                                    title: "Weekly",
+                                    price: "$4.99",
+                                    period: "per week",
+                                    pricePerWeek: "$4.99/week",
+                                    badge: nil,
                                     isSelected: selectedPlan == "ancient.week",
-                                    showBadge: false,
                                     onSelect: { selectedPlan = "ancient.week" }
                                 )
                             }
-                        } else {
-                            // Fallback static plans while loading
-                            StaticSubscriptionCard(
-                                title: "Yearly",
-                                price: "$39.99",
-                                period: "per year",
-                                pricePerWeek: "$0.77/week",
-                                badge: "Save 85%",
-                                isSelected: selectedPlan == "ancient.year",
-                                onSelect: { selectedPlan = "ancient.year" }
-                            )
-                            
-                            StaticSubscriptionCard(
-                                title: "Weekly",
-                                price: "$4.99",
-                                period: "per week",
-                                pricePerWeek: "$4.99/week",
-                                badge: nil,
-                                isSelected: selectedPlan == "ancient.week",
-                                onSelect: { selectedPlan = "ancient.week" }
-                            )
                         }
+                        .padding(.horizontal, 20)
+
+                        // Try Free toggle - positioned on top-right of cards
+                        Button(action: {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                selectedPlan = selectedPlan == "ancient.week" ? "ancient.year" : "ancient.week"
+                            }
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "gift.fill")
+                                    .font(.system(size: 11))
+                                Text("Try Free")
+                                    .font(.system(size: 13, weight: .semibold, design: .serif))
+                            }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(
+                                Capsule()
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                Color(red: 0.94, green: 0.82, blue: 0.54),
+                                                Color(red: 0.84, green: 0.58, blue: 0.23)
+                                            ],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                            )
+                            .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.4), radius: 6, x: 0, y: 3)
+                        }
+                        .offset(x: -8, y: -8)
                     }
-                    .padding(.horizontal, 20)
                     
                     Spacer(minLength: 16)
-                    
-                    // Subscribe Button (only for yearly, weekly has top-right button)
-                    if selectedPlan == "ancient.year" {
-                        Button(action: subscribe) {
-                            HStack {
-                                if isProcessing {
-                                    ProgressView()
-                                        .tint(.white)
-                                } else {
-                                    Text(buttonText)
-                                        .font(.system(size: 18, weight: .semibold, design: .serif))
-                                        .foregroundColor(.white)
-                                }
+
+                    // Subscribe Button (always visible)
+                    Button(action: subscribe) {
+                        HStack {
+                            if isProcessing {
+                                ProgressView()
+                                    .tint(.white)
+                            } else {
+                                Text(buttonText)
+                                    .font(.system(size: 18, weight: .semibold, design: .serif))
+                                    .foregroundColor(.white)
                             }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(
-                                LinearGradient(
-                                    colors: [
-                                        Color(red: 0.94, green: 0.82, blue: 0.54),
-                                        Color(red: 0.84, green: 0.58, blue: 0.23)
-                                    ],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .cornerRadius(16)
-                            .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.5), radius: 10, x: 0, y: 5)
                         }
-                        .disabled(isProcessing)
-                        .padding(.horizontal, 20)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(
+                            LinearGradient(
+                                colors: [
+                                    Color(red: 0.94, green: 0.82, blue: 0.54),
+                                    Color(red: 0.84, green: 0.58, blue: 0.23)
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .cornerRadius(16)
+                        .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.5), radius: 10, x: 0, y: 5)
                     }
+                    .disabled(isProcessing)
+                    .padding(.horizontal, 20)
                     
                     // Trial info
                     Text(trialInfo)
                         .font(.system(size: 12, design: .serif))
                         .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.7))
-                        .padding(.top, selectedPlan == "ancient.year" ? 8 : 12)
+                        .padding(.top, 8)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 20)
                     

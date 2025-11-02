@@ -56,67 +56,33 @@ struct OnboardingView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 
-                // Bottom buttons
-                VStack(spacing: 16) {
-                    if currentPage < 2 {
-                        Button(action: {
-                            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                                currentPage += 1
-                            }
-                        }) {
-                            Text("Continue")
-                                .font(.system(size: 18, weight: .semibold, design: .serif))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
-                                .background(
-                                    LinearGradient(
-                                        colors: [
-                                            Color(red: 0.94, green: 0.82, blue: 0.54), // #f1d78a faded gold
-                                            Color(red: 0.84, green: 0.58, blue: 0.23)  // #d69438 antique gold
-                                        ],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .cornerRadius(16)
-                                .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.4), radius: 8, x: 0, y: 4)
-                        }
-                        
-                        Button(action: {
-                            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                                currentPage = 2
-                            }
-                        }) {
-                            Text("Skip")
-                                .font(.system(size: 15, weight: .medium, design: .serif))
-                                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23)) // #7b5e3b antique brown
-                        }
-                    } else {
-                        Button(action: {
-                            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                                showPaywall = true
-                            }
-                        }) {
-                            Text("Get Started")
-                                .font(.system(size: 18, weight: .semibold, design: .serif))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
-                                .background(
-                                    LinearGradient(
-                                        colors: [
-                                            Color(red: 0.94, green: 0.82, blue: 0.54),
-                                            Color(red: 0.84, green: 0.58, blue: 0.23)
-                                        ],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .cornerRadius(16)
-                                .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.4), radius: 8, x: 0, y: 4)
+                // Bottom button - consistent across all pages
+                Button(action: {
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                        if currentPage < 2 {
+                            currentPage += 1
+                        } else {
+                            showPaywall = true
                         }
                     }
+                }) {
+                    Text(currentPage < 2 ? "Continue" : "Get Started")
+                        .font(.system(size: 18, weight: .semibold, design: .serif))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(
+                            LinearGradient(
+                                colors: [
+                                    Color(red: 0.94, green: 0.82, blue: 0.54),
+                                    Color(red: 0.84, green: 0.58, blue: 0.23)
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .cornerRadius(16)
+                        .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.4), radius: 8, x: 0, y: 4)
                 }
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
