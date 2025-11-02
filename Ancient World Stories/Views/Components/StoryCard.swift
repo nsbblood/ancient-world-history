@@ -24,14 +24,8 @@ struct StoryCard: View {
                 }
                 
                 Spacer()
-                
-                Button(action: {
-                    favoritesManager.toggleFavorite(storyId: story.id)
-                }) {
-                    Image(systemName: favoritesManager.isFavorite(storyId: story.id) ? "heart.fill" : "heart")
-                        .foregroundColor(.accentColor)
-                        .font(.system(size: 20))
-                }
+
+                // Story favorites removed - favorites are now chapter-based
             }
             
             Text(story.summary)

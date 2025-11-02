@@ -12,6 +12,10 @@ extension Font {
     // Note: These require custom fonts to be added to the project
     // For now, using system serif fonts as fallback
 
+    static func serifLargeTitle() -> Font {
+        .system(size: 40, weight: .bold, design: .serif)
+    }
+
     static func serifTitle() -> Font {
         .system(size: 34, weight: .bold, design: .serif)
     }
