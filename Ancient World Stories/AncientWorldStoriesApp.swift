@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import RevenueCat
 
 @main
 struct AncientWorldStoriesApp: App {
     init() {
+        configureRevenueCat()
         configureAppearance()
     }
 
@@ -19,10 +21,15 @@ struct AncientWorldStoriesApp: App {
         }
     }
 
+    private func configureRevenueCat() {
+        Purchases.logLevel = .debug
+        Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+    }
+
     private func configureAppearance() {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = UIColor(Color.backgroundColor)
+        navigationBarAppearance.backgroundColor = UIColor(Color.appBackground)
         navigationBarAppearance.titleTextAttributes = [
             .foregroundColor: UIColor(Color.primaryText),
             .font: UIFont.systemFont(ofSize: 17, weight: .semibold)

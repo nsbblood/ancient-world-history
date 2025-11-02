@@ -2,14 +2,14 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject private var content = ContentLoader.shared
+    @ObservedObject private var content = ContentLoader.shared
     @State private var selectedChapter: Chapter?
     @State private var randomChapters: [Chapter] = []
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.backgroundColor.ignoresSafeArea()
+                Color.appBackground.ignoresSafeArea()
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
@@ -147,7 +147,7 @@ struct HomeView: View {
         .onAppear {
             loadRandomChapters()
         }
-        .onChange(of: content.chapters) { _ in
+        .onChange(of: content.chapters) {
             // Auto-load random chapters when content finishes loading
             if !content.chapters.isEmpty && randomChapters.isEmpty {
                 loadRandomChapters()

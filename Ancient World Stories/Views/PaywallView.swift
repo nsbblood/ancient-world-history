@@ -277,17 +277,11 @@ struct PaywallView: View {
             }
         }
         .onAppear {
-            configureRevenueCat()
             fetchOfferings()
         }
     }
-    
-    // MARK: - RevenueCat Configuration
-    private func configureRevenueCat() {
-        Purchases.logLevel = .debug
-        Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
-    }
-    
+
+    // MARK: - RevenueCat Methods
     private func fetchOfferings() {
         Task {
             do {
