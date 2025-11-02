@@ -45,21 +45,33 @@ struct PaywallView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Ancient parchment gradient background (matching onboarding)
+                // Warm parchment background (matching app theme)
+                Color.appBackground
+                    .ignoresSafeArea()
+
+                // Subtle papyrus texture overlay
                 LinearGradient(
                     colors: [
-                        Color(red: 0.95, green: 0.90, blue: 0.67), // #f3e5ab soft parchment
-                        Color(red: 0.84, green: 0.75, blue: 0.54)  // #d6c08a warm stone
+                        Color.appSecondary.opacity(0.3),
+                        Color.appBackground,
+                        Color.appSecondary.opacity(0.2)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
-                
-                // Subtle texture overlay
-                Color.white.opacity(0.03)
-                    .ignoresSafeArea()
-                    .blendMode(.overlay)
+
+                // Golden light rays overlay (subtle)
+                RadialGradient(
+                    colors: [
+                        Color.appAccent.opacity(0.15),
+                        Color.clear
+                    ],
+                    center: .top,
+                    startRadius: 50,
+                    endRadius: 400
+                )
+                .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
                     // Top bar: Close button only
@@ -67,106 +79,85 @@ struct PaywallView: View {
                         Button(action: onDismiss) {
                             Image(systemName: "xmark")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.7))
+                                .foregroundColor(.appText.opacity(0.7))
                                 .padding(10)
                                 .background(
                                     Circle()
-                                        .fill(Color.white.opacity(0.4))
+                                        .fill(Color.appText.opacity(0.08))
                                 )
                         }
 
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, 16)
+                    .padding(.top, 12)
 
-                    Spacer(minLength: 8)
+                    Spacer(minLength: 0)
 
-                    // Header with crown icon and radial glow
+                    // Header with crown icon and radial glow (more compact)
                     VStack(spacing: 8) {
                         ZStack {
-                            // Radial glow
+                            // Warm glow
                             Circle()
                                 .fill(
                                     RadialGradient(
                                         colors: [
-                                            Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.4),
+                                            Color.appAccent.opacity(0.3),
+                                            Color.appAccent.opacity(0.1),
                                             Color.clear
                                         ],
                                         center: .center,
-                                        startRadius: 10,
-                                        endRadius: 60
+                                        startRadius: 8,
+                                        endRadius: 50
                                     )
                                 )
-                                .frame(width: 120, height: 120)
-                            
+                                .frame(width: 100, height: 100)
+
+                            // Bronze/gold crown
                             Image(systemName: "crown.fill")
-                                .font(.system(size: 50))
-                                .foregroundColor(Color(red: 0.84, green: 0.58, blue: 0.23))
+                                .font(.system(size: 44))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [
+                                            Color(hex: "D4AF37"), // Deep gold
+                                            Color.appAccent,
+                                            Color(hex: "8B6914")  // Dark gold
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .shadow(color: Color.appAccent.opacity(0.4), radius: 10, x: 0, y: 4)
                         }
-                        
-                        Text("Unlock Premium")
-                            .font(.system(size: 28, weight: .bold, design: .serif))
-                            .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
 
-                        Text("Get unlimited access to all ancient stories")
-                            .font(.system(size: 14, design: .serif))
-                            .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.8))
+                        Text("Unlock the Ancient World")
+                            .font(.system(size: 26, weight: .bold, design: .serif))
+                            .foregroundColor(.appText)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal, 40)
+
+                        Text("Journey through time. Experience every civilization.")
+                            .font(.system(size: 13, weight: .medium, design: .serif))
+                            .foregroundColor(.secondaryText)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 30)
                     }
 
-                    Spacer(minLength: 8)
+                    Spacer(minLength: 0)
 
-                    // Features (compact)
+                    // Features (more compact, only 3 features)
                     VStack(spacing: 10) {
-                        CompactFeature(icon: "book.fill", title: "100+ Stories")
-                        CompactFeature(icon: "speaker.wave.3.fill", title: "Audio Narration")
-                        CompactFeature(icon: "arrow.down.circle.fill", title: "Offline Mode")
-                        CompactFeature(icon: "sparkles", title: "Weekly Updates")
+                        VibrantFeature(icon: "scroll.fill", title: "100+ Epic Stories", description: "From pharaohs to emperors")
+                        VibrantFeature(icon: "waveform", title: "Immersive Audio", description: "Professional narration")
+                        VibrantFeature(icon: "globe.americas.fill", title: "15+ Civilizations", description: "Across time and space")
                     }
-                    .padding(.horizontal, 32)
+                    .padding(.horizontal, 24)
 
-                    Spacer(minLength: 8)
+                    Spacer(minLength: 0)
 
-                    // Try Free Toggle - Independent switch
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Try Free Trial")
-                                .font(.system(size: 16, weight: .semibold, design: .serif))
-                                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
-
-                            Text("3-day free trial, then billed")
-                                .font(.system(size: 12, design: .serif))
-                                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.7))
-                        }
-
-                        Spacer()
-
-                        Toggle("", isOn: Binding(
-                            get: { selectedPlan == "ancient.week" },
-                            set: { isOn in
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                    selectedPlan = isOn ? "ancient.week" : "ancient.year"
-                                }
-                            }
-                        ))
-                        .tint(Color(red: 0.84, green: 0.58, blue: 0.23))
-                    }
-                    .padding(16)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.white.opacity(0.3))
-                    )
-                    .padding(.horizontal, 20)
-
-                    Spacer(minLength: 6)
-
-                    // Subscription Plans
-                    VStack(spacing: 12) {
-                        if let offerings = offerings,
-                           let current = offerings.current {
-
+                    // Subscription Plans (more compact)
+                    if let offerings = offerings,
+                       let current = offerings.current {
+                        VStack(spacing: 10) {
                             // Yearly Plan
                             if let yearlyPackage = current.package(identifier: "ancient.year") {
                                 SubscriptionCard(
@@ -186,93 +177,92 @@ struct PaywallView: View {
                                     onSelect: { selectedPlan = "ancient.week" }
                                 )
                             }
-                        } else {
-                            // Fallback static plans while loading
-                            StaticSubscriptionCard(
-                                title: "Yearly",
-                                price: "$39.99",
-                                period: "per year",
-                                pricePerWeek: "$0.77/week",
-                                badge: "Save 85%",
-                                isSelected: selectedPlan == "ancient.year",
-                                onSelect: { selectedPlan = "ancient.year" }
-                            )
-
-                            StaticSubscriptionCard(
-                                title: "Weekly",
-                                price: "$4.99",
-                                period: "per week",
-                                pricePerWeek: "$4.99/week",
-                                badge: nil,
-                                isSelected: selectedPlan == "ancient.week",
-                                onSelect: { selectedPlan = "ancient.week" }
-                            )
                         }
+                        .padding(.horizontal, 20)
+                    } else {
+                        // Loading state
+                        VStack(spacing: 16) {
+                            ProgressView()
+                                .tint(.appAccent)
+
+                            Text("Loading subscription options...")
+                                .font(.system(size: 14, design: .serif))
+                                .foregroundColor(.secondaryText)
+                        }
+                        .frame(height: 150)
+                        .padding(.horizontal, 20)
                     }
-                    .padding(.horizontal, 20)
 
-                    Spacer(minLength: 8)
+                    Spacer(minLength: 0)
 
-                    // Subscribe Button (always visible)
+                    // Subscribe Button (more compact)
                     Button(action: subscribe) {
-                        HStack {
+                        HStack(spacing: 8) {
                             if isProcessing {
                                 ProgressView()
                                     .tint(.white)
                             } else {
+                                Image(systemName: "crown.fill")
+                                    .font(.system(size: 16, weight: .bold))
                                 Text(buttonText)
-                                    .font(.system(size: 18, weight: .semibold, design: .serif))
-                                    .foregroundColor(.white)
+                                    .font(.system(size: 18, weight: .bold, design: .serif))
                             }
                         }
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
+                        .padding(.vertical, 15)
                         .background(
                             LinearGradient(
                                 colors: [
-                                    Color(red: 0.94, green: 0.82, blue: 0.54),
-                                    Color(red: 0.84, green: 0.58, blue: 0.23)
+                                    Color(hex: "D4AF37"), // Deep gold
+                                    Color.appAccent,
+                                    Color(hex: "8B6914")  // Dark gold
                                 ],
-                                startPoint: .leading,
-                                endPoint: .trailing
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
                             )
                         )
-                        .cornerRadius(16)
-                        .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.5), radius: 10, x: 0, y: 5)
+                        .cornerRadius(14)
+                        .shadow(color: Color.appAccent.opacity(0.4), radius: 12, x: 0, y: 4)
+                        .opacity(offerings != nil ? 1.0 : 0.5)
                     }
-                    .disabled(isProcessing)
+                    .disabled(isProcessing || offerings == nil)
                     .padding(.horizontal, 20)
-                    
+
                     // Trial info
                     Text(trialInfo)
-                        .font(.system(size: 12, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.7))
-                        .padding(.top, 8)
+                        .font(.system(size: 11, weight: .medium, design: .serif))
+                        .foregroundColor(.secondaryText)
+                        .padding(.top, 6)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 20)
-                    
+
                     // Legal links
                     HStack(spacing: 16) {
                         Button("Terms") {
-                            // Open terms
+                            if let url = URL(string: "https://dainty.app/terms") {
+                                UIApplication.shared.open(url)
+                            }
                         }
-                        .font(.system(size: 11, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.6))
-                        
+                        .font(.system(size: 10, weight: .medium, design: .serif))
+                        .foregroundColor(.secondaryText)
+
                         Button("Privacy") {
-                            // Open privacy
+                            if let url = URL(string: "https://dainty.app/privacy") {
+                                UIApplication.shared.open(url)
+                            }
                         }
-                        .font(.system(size: 11, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.6))
-                        
+                        .font(.system(size: 10, weight: .medium, design: .serif))
+                        .foregroundColor(.secondaryText)
+
                         Button("Restore") {
                             restorePurchases()
                         }
-                        .font(.system(size: 11, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.6))
+                        .font(.system(size: 10, weight: .medium, design: .serif))
+                        .foregroundColor(.secondaryText)
                     }
-                    .padding(.top, 6)
-                    .padding(.bottom, 20)
+                    .padding(.top, 4)
+                    .padding(.bottom, 16)
                 }
             }
         }
@@ -302,21 +292,28 @@ struct PaywallView: View {
         guard let offerings = offerings,
               let current = offerings.current,
               let package = current.package(identifier: selectedPlan) else {
-            // Fallback: complete without purchase for testing
-            onComplete()
+            errorMessage = "Unable to load subscription options. Please try again."
             return
         }
-        
+
         isProcessing = true
-        
+
         Task {
             do {
                 let (_, customerInfo, _) = try await Purchases.shared.purchase(package: package)
-                
+
                 await MainActor.run {
                     isProcessing = false
-                    if customerInfo.entitlements["premium"]?.isActive == true {
+                    let hasPremium = customerInfo.entitlements["premium"]?.isActive == true
+                    print("✅ Purchase successful - Premium: \(hasPremium)")
+
+                    if hasPremium {
+                        ProfileManager.shared.isPremium = true
+                        ProfileManager.shared.checkPremiumStatus()
                         onComplete()
+                    } else {
+                        errorMessage = "Purchase completed but premium not activated"
+                        print("❌ Premium entitlement not active after purchase")
                     }
                 }
             } catch {
@@ -333,38 +330,66 @@ struct PaywallView: View {
         Task {
             do {
                 let customerInfo = try await Purchases.shared.restorePurchases()
-                if customerInfo.entitlements["premium"]?.isActive == true {
-                    await MainActor.run {
+                let hasPremium = customerInfo.entitlements["premium"]?.isActive == true
+
+                await MainActor.run {
+                    if hasPremium {
+                        ProfileManager.shared.isPremium = true
+                        ProfileManager.shared.checkPremiumStatus()
                         onComplete()
+                        print("✅ Purchases restored successfully")
+                    } else {
+                        errorMessage = "No active subscriptions found"
+                        print("⚠️ No active premium subscription found")
                     }
                 }
             } catch {
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                }
                 print("❌ Restore error: \(error)")
             }
         }
     }
 }
 
-// MARK: - Compact Feature Row
-struct CompactFeature: View {
+// MARK: - Vibrant Feature Row
+struct VibrantFeature: View {
     let icon: String
     let title: String
-    
+    let description: String
+
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.system(size: 20))
-                .foregroundColor(Color(red: 0.84, green: 0.58, blue: 0.23))
-                .frame(width: 36, height: 36)
-                .background(
-                    Circle()
-                        .fill(Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.4))
-                )
-            
-            Text(title)
-                .font(.system(size: 15, weight: .semibold, design: .serif))
-                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
-            
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.appAccent.opacity(0.25),
+                                Color.appAccent.opacity(0.15)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 36, height: 36)
+
+                Image(systemName: icon)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.appAccent)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 14, weight: .bold, design: .serif))
+                    .foregroundColor(.appText)
+
+                Text(description)
+                    .font(.system(size: 11, design: .serif))
+                    .foregroundColor(.secondaryText)
+            }
+
             Spacer()
         }
     }
@@ -376,93 +401,23 @@ struct SubscriptionCard: View {
     let isSelected: Bool
     let showBadge: Bool
     let onSelect: () -> Void
-    
+
+    private var isWeekly: Bool {
+        package.storeProduct.subscriptionPeriod?.unit == .week
+    }
+
     var body: some View {
         Button(action: onSelect) {
             HStack {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text(package.storeProduct.localizedTitle)
-                            .font(.system(size: 17, weight: .bold, design: .serif))
-                            .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
-                        
-                        if showBadge {
-                            Text("Save 85%")
-                                .font(.system(size: 11, weight: .bold, design: .serif))
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(
-                                    Capsule()
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [
-                                                    Color(red: 0.94, green: 0.82, blue: 0.54),
-                                                    Color(red: 0.84, green: 0.58, blue: 0.23)
-                                                ],
-                                                startPoint: .leading,
-                                                endPoint: .trailing
-                                            )
-                                        )
-                                )
-                        }
-                    }
-                    
-                    Text(package.storeProduct.subscriptionPeriod?.unit == .year ? "Best Value" : "Weekly Access")
-                        .font(.system(size: 12, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.7))
-                }
-                
-                Spacer()
-                
-                Text(package.storeProduct.localizedPriceString)
-                    .font(.system(size: 24, weight: .bold, design: .serif))
-                    .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(
-                        isSelected ?
-                        Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.4) :
-                        Color.white.opacity(0.4)
-                    )
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(
-                        isSelected ?
-                        Color(red: 0.84, green: 0.58, blue: 0.23) :
-                        Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.3),
-                        lineWidth: isSelected ? 2.5 : 1
-                    )
-            )
-        }
-    }
-}
+                            .font(.system(size: 15, weight: .bold, design: .serif))
+                            .foregroundColor(.appText)
 
-// MARK: - Static Subscription Card (Fallback)
-struct StaticSubscriptionCard: View {
-    let title: String
-    let price: String
-    let period: String
-    let pricePerWeek: String
-    let badge: String?
-    let isSelected: Bool
-    let onSelect: () -> Void
-    
-    var body: some View {
-        Button(action: onSelect) {
-            HStack {
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack {
-                        Text(title)
-                            .font(.system(size: 17, weight: .bold, design: .serif))
-                            .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
-                        
-                        if let badge = badge {
-                            Text(badge)
-                                .font(.system(size: 11, weight: .bold, design: .serif))
+                        if showBadge {
+                            Text("BEST VALUE")
+                                .font(.system(size: 9, weight: .black, design: .serif))
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 3)
@@ -471,9 +426,25 @@ struct StaticSubscriptionCard: View {
                                         .fill(
                                             LinearGradient(
                                                 colors: [
-                                                    Color(red: 0.94, green: 0.82, blue: 0.54),
-                                                    Color(red: 0.84, green: 0.58, blue: 0.23)
+                                                    Color(hex: "D4AF37"),
+                                                    Color.appAccent
                                                 ],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                        )
+                                )
+                        } else if isWeekly {
+                            Text("3-DAY TRIAL")
+                                .font(.system(size: 9, weight: .black, design: .serif))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(
+                                    Capsule()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [.blue, .purple],
                                                 startPoint: .leading,
                                                 endPoint: .trailing
                                             )
@@ -481,42 +452,46 @@ struct StaticSubscriptionCard: View {
                                 )
                         }
                     }
-                    
-                    Text(title == "Yearly" ? "Best Value" : "Weekly Access")
-                        .font(.system(size: 12, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.7))
-                }
-                
-                Spacer()
-                
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(price)
-                        .font(.system(size: 24, weight: .bold, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
-                    
-                    Text(period)
+
+                    Text(package.storeProduct.subscriptionPeriod?.unit == .year ? "Save 85% • Full Access" : "3 days free, then weekly")
                         .font(.system(size: 11, design: .serif))
-                        .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.6))
+                        .foregroundColor(.secondaryText)
                 }
+
+                Spacer()
+
+                Text(package.storeProduct.localizedPriceString)
+                    .font(.system(size: 22, weight: .bold, design: .serif))
+                    .foregroundColor(.appAccent)
             }
-            .padding(16)
+            .padding(14)
             .background(
                 RoundedRectangle(cornerRadius: 14)
                     .fill(
-                        isSelected ?
-                        Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.4) :
-                        Color.white.opacity(0.4)
+                        isSelected ? Color.white : Color.white.opacity(0.6)
                     )
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
                     .stroke(
                         isSelected ?
-                        Color(red: 0.84, green: 0.58, blue: 0.23) :
-                        Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.3),
-                        lineWidth: isSelected ? 2.5 : 1
+                        LinearGradient(
+                            colors: [
+                                Color(hex: "D4AF37"),
+                                Color.appAccent
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ) :
+                        LinearGradient(
+                            colors: [Color.appText.opacity(0.2), Color.appText.opacity(0.1)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: isSelected ? 2 : 1
                     )
             )
+            .shadow(color: isSelected ? Color.appAccent.opacity(0.3) : Color.appText.opacity(0.1), radius: isSelected ? 10 : 4, x: 0, y: 3)
         }
     }
 }

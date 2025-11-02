@@ -1,5 +1,6 @@
 // ProfileView.swift
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     @ObservedObject private var profileManager = ProfileManager.shared
@@ -8,6 +9,8 @@ struct ProfileView: View {
     @State private var selectedChapter: Chapter?
     @State private var showPaywall = false
     @State private var showSettings = false
+    @State private var showImagePicker = false
+    @State private var selectedPhotoItem: PhotosPickerItem?
 
     var favoriteChapters: [Chapter] {
         favoritesManager.getFavoriteChapters()
@@ -43,10 +46,45 @@ struct ProfileView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         VStack(spacing: 16) {
-                            Image(systemName: "person.circle.fill")
-                                .font(.system(size: 80))
-                                .foregroundColor(.accentColor)
-                            
+                            Button {
+                                showImagePicker = true
+                            } label: {
+                                ZStack {
+                                    if let profileImage = profileManager.profileImage {
+                                        Image(uiImage: profileImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(Circle())
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color.accentColor, lineWidth: 2)
+                                            )
+                                    } else {
+                                        Image(systemName: "person.circle.fill")
+                                            .font(.system(size: 80))
+                                            .foregroundColor(.accentColor)
+                                    }
+
+                                    VStack {
+                                        Spacer()
+                                        HStack {
+                                            Spacer()
+                                            Image(systemName: "camera.circle.fill")
+                                                .font(.system(size: 24))
+                                                .foregroundColor(.white)
+                                                .background(
+                                                    Circle()
+                                                        .fill(Color.accentColor)
+                                                        .frame(width: 28, height: 28)
+                                                )
+                                        }
+                                    }
+                                    .frame(width: 80, height: 80)
+                                }
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
                             if !profileManager.isPremium {
                                 Button {
                                     showPaywall = true
@@ -171,6 +209,18 @@ struct ProfileView: View {
                 )
             }
         }
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarBackground(Color.cardBackground, for: .tabBar)
+        .photosPicker(isPresented: $showImagePicker, selection: $selectedPhotoItem, matching: .images)
+        .onChange(of: selectedPhotoItem) { oldValue, newValue in
+            Task {
+                if let newValue,
+                   let data = try? await newValue.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data) {
+                    profileManager.saveProfileImage(image)
+                }
+            }
+        }
     }
 }
 
@@ -289,11 +339,13 @@ struct VoiceSelectorView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.secondaryText)
                     }
-                    .font(.serifBody())
-                    .foregroundColor(.accentColor)
                 }
             }
         }

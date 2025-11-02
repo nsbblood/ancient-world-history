@@ -26,9 +26,11 @@ struct SettingsView: View {
                         ) {
                             showVoiceSelector = true
                         }
+                        .listRowBackground(Color.cardBackground)
                     } header: {
                         Text("Audio")
                             .font(.serifBody())
+                            .foregroundColor(.primaryText)
                     }
 
                     Section {
@@ -41,9 +43,11 @@ struct SettingsView: View {
                                 UIApplication.shared.open(url)
                             }
                         }
+                        .listRowBackground(Color.cardBackground)
                     } header: {
                         Text("Support")
                             .font(.serifBody())
+                            .foregroundColor(.primaryText)
                     }
 
                     Section {
@@ -56,6 +60,7 @@ struct SettingsView: View {
                                 UIApplication.shared.open(url)
                             }
                         }
+                        .listRowBackground(Color.cardBackground)
 
                         SettingsRow(
                             icon: "doc.text.fill",
@@ -66,9 +71,11 @@ struct SettingsView: View {
                                 UIApplication.shared.open(url)
                             }
                         }
+                        .listRowBackground(Color.cardBackground)
                     } header: {
                         Text("Legal")
                             .font(.serifBody())
+                            .foregroundColor(.primaryText)
                     }
 
                     Section {
@@ -83,9 +90,11 @@ struct SettingsView: View {
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
                         }
+                        .listRowBackground(Color.cardBackground)
                     } header: {
                         Text("About")
                             .font(.serifBody())
+                            .foregroundColor(.primaryText)
                     }
                 }
                 .listStyle(.insetGrouped)
@@ -95,11 +104,13 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.secondaryText)
                     }
-                    .font(.serifBody())
-                    .foregroundColor(.accentColor)
                 }
             }
         }

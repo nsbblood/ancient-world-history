@@ -144,6 +144,8 @@ struct HomeView: View {
                 }
             }
         }
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarBackground(Color.cardBackground, for: .tabBar)
         .onAppear {
             loadRandomChapters()
         }

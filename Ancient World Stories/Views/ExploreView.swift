@@ -13,6 +13,7 @@ struct ExploreView: View {
     @State private var selectedCivilization: Civilization?
     @State private var showStoriesSheet = false
     @State private var timelineYear: Double = -3000
+    @State private var showTimeTravel = false
     @State private var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 35, longitude: 25),
@@ -48,18 +49,55 @@ struct ExploreView: View {
             // Timeline Slider Overlay
             VStack(spacing: 0) {
                 Spacer()
-                
-                TimelineSlider(
-                    year: $timelineYear,
-                    filteredCount: filteredCivilizations.count
-                )
-                .padding(.horizontal, 20)
+
+                VStack(spacing: 20) {
+                    TimelineSlider(
+                        year: $timelineYear,
+                        filteredCount: filteredCivilizations.count
+                    )
+                    .padding(.horizontal, 20)
+
+                    Button {
+                        selectedCivilization = contentLoader.civilizations.randomElement()
+                        showTimeTravel = true
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 18))
+                            Text("Zaman Yolculuğu")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(
+                            LinearGradient(
+                                colors: [.purple, .blue],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .cornerRadius(16)
+                        .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                    }
+                    .padding(.horizontal, 20)
+                }
                 .padding(.bottom, 100)
             }
         }
         .sheet(isPresented: $showStoriesSheet) {
             if let civilization = selectedCivilization {
                 CivilizationDetailSheet(civilization: civilization)
+            } else {
+                EmptyCivilizationSheet(onDismiss: { showStoriesSheet = false })
+            }
+        }
+        .sheet(isPresented: $showTimeTravel) {
+            if let civilization = selectedCivilization {
+                CivilizationDetailSheet(civilization: civilization)
+            } else {
+                EmptyCivilizationSheet(onDismiss: { showTimeTravel = false })
             }
         }
     }
@@ -258,16 +296,66 @@ struct CivilizationDetailSheet: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundColor(.appAccent)
+                            .symbolRenderingMode(.hierarchical)
+                    }
+                }
+            }
+            .background(Color.appBackground)
+        }
+    }
+}
+
+
+// MARK: - Empty Civilization Sheet
+struct EmptyCivilizationSheet: View {
+    let onDismiss: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                Spacer()
+
+                Image(systemName: "map")
+                    .font(.system(size: 60))
+                    .foregroundColor(.appAccent)
+
+                Text("No Civilizations Found")
+                    .font(.serifTitle2())
+                    .foregroundColor(.appText)
+
+                Text("Please check back later for ancient civilizations to explore.")
+                    .font(.serifBody())
+                    .foregroundColor(.secondaryText)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.appBackground)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        onDismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundColor(.appAccent)
+                            .symbolRenderingMode(.hierarchical)
                     }
                 }
             }
         }
     }
 }
-
 
 // MARK: - Preview
 #Preview {

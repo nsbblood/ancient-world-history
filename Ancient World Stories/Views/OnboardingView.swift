@@ -15,18 +15,23 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            // Ancient parchment gradient background
+            // App theme parchment background
+            Color.appBackground
+                .ignoresSafeArea()
+
+            // Subtle gradient overlay
             LinearGradient(
                 colors: [
-                    Color(red: 0.95, green: 0.90, blue: 0.67), // #f3e5ab soft parchment
-                    Color(red: 0.84, green: 0.75, blue: 0.54)  // #d6c08a warm stone
+                    Color.appSecondary.opacity(0.3),
+                    Color.appBackground,
+                    Color.appSecondary.opacity(0.2)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
 
-            // Papyrus texture overlay (5% opacity)
+            // Papyrus texture overlay
             PapyrusTexture()
                 .opacity(0.05)
                 .ignoresSafeArea()
@@ -37,9 +42,9 @@ struct OnboardingView: View {
                 HStack(spacing: 8) {
                     ForEach(0..<3) { index in
                         Circle()
-                            .fill(currentPage == index ? 
-                                  Color(red: 0.84, green: 0.58, blue: 0.23) : 
-                                  Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.3))
+                            .fill(currentPage == index ?
+                                  Color.appAccent :
+                                  Color.appText.opacity(0.25))
                             .frame(width: 8, height: 8)
                     }
                 }
@@ -76,15 +81,16 @@ struct OnboardingView: View {
                         .background(
                             LinearGradient(
                                 colors: [
-                                    Color(red: 0.94, green: 0.82, blue: 0.54),
-                                    Color(red: 0.84, green: 0.58, blue: 0.23)
+                                    Color(hex: "D4AF37"),
+                                    Color.appAccent,
+                                    Color(hex: "8B6914")
                                 ],
                                 startPoint: .leading,
                                 endPoint: .trailing
                             )
                         )
                         .cornerRadius(16)
-                        .shadow(color: Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.4), radius: 8, x: 0, y: 4)
+                        .shadow(color: Color.appAccent.opacity(0.4), radius: 8, x: 0, y: 4)
                         .scaleEffect(buttonPulse)
                 }
                 .padding(.horizontal, 32)
@@ -129,12 +135,12 @@ struct OnboardingPage1: View {
 
             // Icon with radial glow and scale animation
             ZStack {
-                // Radial glow effect with subtle parallax
+                // Radial glow effect
                 Circle()
                     .fill(
                         RadialGradient(
                             colors: [
-                                Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.4),
+                                Color.appAccent.opacity(0.3),
                                 Color.clear
                             ],
                             center: .center,
@@ -149,8 +155,8 @@ struct OnboardingPage1: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.2),
-                                Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.2)
+                                Color.appAccent.opacity(0.15),
+                                Color.appSecondary.opacity(0.15)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -161,20 +167,20 @@ struct OnboardingPage1: View {
 
                 Image(systemName: "building.columns.fill")
                     .font(.system(size: 80))
-                    .foregroundColor(Color(red: 0.84, green: 0.58, blue: 0.23))
+                    .foregroundColor(Color.appAccent)
                     .scaleEffect(iconScale)
             }
 
             VStack(spacing: 16) {
                 Text("Journey Through Time")
                     .font(.system(size: 34, weight: .bold, design: .serif))
-                    .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
+                    .foregroundColor(.appText)
                     .multilineTextAlignment(.center)
                     .opacity(titleOpacity)
 
                 Text("Discover captivating stories from ancient civilizations. From Mesopotamia to Greece, experience history like never before.")
                     .font(.system(size: 18, design: .serif))
-                    .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.8))
+                    .foregroundColor(.appText.opacity(0.75))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
                     .opacity(descriptionOpacity)
@@ -212,7 +218,7 @@ struct OnboardingPage2: View {
                     .fill(
                         RadialGradient(
                             colors: [
-                                Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.4),
+                                Color.appAccent.opacity(0.3),
                                 Color.clear
                             ],
                             center: .center,
@@ -227,8 +233,8 @@ struct OnboardingPage2: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.2),
-                                Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.2)
+                                Color.appAccent.opacity(0.15),
+                                Color.appSecondary.opacity(0.15)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -239,20 +245,20 @@ struct OnboardingPage2: View {
 
                 Image(systemName: "map.fill")
                     .font(.system(size: 80))
-                    .foregroundColor(Color(red: 0.84, green: 0.58, blue: 0.23))
+                    .foregroundColor(Color.appAccent)
                     .scaleEffect(iconScale)
             }
 
             VStack(spacing: 16) {
                 Text("Explore & Listen")
                     .font(.system(size: 34, weight: .bold, design: .serif))
-                    .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
+                    .foregroundColor(.appText)
                     .multilineTextAlignment(.center)
                     .opacity(titleOpacity)
 
                 Text("Navigate through an interactive map, discover civilizations by era, and listen to stories with immersive audio narration.")
                     .font(.system(size: 18, design: .serif))
-                    .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.8))
+                    .foregroundColor(.appText.opacity(0.75))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
                     .opacity(descriptionOpacity)
@@ -290,7 +296,7 @@ struct OnboardingPage3: View {
                     .fill(
                         RadialGradient(
                             colors: [
-                                Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.4),
+                                Color.appAccent.opacity(0.3),
                                 Color.clear
                             ],
                             center: .center,
@@ -305,8 +311,8 @@ struct OnboardingPage3: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                Color(red: 0.94, green: 0.82, blue: 0.54).opacity(0.2),
-                                Color(red: 0.84, green: 0.58, blue: 0.23).opacity(0.2)
+                                Color.appAccent.opacity(0.15),
+                                Color.appSecondary.opacity(0.15)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -317,14 +323,14 @@ struct OnboardingPage3: View {
 
                 Image(systemName: "crown.fill")
                     .font(.system(size: 80))
-                    .foregroundColor(Color(red: 0.84, green: 0.58, blue: 0.23))
+                    .foregroundColor(Color.appAccent)
                     .scaleEffect(iconScale)
             }
 
             VStack(spacing: 24) {
                 Text("Unlock All Stories")
                     .font(.system(size: 34, weight: .bold, design: .serif))
-                    .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23))
+                    .foregroundColor(.appText)
                     .multilineTextAlignment(.center)
                     .opacity(titleOpacity)
 
@@ -357,16 +363,16 @@ struct OnboardingPage3: View {
 struct FeatureRow: View {
     let icon: String
     let text: String
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 20))
-                .foregroundColor(Color(red: 0.84, green: 0.58, blue: 0.23))
-            
+                .foregroundColor(Color.appAccent)
+
             Text(text)
                 .font(.system(size: 16, design: .serif))
-                .foregroundColor(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.9))
+                .foregroundColor(.appText.opacity(0.85))
         }
     }
 }
@@ -391,7 +397,7 @@ struct PapyrusTexture: View {
 
                     context.stroke(
                         path,
-                        with: .color(Color(red: 0.48, green: 0.37, blue: 0.23).opacity(0.15)),
+                        with: .color(Color.appText.opacity(0.1)),
                         lineWidth: 0.5
                     )
                 }
