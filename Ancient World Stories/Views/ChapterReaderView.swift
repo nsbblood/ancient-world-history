@@ -3,7 +3,7 @@ import SwiftUI
 import AVFoundation
 
 struct ChapterReaderView: View {
-    let chapter: Chapter
+    let initialChapter: Chapter
     let story: Story
     let civilization: Civilization
     let allChapters: [Chapter]
@@ -12,10 +12,20 @@ struct ChapterReaderView: View {
     @ObservedObject private var audioManager = AudioManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
+
+    @State private var currentChapter: Chapter
     @State private var hasMarkedAsRead = false
 
+    init(chapter: Chapter, story: Story, civilization: Civilization, allChapters: [Chapter]) {
+        self.initialChapter = chapter
+        self.story = story
+        self.civilization = civilization
+        self.allChapters = allChapters
+        self._currentChapter = State(initialValue: chapter)
+    }
+
     var currentIndex: Int? {
-        allChapters.firstIndex(where: { $0.id == chapter.id })
+        allChapters.firstIndex(where: { $0.id == currentChapter.id })
     }
 
     var nextChapter: Chapter? {
@@ -24,7 +34,7 @@ struct ChapterReaderView: View {
     }
 
     var isFavorite: Bool {
-        favoritesManager.isFavorite(chapterId: chapter.id)
+        favoritesManager.isFavorite(chapterId: currentChapter.id)
     }
     
     var body: some View {
@@ -38,30 +48,30 @@ struct ChapterReaderView: View {
                             Text(civilization.name)
                                 .font(.serifCaption())
                                 .foregroundColor(.accentColor)
-                            
+
                             Text(story.title)
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
-                            
-                            Text(chapter.title)
+
+                            Text(currentChapter.title)
                                 .font(.serifTitle2())
                                 .foregroundColor(.primaryText)
-                            
+
                             HStack(spacing: 12) {
                                 HStack(spacing: 4) {
                                     Image(systemName: "clock")
-                                    Text(chapter.formattedDuration)
+                                    Text(currentChapter.formattedDuration)
                                 }
                                 Text("•")
-                                Text("Chapter \(chapter.orderNo)")
+                                Text("Chapter \(currentChapter.orderNo)")
                             }
                             .font(.serifCaption())
                             .foregroundColor(.secondaryText)
                         }
-                        
+
                         Divider().background(Color.appSecondary)
-                        
-                        Text(chapter.text)
+
+                        Text(currentChapter.text)
                             .readingTextStyle()
                             .textSelection(.enabled)
                         
@@ -83,7 +93,7 @@ struct ChapterReaderView: View {
                                 } else if audioManager.synthesizer.isPaused {
                                     audioManager.resume()
                                 } else {
-                                    audioManager.speak(text: chapter.text, language: chapter.languageCode)
+                                    audioManager.speak(text: currentChapter.text, language: currentChapter.languageCode)
                                     markAsRead()
                                 }
                             },
@@ -97,13 +107,8 @@ struct ChapterReaderView: View {
                             Divider()
                                 .background(Color.appSecondary.opacity(0.3))
 
-                            NavigationLink {
-                                ChapterReaderView(
-                                    chapter: next,
-                                    story: story,
-                                    civilization: civilization,
-                                    allChapters: allChapters
-                                )
+                            Button {
+                                navigateToNextChapter(next)
                             } label: {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 4) {
@@ -148,7 +153,7 @@ struct ChapterReaderView: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        favoritesManager.toggleFavorite(chapterId: chapter.id)
+                        favoritesManager.toggleFavorite(chapterId: currentChapter.id)
                     } label: {
                         Image(systemName: isFavorite ? "heart.fill" : "heart")
                             .foregroundColor(.accentColor)
@@ -164,10 +169,24 @@ struct ChapterReaderView: View {
             audioManager.stop()
         }
     }
-    
+
+    private func navigateToNextChapter(_ next: Chapter) {
+        // Stop current audio
+        audioManager.stop()
+
+        // Update to next chapter
+        withAnimation {
+            currentChapter = next
+            hasMarkedAsRead = false
+        }
+
+        // Mark new chapter as read
+        markAsRead()
+    }
+
     private func markAsRead() {
         if !hasMarkedAsRead {
-            profileManager.markChapterAsRead(chapter.id, duration: chapter.duration)
+            profileManager.markChapterAsRead(currentChapter.id, duration: currentChapter.duration)
             hasMarkedAsRead = true
         }
     }
