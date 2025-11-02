@@ -6,7 +6,6 @@ struct ProfileView: View {
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @StateObject private var content = ContentLoader.shared
     @State private var selectedChapter: Chapter?
-    @State private var showVoiceSelector = false
     @State private var showPaywall = false
     @State private var showSettings = false
 
@@ -20,28 +19,24 @@ struct ProfileView: View {
 
             VStack(spacing: 0) {
                 // Fixed Header
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("Profile")
-                            .font(.serifLargeTitle())
-                            .foregroundColor(.primaryText)
+                HStack {
+                    Text("Profile")
+                        .font(.serifLargeTitle())
+                        .foregroundColor(.primaryText)
 
-                        Spacer()
+                    Spacer()
 
-                        Button {
-                            showSettings = true
-                        } label: {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 24))
-                                .foregroundColor(.accentColor)
-                        }
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.accentColor)
                     }
-
-                    Divider()
-                        .background(Color.appSecondary.opacity(0.3))
                 }
                 .padding(.horizontal)
                 .padding(.top, 8)
+                .padding(.bottom, 16)
                 .background(Color.backgroundColor)
 
                 // Scrollable Content
@@ -122,38 +117,7 @@ struct ProfileView: View {
                             }
                         }
                         .padding(.horizontal)
-                        
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("Voice Settings")
-                                .font(.serifTitle3())
-                                .foregroundColor(.primaryText)
-                            
-                            Button {
-                                showVoiceSelector = true
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("Selected Voice")
-                                            .font(.serifCaption())
-                                            .foregroundColor(.secondaryText)
-                                        
-                                        Text(profileManager.currentVoice.displayName)
-                                            .font(.serifBody())
-                                            .foregroundColor(.primaryText)
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.accentColor)
-                                }
-                                .padding()
-                                .background(Color.cardBackground)
-                                .cornerRadius(12)
-                            }
-                        }
-                        .padding(.horizontal)
-                        
+
                         if !favoriteChapters.isEmpty {
                             VStack(alignment: .leading, spacing: 16) {
                                 Text("Favorite Chapters")
@@ -182,9 +146,6 @@ struct ProfileView: View {
                     .padding(.vertical)
                 }
             }
-        }
-        .sheet(isPresented: $showVoiceSelector) {
-            VoiceSelectorView()
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()

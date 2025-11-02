@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var profileManager = ProfileManager.shared
+    @State private var showVoiceSelector = false
 
     var body: some View {
         NavigationStack {
@@ -16,6 +18,19 @@ struct SettingsView: View {
                 Color.appBackground.ignoresSafeArea()
 
                 List {
+                    Section {
+                        SettingsRow(
+                            icon: "speaker.wave.3.fill",
+                            title: "Voice Settings",
+                            subtitle: profileManager.currentVoice.displayName
+                        ) {
+                            showVoiceSelector = true
+                        }
+                    } header: {
+                        Text("Audio")
+                            .font(.serifBody())
+                    }
+
                     Section {
                         SettingsRow(
                             icon: "envelope.fill",
@@ -87,6 +102,9 @@ struct SettingsView: View {
                     .foregroundColor(.accentColor)
                 }
             }
+        }
+        .sheet(isPresented: $showVoiceSelector) {
+            VoiceSelectorView()
         }
     }
 }
