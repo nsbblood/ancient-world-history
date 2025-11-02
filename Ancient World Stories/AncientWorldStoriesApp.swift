@@ -59,17 +59,23 @@ struct ContentView: View {
                 }
                 .tag(0)
 
+            CivilizationsView()
+                .tabItem {
+                    Label("Episodes", systemImage: "list.bullet")
+                }
+                .tag(1)
+
             ExploreView()
                 .tabItem {
                     Label("Explore", systemImage: "map.fill")
                 }
-                .tag(1)
+                .tag(2)
 
             ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: "person.fill")
                 }
-                .tag(2)
+                .tag(3)
         }
         .tint(.accentColor)
     }

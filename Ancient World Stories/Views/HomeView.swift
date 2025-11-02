@@ -132,10 +132,15 @@ struct HomeView: View {
                     loadRandomChapters()
                 }
             }
-            .sheet(item: $selectedChapter) { chapter in
+            .fullScreenCover(item: $selectedChapter) { chapter in
                 if let story = content.story(for: chapter),
                    let civ = content.civilization(for: story) {
-                    ChapterReaderView(chapter: chapter, story: story, civilization: civ)
+                    ChapterReaderView(
+                        chapter: chapter,
+                        story: story,
+                        civilization: civ,
+                        allChapters: content.chapters(for: story.id)
+                    )
                 }
             }
         }

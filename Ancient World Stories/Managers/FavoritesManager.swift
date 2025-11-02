@@ -6,45 +6,45 @@ import Combine
 @MainActor
 class FavoritesManager: ObservableObject {
     static let shared = FavoritesManager()
-    
-    @Published var favoriteStoryIds: Set<UUID> = []
-    private let favoritesKey = "favoriteStoryIds"
-    
+
+    @Published var favoriteChapterIds: Set<UUID> = []
+    private let favoritesKey = "favoriteChapterIds"
+
     private init() {
         loadFavorites()
     }
-    
+
     private func loadFavorites() {
         if let data = UserDefaults.standard.data(forKey: favoritesKey),
            let decoded = try? JSONDecoder().decode(Set<UUID>.self, from: data) {
-            favoriteStoryIds = decoded
+            favoriteChapterIds = decoded
         }
     }
-    
+
     private func saveFavorites() {
-        if let encoded = try? JSONEncoder().encode(favoriteStoryIds) {
+        if let encoded = try? JSONEncoder().encode(favoriteChapterIds) {
             UserDefaults.standard.set(encoded, forKey: favoritesKey)
         }
     }
-    
-    func toggleFavorite(storyId: UUID) {
-        if favoriteStoryIds.contains(storyId) {
-            favoriteStoryIds.remove(storyId)
+
+    func toggleFavorite(chapterId: UUID) {
+        if favoriteChapterIds.contains(chapterId) {
+            favoriteChapterIds.remove(chapterId)
         } else {
-            favoriteStoryIds.insert(storyId)
+            favoriteChapterIds.insert(chapterId)
         }
         saveFavorites()
     }
-    
-    func isFavorite(storyId: UUID) -> Bool {
-        favoriteStoryIds.contains(storyId)
+
+    func isFavorite(chapterId: UUID) -> Bool {
+        favoriteChapterIds.contains(chapterId)
     }
-    
-    func getFavoriteStories() -> [Story] {
-        ContentLoader.shared.stories.filter { favoriteStoryIds.contains($0.id) }
+
+    func getFavoriteChapters() -> [Chapter] {
+        ContentLoader.shared.chapters.filter { favoriteChapterIds.contains($0.id) }
     }
-    
+
     func favoriteCount() -> Int {
-        favoriteStoryIds.count
+        favoriteChapterIds.count
     }
 }

@@ -5,18 +5,33 @@ struct ProfileView: View {
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @StateObject private var content = ContentLoader.shared
-    @State private var selectedStory: Story?
+    @State private var selectedChapter: Chapter?
     @State private var showVoiceSelector = false
-    
-    var favoriteStories: [Story] {
-        favoritesManager.getFavoriteStories()
+
+    var favoriteChapters: [Chapter] {
+        favoritesManager.getFavoriteChapters()
     }
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.backgroundColor.ignoresSafeArea()
-                
+        ZStack {
+            Color.backgroundColor.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                // Fixed Header
+                VStack(spacing: 8) {
+                    Text("Profile")
+                        .font(.serifLargeTitle())
+                        .foregroundColor(.primaryText)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Divider()
+                        .background(Color.appSecondary.opacity(0.3))
+                }
+                .padding(.horizontal)
+                .padding(.top, 8)
+                .background(Color.backgroundColor)
+
+                // Scrollable Content
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         VStack(spacing: 16) {
@@ -88,7 +103,7 @@ struct ProfileView: View {
                                 
                                 StatisticRow(
                                     icon: "heart.fill",
-                                    title: "Favorite Stories",
+                                    title: "Favorite Chapters",
                                     value: "\(favoritesManager.favoriteCount())"
                                 )
                             }
@@ -126,19 +141,26 @@ struct ProfileView: View {
                         }
                         .padding(.horizontal)
                         
-                        if !favoriteStories.isEmpty {
+                        if !favoriteChapters.isEmpty {
                             VStack(alignment: .leading, spacing: 16) {
-                                Text("Favorite Stories")
+                                Text("Favorite Chapters")
                                     .font(.serifTitle3())
                                     .foregroundColor(.primaryText)
-                                
-                                ForEach(favoriteStories) { story in
-                                    Button {
-                                        selectedStory = story
-                                    } label: {
-                                        StoryCard(story: story, civilization: content.civilization(for: story))
+
+                                ForEach(favoriteChapters) { chapter in
+                                    if let story = content.story(for: chapter.storyId),
+                                       let civilization = content.civilization(for: story) {
+                                        Button {
+                                            selectedChapter = chapter
+                                        } label: {
+                                            FavoriteChapterRow(
+                                                chapter: chapter,
+                                                story: story,
+                                                civilization: civilization
+                                            )
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
                                     }
-                                    .buttonStyle(PlainButtonStyle())
                                 }
                             }
                             .padding(.horizontal)
@@ -147,17 +169,65 @@ struct ProfileView: View {
                     .padding(.vertical)
                 }
             }
-            .navigationTitle("Profile")
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $showVoiceSelector) {
-                VoiceSelectorView()
-            }
-            .navigationDestination(item: $selectedStory) { story in
-                if let civ = content.civilization(for: story) {
-                    ChaptersView(story: story, civilization: civ)
-                }
+        }
+        .sheet(isPresented: $showVoiceSelector) {
+            VoiceSelectorView()
+        }
+        .fullScreenCover(item: $selectedChapter) { chapter in
+            if let story = content.story(for: chapter.storyId),
+               let civilization = content.civilization(for: story) {
+                ChapterReaderView(
+                    chapter: chapter,
+                    story: story,
+                    civilization: civilization,
+                    allChapters: content.chapters(for: story.id)
+                )
             }
         }
+    }
+}
+
+struct FavoriteChapterRow: View {
+    let chapter: Chapter
+    let story: Story
+    let civilization: Civilization
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(civilization.name)
+                    .font(.serifCaption())
+                    .foregroundColor(.accentColor)
+
+                Text(story.title)
+                    .font(.serifBody())
+                    .foregroundColor(.secondaryText)
+
+                Text(chapter.title)
+                    .font(.serifHeadline())
+                    .foregroundColor(.primaryText)
+
+                HStack(spacing: 8) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "clock")
+                        Text(chapter.formattedDuration)
+                    }
+                    Text("•")
+                    Text("Chapter \(chapter.orderNo)")
+                }
+                .font(.serifCaption())
+                .foregroundColor(.secondaryText)
+            }
+
+            Spacer()
+
+            Image(systemName: "heart.fill")
+                .foregroundColor(.accentColor)
+                .font(.system(size: 20))
+        }
+        .padding()
+        .background(Color.cardBackground)
+        .cornerRadius(12)
     }
 }
 

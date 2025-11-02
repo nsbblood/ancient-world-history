@@ -103,6 +103,11 @@ class ContentLoader: ObservableObject {
         stories.first { $0.id == chapter.storyId }
     }
 
+    /// Get story by ID
+    func story(for storyId: UUID) -> Story? {
+        stories.first { $0.id == storyId }
+    }
+
     /// Get random chapters from all stories
     func randomChapters(count: Int = 10) -> [Chapter] {
         Array(chapters.shuffled().prefix(count))

@@ -6,11 +6,26 @@ struct ChapterReaderView: View {
     let chapter: Chapter
     let story: Story
     let civilization: Civilization
-    
+    let allChapters: [Chapter]
+
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var audioManager = AudioManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
+    @ObservedObject private var favoritesManager = FavoritesManager.shared
     @State private var hasMarkedAsRead = false
+
+    var currentIndex: Int? {
+        allChapters.firstIndex(where: { $0.id == chapter.id })
+    }
+
+    var nextChapter: Chapter? {
+        guard let index = currentIndex, index + 1 < allChapters.count else { return nil }
+        return allChapters[index + 1]
+    }
+
+    var isFavorite: Bool {
+        favoritesManager.isFavorite(chapterId: chapter.id)
+    }
     
     var body: some View {
         NavigationStack {
@@ -57,24 +72,60 @@ struct ChapterReaderView: View {
                 
                 VStack {
                     Spacer()
-                    AudioPlayerControls(
-                        isPlaying: audioManager.isPlaying,
-                        progress: audioManager.currentProgress,
-                        onPlayPause: {
-                            if audioManager.isPlaying {
-                                audioManager.pause()
-                            } else if audioManager.synthesizer.isPaused {
-                                audioManager.resume()
-                            } else {
-                                audioManager.speak(text: chapter.text, language: chapter.languageCode)
-                                markAsRead()
+
+                    VStack(spacing: 0) {
+                        AudioPlayerControls(
+                            isPlaying: audioManager.isPlaying,
+                            progress: audioManager.currentProgress,
+                            onPlayPause: {
+                                if audioManager.isPlaying {
+                                    audioManager.pause()
+                                } else if audioManager.synthesizer.isPaused {
+                                    audioManager.resume()
+                                } else {
+                                    audioManager.speak(text: chapter.text, language: chapter.languageCode)
+                                    markAsRead()
+                                }
+                            },
+                            onStop: {
+                                audioManager.stop()
                             }
-                        },
-                        onStop: {
-                            audioManager.stop()
+                        )
+                        .padding()
+
+                        if let next = nextChapter {
+                            Divider()
+                                .background(Color.appSecondary.opacity(0.3))
+
+                            NavigationLink {
+                                ChapterReaderView(
+                                    chapter: next,
+                                    story: story,
+                                    civilization: civilization,
+                                    allChapters: allChapters
+                                )
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Next Chapter")
+                                            .font(.serifCaption())
+                                            .foregroundColor(.secondaryText)
+
+                                        Text(next.title)
+                                            .font(.serifBody())
+                                            .foregroundColor(.primaryText)
+                                            .lineLimit(1)
+                                    }
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.accentColor)
+                                }
+                                .padding()
+                            }
                         }
-                    )
-                    .padding()
+                    }
                     .background(Color.cardBackground.opacity(0.95))
                     .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
                 }
@@ -82,18 +133,26 @@ struct ChapterReaderView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") {
+                    Button {
                         audioManager.stop()
                         dismiss()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                            Text("Back")
+                        }
+                        .font(.serifBody())
+                        .foregroundColor(.accentColor)
                     }
-                    .font(.serifBody())
-                    .foregroundColor(.accentColor)
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: markAsRead) {
-                        Image(systemName: profileManager.isChapterRead(chapter.id) ? "checkmark.circle.fill" : "checkmark.circle")
+                    Button {
+                        favoritesManager.toggleFavorite(chapterId: chapter.id)
+                    } label: {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
                             .foregroundColor(.accentColor)
+                            .font(.system(size: 20))
                     }
                 }
             }

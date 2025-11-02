@@ -38,13 +38,7 @@ struct ChaptersView: View {
                             
                             Spacer()
                             
-                            Button {
-                                favoritesManager.toggleFavorite(storyId: story.id)
-                            } label: {
-                                Image(systemName: favoritesManager.isFavorite(storyId: story.id) ? "heart.fill" : "heart")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.accentColor)
-                            }
+                            // Removed story favorite button - favorites are now chapter-based
                         }
                         
                         Text(story.summary)
@@ -99,8 +93,13 @@ struct ChaptersView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $selectedChapter) { chapter in
-            ChapterReaderView(chapter: chapter, story: story, civilization: civilization)
+        .fullScreenCover(item: $selectedChapter) { chapter in
+            ChapterReaderView(
+                chapter: chapter,
+                story: story,
+                civilization: civilization,
+                allChapters: chapters
+            )
         }
     }
 }
