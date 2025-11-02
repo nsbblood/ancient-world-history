@@ -147,8 +147,14 @@ struct HomeView: View {
         .onAppear {
             loadRandomChapters()
         }
+        .onChange(of: content.chapters) { _ in
+            // Auto-load random chapters when content finishes loading
+            if !content.chapters.isEmpty && randomChapters.isEmpty {
+                loadRandomChapters()
+            }
+        }
     }
-    
+
     private func loadRandomChapters() {
         randomChapters = content.randomChapters(count: 10)
     }
