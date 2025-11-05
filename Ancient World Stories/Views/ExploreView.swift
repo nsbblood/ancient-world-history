@@ -83,7 +83,7 @@ struct ExploreView: View {
                     }
                     .padding(.horizontal, 20)
                 }
-                .padding(.bottom, 100)
+                .padding(.bottom, 20)
             }
         }
         .sheet(isPresented: $showStoriesSheet) {

@@ -189,14 +189,7 @@ struct ProfileView: View {
             SettingsView()
         }
         .fullScreenCover(isPresented: $showPaywall) {
-            PaywallView(
-                onComplete: {
-                    showPaywall = false
-                },
-                onDismiss: {
-                    showPaywall = false
-                }
-            )
+            PaywallView(isPresented: $showPaywall)
         }
         .fullScreenCover(item: $selectedChapter) { chapter in
             if let story = content.story(for: chapter.storyId),

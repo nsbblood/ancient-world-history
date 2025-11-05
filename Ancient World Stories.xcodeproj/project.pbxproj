@@ -29,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D6B1A802EBBE4D7009DEBFD /* StoreKitConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; name = StoreKitConfiguration.storekit; path = "Ancient World Stories/StoreKitConfiguration.storekit"; sourceTree = "<group>"; };
 		6DCDA8BB2EB6B4E80012C785 /* Ancient World Stories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ancient World Stories.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DCDA8C82EB6B4EA0012C785 /* Ancient World StoriesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ancient World StoriesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DCDA8D22EB6B4EA0012C785 /* Ancient World StoriesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ancient World StoriesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,6 +83,7 @@
 		6DCDA8B22EB6B4E80012C785 = {
 			isa = PBXGroup;
 			children = (
+				6D6B1A802EBBE4D7009DEBFD /* StoreKitConfiguration.storekit */,
 				6DCDA8BD2EB6B4E80012C785 /* Ancient World Stories */,
 				6DCDA8CB2EB6B4EA0012C785 /* Ancient World StoriesTests */,
 				6DCDA8D52EB6B4EA0012C785 /* Ancient World StoriesUITests */,

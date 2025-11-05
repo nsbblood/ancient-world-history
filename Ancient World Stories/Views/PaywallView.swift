@@ -10,32 +10,58 @@ import SwiftUI
 import RevenueCat
 
 struct PaywallView: View {
-    let onComplete: () -> Void
-    let onDismiss: () -> Void
-    
-    @State private var selectedPlan: String = "ancient.year" // Default to yearly
+    @Binding var isPresented: Bool
+
+    @State private var selectedPlan: String = "$rc_annual" // Default to yearly
     @State private var isProcessing = false
     @State private var offerings: Offerings?
     @State private var errorMessage: String?
     
+    // Helper to find packages from any available offering
+    private var yearlyPackage: Package? {
+        guard let offerings = offerings else { return nil }
+        if let current = offerings.current,
+           let package = current.package(identifier: "$rc_annual") {
+            return package
+        }
+        // Try alternative offerings
+        for offering in offerings.all.values {
+            if let package = offering.package(identifier: "$rc_annual") {
+                return package
+            }
+        }
+        return nil
+    }
+    
+    private var weeklyPackage: Package? {
+        guard let offerings = offerings else { return nil }
+        if let current = offerings.current,
+           let package = current.package(identifier: "$rc_weekly") {
+            return package
+        }
+        // Try alternative offerings
+        for offering in offerings.all.values {
+            if let package = offering.package(identifier: "$rc_weekly") {
+                return package
+            }
+        }
+        return nil
+    }
+    
     // Computed property for button text
     private var buttonText: String {
-        selectedPlan == "ancient.year" ? "Continue" : "Try Free"
+        selectedPlan == "$rc_annual" ? "Continue" : "Try Free"
     }
     
     // Computed property for trial info
     private var trialInfo: String {
-        if selectedPlan == "ancient.year" {
-            if let offerings = offerings,
-               let current = offerings.current,
-               let package = current.package(identifier: "ancient.year") {
+        if selectedPlan == "$rc_annual" {
+            if let package = yearlyPackage {
                 return "Then \(package.storeProduct.localizedPriceString)/year"
             }
             return "Then $39.99/year"
         } else {
-            if let offerings = offerings,
-               let current = offerings.current,
-               let package = current.package(identifier: "ancient.week") {
+            if let package = weeklyPackage {
                 return "3-day free trial, then \(package.storeProduct.localizedPriceString)/week"
             }
             return "3-day free trial, then $4.99/week"
@@ -76,7 +102,7 @@ struct PaywallView: View {
                 VStack(spacing: 0) {
                     // Top bar: Close button only
                     HStack {
-                        Button(action: onDismiss) {
+                        Button(action: { isPresented = false }) {
                             Image(systemName: "xmark")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(.appText.opacity(0.7))
@@ -155,39 +181,69 @@ struct PaywallView: View {
                     Spacer(minLength: 0)
 
                     // Subscription Plans (more compact)
-                    if let offerings = offerings,
-                       let current = offerings.current {
+                    if yearlyPackage != nil || weeklyPackage != nil {
                         VStack(spacing: 10) {
                             // Yearly Plan
-                            if let yearlyPackage = current.package(identifier: "ancient.year") {
+                            if let yearly = yearlyPackage {
                                 SubscriptionCard(
-                                    package: yearlyPackage,
-                                    isSelected: selectedPlan == "ancient.year",
+                                    package: yearly,
+                                    isSelected: selectedPlan == "$rc_annual",
                                     showBadge: true,
-                                    onSelect: { selectedPlan = "ancient.year" }
+                                    onSelect: { selectedPlan = "$rc_annual" }
                                 )
                             }
 
                             // Weekly Plan
-                            if let weeklyPackage = current.package(identifier: "ancient.week") {
+                            if let weekly = weeklyPackage {
                                 SubscriptionCard(
-                                    package: weeklyPackage,
-                                    isSelected: selectedPlan == "ancient.week",
+                                    package: weekly,
+                                    isSelected: selectedPlan == "$rc_weekly",
                                     showBadge: false,
-                                    onSelect: { selectedPlan = "ancient.week" }
+                                    onSelect: { selectedPlan = "$rc_weekly" }
                                 )
                             }
                         }
                         .padding(.horizontal, 20)
                     } else {
-                        // Loading state
+                        // Loading or Error state
                         VStack(spacing: 16) {
-                            ProgressView()
-                                .tint(.appAccent)
+                            if let error = errorMessage {
+                                // Error state
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(.system(size: 40))
+                                    .foregroundColor(.red.opacity(0.8))
 
-                            Text("Loading subscription options...")
-                                .font(.system(size: 14, design: .serif))
-                                .foregroundColor(.secondaryText)
+                                Text("Unable to load subscriptions")
+                                    .font(.system(size: 16, weight: .semibold, design: .serif))
+                                    .foregroundColor(.appText)
+
+                                Text(error)
+                                    .font(.system(size: 12, design: .serif))
+                                    .foregroundColor(.secondaryText)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal)
+
+                                Button {
+                                    errorMessage = nil
+                                    fetchOfferings()
+                                } label: {
+                                    Text("Retry")
+                                        .font(.system(size: 14, weight: .semibold, design: .serif))
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 24)
+                                        .padding(.vertical, 10)
+                                        .background(Color.appAccent)
+                                        .cornerRadius(8)
+                                }
+                            } else {
+                                // Loading state
+                                ProgressView()
+                                    .tint(.appAccent)
+
+                                Text("Loading subscription options...")
+                                    .font(.system(size: 14, design: .serif))
+                                    .foregroundColor(.secondaryText)
+                            }
                         }
                         .frame(height: 150)
                         .padding(.horizontal, 20)
@@ -224,9 +280,9 @@ struct PaywallView: View {
                         )
                         .cornerRadius(14)
                         .shadow(color: Color.appAccent.opacity(0.4), radius: 12, x: 0, y: 4)
-                        .opacity(offerings != nil ? 1.0 : 0.5)
+                        .opacity((yearlyPackage != nil || weeklyPackage != nil) ? 1.0 : 0.5)
                     }
-                    .disabled(isProcessing || offerings == nil)
+                    .disabled(isProcessing || (yearlyPackage == nil && weeklyPackage == nil))
                     .padding(.horizontal, 20)
 
                     // Trial info
@@ -273,25 +329,103 @@ struct PaywallView: View {
 
     // MARK: - RevenueCat Methods
     private func fetchOfferings() {
+        print("🔄 Fetching RevenueCat offerings...")
+        
+        // Check if RevenueCat is configured
+        guard Purchases.isConfigured else {
+            print("❌ RevenueCat is not configured!")
+            errorMessage = "RevenueCat is not initialized. Please restart the app."
+            return
+        }
+        
+        print("✅ RevenueCat is configured")
+        
         Task {
             do {
                 let offerings = try await Purchases.shared.offerings()
+                
                 await MainActor.run {
+                    print("📦 Offerings received:")
+                    print("   - All offerings: \(offerings.all.keys.joined(separator: ", "))")
+                    
                     self.offerings = offerings
+                    
+                    if let current = offerings.current {
+                        print("✅ Current offering: \(current.identifier)")
+                        print("   Available packages: \(current.availablePackages.map { $0.identifier })")
+                        print("   Package count: \(current.availablePackages.count)")
+                        
+                        // Check for specific packages
+                        let foundYearlyPackage = current.package(identifier: "$rc_annual")
+                        let foundWeeklyPackage = current.package(identifier: "$rc_weekly")
+                        
+                        if foundYearlyPackage == nil {
+                            print("⚠️ Yearly package (ancient.year) not found!")
+                        } else {
+                            print("✅ Yearly package found: \(foundYearlyPackage!.storeProduct.localizedTitle) - \(foundYearlyPackage!.storeProduct.localizedPriceString)")
+                        }
+                        
+                        if foundWeeklyPackage == nil {
+                            print("⚠️ Weekly package (ancient.week) not found!")
+                        } else {
+                            print("✅ Weekly package found: \(foundWeeklyPackage!.storeProduct.localizedTitle) - \(foundWeeklyPackage!.storeProduct.localizedPriceString)")
+                        }
+                        
+                        // If no packages found, show helpful error
+                        if foundYearlyPackage == nil && foundWeeklyPackage == nil {
+                            self.errorMessage = "No subscription packages found. Please check RevenueCat Dashboard:\n1. Ensure offerings are created\n2. Ensure packages 'ancient.year' and 'ancient.week' are added to the offering\n3. Ensure products are synced from App Store Connect"
+                        }
+                    } else {
+                        print("⚠️ No current offering found")
+                        print("   Available offerings: \(offerings.all.keys.joined(separator: ", "))")
+                        
+                        // Try to use the first available offering if any exist
+                        if let firstOffering = offerings.all.values.first {
+                            print("🔄 Found alternative offering: \(firstOffering.identifier)")
+                            print("   Packages: \(firstOffering.availablePackages.map { $0.identifier })")
+                            
+                            // Check if this offering has our packages
+                            let foundYearlyPackage = firstOffering.package(identifier: "$rc_annual")
+                            let foundWeeklyPackage = firstOffering.package(identifier: "$rc_weekly")
+                            
+                            if foundYearlyPackage != nil || foundWeeklyPackage != nil {
+                                // We found packages in an alternative offering, use them
+                                print("✅ Found packages in alternative offering: \(firstOffering.identifier)")
+                                // Clear error message since we can use these packages
+                                self.errorMessage = nil
+                            } else {
+                                self.errorMessage = "No subscription offerings configured in RevenueCat Dashboard.\n\nPlease:\n1. Go to RevenueCat Dashboard\n2. Create an offering (identifier: 'default')\n3. Add packages 'ancient.year' and 'ancient.week'\n4. Ensure products are synced from App Store Connect"
+                            }
+                        } else {
+                            self.errorMessage = "No subscription offerings configured in RevenueCat Dashboard.\n\nPlease:\n1. Go to RevenueCat Dashboard\n2. Create an offering (identifier: 'default')\n3. Add packages 'ancient.year' and 'ancient.week'\n4. Ensure products are synced from App Store Connect"
+                        }
+                    }
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = error.localizedDescription
+                    let errorDescription = error.localizedDescription
+                    self.errorMessage = "Failed to load subscriptions: \(errorDescription)\n\nPlease check:\n1. Internet connection\n2. RevenueCat Dashboard configuration\n3. App Store Connect products"
                     print("❌ RevenueCat error: \(error)")
+                    print("   Error type: \(type(of: error))")
+                    print("   Error details: \(error)")
+                    
+                    if let rcError = error as? ErrorCode {
+                        print("   RevenueCat error code: \(rcError)")
+                    }
                 }
             }
         }
     }
     
     private func subscribe() {
-        guard let offerings = offerings,
-              let current = offerings.current,
-              let package = current.package(identifier: selectedPlan) else {
+        let package: Package?
+        if selectedPlan == "$rc_annual" {
+            package = yearlyPackage
+        } else {
+            package = weeklyPackage
+        }
+        
+        guard let package = package else {
             errorMessage = "Unable to load subscription options. Please try again."
             return
         }
@@ -309,8 +443,10 @@ struct PaywallView: View {
 
                     if hasPremium {
                         ProfileManager.shared.isPremium = true
-                        ProfileManager.shared.checkPremiumStatus()
-                        onComplete()
+                        Task {
+                            await ProfileManager.shared.checkPremiumStatus()
+                        }
+                        isPresented = false
                     } else {
                         errorMessage = "Purchase completed but premium not activated"
                         print("❌ Premium entitlement not active after purchase")
@@ -335,8 +471,10 @@ struct PaywallView: View {
                 await MainActor.run {
                     if hasPremium {
                         ProfileManager.shared.isPremium = true
-                        ProfileManager.shared.checkPremiumStatus()
-                        onComplete()
+                        Task {
+                            await ProfileManager.shared.checkPremiumStatus()
+                        }
+                        isPresented = false
                         print("✅ Purchases restored successfully")
                     } else {
                         errorMessage = "No active subscriptions found"
@@ -498,5 +636,13 @@ struct SubscriptionCard: View {
 
 // MARK: - Preview
 #Preview {
-    PaywallView(onComplete: {}, onDismiss: {})
+    // Configure RevenueCat for preview
+    let _ = {
+        if !Purchases.isConfigured {
+            Purchases.logLevel = .debug
+            Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+        }
+    }()
+
+    return PaywallView(isPresented: .constant(true))
 }

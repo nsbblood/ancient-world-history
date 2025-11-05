@@ -20,20 +20,16 @@ class ProfileManager: ObservableObject {
     private init() {
         loadReadChapters()
         loadProfileImage()
-        checkPremiumStatus()
+        // Don't check premium status in init - wait for explicit call after splash and RevenueCat configuration
     }
 
-    func checkPremiumStatus() {
-        Task {
-            do {
-                let customerInfo = try await Purchases.shared.customerInfo()
-                let hasPremium = customerInfo.entitlements["premium"]?.isActive == true
-                await MainActor.run {
-                    self.isPremium = hasPremium
-                }
-            } catch {
-                print("❌ Error checking premium status: \(error)")
-            }
+    func checkPremiumStatus() async {
+        do {
+            let customerInfo = try await Purchases.shared.customerInfo()
+            let hasPremium = customerInfo.entitlements["premium"]?.isActive == true
+            self.isPremium = hasPremium
+        } catch {
+            print("❌ Error checking premium status: \(error)")
         }
     }
 

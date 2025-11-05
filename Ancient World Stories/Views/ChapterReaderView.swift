@@ -9,6 +9,7 @@ struct ChapterReaderView: View {
     let allChapters: [Chapter]
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.displayScale) private var displayScale
     @ObservedObject private var audioManager = AudioManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
@@ -17,6 +18,7 @@ struct ChapterReaderView: View {
     @State private var hasMarkedAsRead = false
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
+    @State private var screenWidth: CGFloat = 0
 
     init(chapter: Chapter, story: Story, civilization: Civilization, allChapters: [Chapter]) {
         self.initialChapter = chapter
@@ -217,6 +219,13 @@ struct ChapterReaderView: View {
         .onDisappear {
             audioManager.stop()
         }
+        .background(
+            GeometryReader { geometry in
+                Color.clear.onAppear {
+                    screenWidth = geometry.size.width
+                }
+            }
+        )
         .offset(x: dragOffset)
         .gesture(
             DragGesture(minimumDistance: 10)
@@ -224,7 +233,7 @@ struct ChapterReaderView: View {
                     // Only allow swipe from left edge
                     if value.startLocation.x < 30 && value.translation.width > 0 {
                         isDragging = true
-                        dragOffset = min(value.translation.width, UIScreen.main.bounds.width)
+                        dragOffset = min(value.translation.width, screenWidth)
                     }
                 }
                 .onEnded { value in

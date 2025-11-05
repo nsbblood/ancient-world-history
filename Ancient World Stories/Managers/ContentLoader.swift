@@ -19,13 +19,20 @@ class ContentLoader: ObservableObject {
     @Published var error: String?
 
     private let supabase = SupabaseClient.shared
+    private var hasInitialized = false
 
     private init() {
-        loadInitialData()
+        // Don't load data in init - wait for explicit call after splash
     }
 
     // MARK: - Load Data
     func loadInitialData() {
+        guard !hasInitialized else {
+            print("ℹ️ ContentLoader already initialized, skipping...")
+            return
+        }
+        hasInitialized = true
+        print("🚀 ContentLoader: Starting to load data from Supabase...")
         Task {
             await loadAllData()
         }

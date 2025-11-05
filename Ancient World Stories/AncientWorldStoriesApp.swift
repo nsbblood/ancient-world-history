@@ -11,7 +11,6 @@ import RevenueCat
 @main
 struct AncientWorldStoriesApp: App {
     init() {
-        configureRevenueCat()
         configureAppearance()
     }
 
@@ -21,15 +20,6 @@ struct AncientWorldStoriesApp: App {
         }
     }
 
-    private func configureRevenueCat() {
-        Purchases.logLevel = .debug
-        Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
-
-        // Check premium status on app launch
-        Task { @MainActor in
-            await ProfileManager.shared.checkPremiumStatus()
-        }
-    }
 
     private func configureAppearance() {
         let navigationBarAppearance = UINavigationBarAppearance()
@@ -62,34 +52,95 @@ struct AncientWorldStoriesApp: App {
 
 struct ContentView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @StateObject private var profileManager = ProfileManager.shared
     @State private var selectedTab = 0
     @State private var showSplash = true
+    @State private var isInitialized = false
+    @State private var showPaywall = false
 
+    static func configureRevenueCat() {
+        // Prevent double configuration (important for previews)
+       
+    }
+    
+    
     var body: some View {
         ZStack {
-            Group {
+            // Only render the main content AFTER splash is hidden
+            if !showSplash {
                 if !hasCompletedOnboarding {
                     OnboardingView()
                 } else {
                     mainTabView
+                        .sheet(isPresented: $showPaywall) {
+                            PaywallView(isPresented: $showPaywall)
+                        }
                 }
             }
-            .opacity(showSplash ? 0 : 1)
 
+            // Show splash on top
             if showSplash {
                 SplashView()
-                    .transition(.opacity)
-                    .zIndex(2)
+                    .zIndex(999)
             }
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            // Initialize services immediately in background
+            if !isInitialized {
+                print("🚀 Starting app initialization...")
+                // 2. Initialize ContentLoader (loads Supabase data)
+                ContentLoader.shared.loadInitialData()
+
+                isInitialized = true
+                // 1. Configure RevenueCat
+    //     AncientWorldStoriesApp.configureRevenueCat()
+                
+                guard !Purchases.isConfigured else {
+                    print("⚠️ RevenueCat already configured, skipping...")
+                    return
+                }
+
+                print("🔧 Configuring RevenueCat...")
+                Purchases.logLevel = .debug
+                Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+                print("✅ RevenueCat configured successfully")
+
+                // Check premium status after configuration
+                Task {
+                    await ProfileManager.shared.checkPremiumStatus()
+                    
+                    // Pre-fetch offerings to ensure they're available when PaywallView appears
+                    do {
+                        let offerings = try await Purchases.shared.offerings()
+                        print("✅ Offerings pre-fetched: \(offerings.current?.identifier ?? "none")")
+                        if let current = offerings.current {
+                            print("   Packages: \(current.availablePackages.map { $0.identifier })")
+                        }
+                    } catch {
+                        print("⚠️ Failed to pre-fetch offerings: \(error)")
+                    }
+                }
+
+
+            }
+
+            // Show splash for 2 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 withAnimation(.easeOut(duration: 0.5)) {
                     showSplash = false
+                    print("✨ Splash complete, showing main app")
+
+                    // Show paywall after splash if not premium and onboarding completed
+                    if hasCompletedOnboarding && !profileManager.isPremium {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            showPaywall = true
+                        }
+                    }
                 }
             }
         }
     }
+    
     
     private var mainTabView: some View {
         TabView(selection: $selectedTab) {
@@ -183,5 +234,13 @@ struct SplashView: View {
 }
 
 #Preview {
-    ContentView()
+    // Configure RevenueCat for preview
+    let _ = {
+        if !Purchases.isConfigured {
+            Purchases.logLevel = .debug
+            Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+        }
+    }()
+
+    return ContentView()
 }

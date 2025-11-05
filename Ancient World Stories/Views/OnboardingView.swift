@@ -107,18 +107,17 @@ struct OnboardingView: View {
             
             // Paywall slides in from right
             if showPaywall {
-                PaywallView(onComplete: {
-                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                        hasCompletedOnboarding = true
-                    }
-                }, onDismiss: {
-                    // User dismissed paywall - still mark onboarding as complete
-                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                        hasCompletedOnboarding = true
-                    }
-                })
-                .transition(.move(edge: .trailing))
-                .zIndex(1)
+                PaywallView(isPresented: $showPaywall)
+                    .transition(.move(edge: .trailing))
+                    .zIndex(1)
+            }
+        }
+        .onChange(of: showPaywall) { oldValue, newValue in
+            // When paywall is dismissed, mark onboarding as complete
+            if oldValue && !newValue {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                    hasCompletedOnboarding = true
+                }
             }
         }
     }
