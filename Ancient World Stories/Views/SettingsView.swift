@@ -10,7 +10,16 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var profileManager = ProfileManager.shared
+    @ObservedObject private var audioManager = AudioManager.shared
     @State private var showVoiceSelector = false
+
+    private var currentVoiceDescription: String {
+        if audioManager.selectedEngine == .minimax {
+            return audioManager.selectedMinimaxVoice.displayName + " (Neural AI)"
+        } else {
+            return audioManager.selectedVoice.displayName
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -22,7 +31,7 @@ struct SettingsView: View {
                         SettingsRow(
                             icon: "speaker.wave.3.fill",
                             title: "Voice Settings",
-                            subtitle: profileManager.currentVoice.displayName
+                            subtitle: currentVoiceDescription
                         ) {
                             showVoiceSelector = true
                         }

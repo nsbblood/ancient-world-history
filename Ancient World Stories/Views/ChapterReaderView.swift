@@ -20,6 +20,7 @@ struct ChapterReaderView: View {
     @State private var isDragging = false
     @State private var screenWidth: CGFloat = 0
     @State private var showPaywall = false
+    @State private var showVoiceSelector = false
 
     init(chapter: Chapter, story: Story, civilization: Civilization, allChapters: [Chapter]) {
         self.initialChapter = chapter
@@ -216,14 +217,29 @@ struct ChapterReaderView: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        favoritesManager.toggleFavorite(chapterId: currentChapter.id)
-                    } label: {
-                        Image(systemName: isFavorite ? "heart.fill" : "heart")
-                            .foregroundColor(.accentColor)
-                            .font(.system(size: 20))
+                    HStack(spacing: 16) {
+                        // Voice selector button
+                        Button {
+                            showVoiceSelector = true
+                        } label: {
+                            Image(systemName: "speaker.wave.2.fill")
+                                .foregroundColor(.accentColor)
+                                .font(.system(size: 20))
+                        }
+
+                        // Favorite button
+                        Button {
+                            favoritesManager.toggleFavorite(chapterId: currentChapter.id)
+                        } label: {
+                            Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                .foregroundColor(.accentColor)
+                                .font(.system(size: 20))
+                        }
                     }
                 }
+            }
+            .sheet(isPresented: $showVoiceSelector) {
+                VoiceSelectorView()
             }
         }
         .onAppear {
