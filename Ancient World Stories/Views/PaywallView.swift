@@ -98,6 +98,10 @@ struct PaywallView: View {
                     endRadius: 400
                 )
                 .ignoresSafeArea()
+                .onAppear {
+                    // Try to get cached offerings immediately on appear
+                    loadCachedOfferingsIfAvailable()
+                }
                 
                 VStack(spacing: 0) {
                     // Top bar: Close button only
@@ -322,12 +326,51 @@ struct PaywallView: View {
                 }
             }
         }
-        .onAppear {
-            fetchOfferings()
-        }
     }
 
     // MARK: - RevenueCat Methods
+
+    // Try to load cached offerings immediately for instant display
+    private func loadCachedOfferingsIfAvailable() {
+        // Check if RevenueCat is configured
+        guard Purchases.isConfigured else {
+            print("❌ RevenueCat is not configured!")
+            errorMessage = "RevenueCat is not initialized. Please restart the app."
+            return
+        }
+
+        // Try to fetch offerings - RevenueCat will use cache if available
+        Task {
+            do {
+                let offerings = try await Purchases.shared.offerings()
+
+                await MainActor.run {
+                    self.offerings = offerings
+                    print("✅ Offerings loaded (from cache or network)")
+
+                    if let current = offerings.current {
+                        print("   Current offering: \(current.identifier)")
+                        print("   Available packages: \(current.availablePackages.map { $0.identifier })")
+
+                        let foundYearlyPackage = current.package(identifier: "$rc_annual")
+                        let foundWeeklyPackage = current.package(identifier: "$rc_weekly")
+
+                        if foundYearlyPackage == nil && foundWeeklyPackage == nil {
+                            self.errorMessage = "No subscription packages found. Please check RevenueCat Dashboard."
+                        }
+                    } else if offerings.all.values.first == nil {
+                        self.errorMessage = "No subscription offerings configured in RevenueCat Dashboard."
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = "Failed to load subscriptions: \(error.localizedDescription)"
+                    print("❌ RevenueCat error: \(error)")
+                }
+            }
+        }
+    }
+
     private func fetchOfferings() {
         print("🔄 Fetching RevenueCat offerings...")
         
