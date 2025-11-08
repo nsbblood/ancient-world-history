@@ -79,5 +79,7 @@ struct StoriesView: View {
         .navigationDestination(item: $selectedStory) { story in
             ChaptersView(story: story, civilization: civilization)
         }
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(Color.appBackground, for: .navigationBar)
     }
 }

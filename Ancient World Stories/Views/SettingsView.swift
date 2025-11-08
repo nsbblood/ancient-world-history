@@ -113,6 +113,8 @@ struct SettingsView: View {
                     }
                 }
             }
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.appBackground, for: .navigationBar)
         }
         .sheet(isPresented: $showVoiceSelector) {
             VoiceSelectorView()

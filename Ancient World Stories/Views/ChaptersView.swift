@@ -101,5 +101,7 @@ struct ChaptersView: View {
                 allChapters: chapters
             )
         }
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(Color.appBackground, for: .navigationBar)
     }
 }

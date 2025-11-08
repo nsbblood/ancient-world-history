@@ -42,6 +42,10 @@ struct CivilizationsView: View {
             .navigationDestination(item: $selectedCivilization) { civ in
                 StoriesView(civilization: civ)
             }
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.appBackground, for: .navigationBar)
         }
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarBackground(Color.cardBackground, for: .tabBar)
     }
 }
