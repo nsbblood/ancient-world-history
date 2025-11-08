@@ -11,23 +11,121 @@ import RevenueCat
 struct AppLoadingView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var selectedTab = 0
-    // Remove @StateObject to prevent early initialization
-    // ContentLoader will be accessed directly when needed
     @State private var profileManager: ProfileManager?
+    @State private var showLoading = true
+    @State private var loadingProgress: CGFloat = 0
 
     var body: some View {
-        Group {
-            if !hasCompletedOnboarding {
-                // Show onboarding immediately - it will load data itself
-                OnboardingView()
-            } else {
-                // Show main UI immediately - tabs will load data as needed
-                mainTabView
+        ZStack {
+            // Main content - show immediately after LaunchScreen
+            Group {
+                if !hasCompletedOnboarding {
+                    OnboardingView()
+                } else {
+                    mainTabView
+                }
+            }
+
+            // Minimal loading bar at bottom - only while loading
+            if showLoading {
+                VStack {
+                    Spacer()
+
+                    // App icon with glow effect
+                    ZStack {
+                        // Radial glow
+                        Circle()
+                            .fill(
+                                RadialGradient(
+                                    colors: [
+                                        Color(red: 0.831, green: 0.686, blue: 0.216).opacity(0.3),
+                                        Color.clear
+                                    ],
+                                    center: .center,
+                                    startRadius: 20,
+                                    endRadius: 80
+                                )
+                            )
+                            .frame(width: 160, height: 160)
+
+                        // App icon
+                        Image("AppIconImage")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(22.37) // iOS app icon corner radius
+                            .shadow(color: Color(red: 0.831, green: 0.686, blue: 0.216).opacity(0.4), radius: 10, x: 0, y: 4)
+                    }
+                    .padding(.bottom, 40)
+
+                    // Simple progress bar at bottom
+                    VStack(spacing: 8) {
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                // Background track
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.white.opacity(0.2))
+                                    .frame(height: 4)
+
+                                // Progress fill
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                Color(red: 0.831, green: 0.686, blue: 0.216),
+                                                Color(red: 0.545, green: 0.412, blue: 0.078)
+                                            ],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                                    .frame(width: geometry.size.width * loadingProgress, height: 4)
+                            }
+                        }
+                        .frame(height: 4)
+
+                        Text("Loading...")
+                            .font(.system(size: 12, design: .serif))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal, 32)
+                    .padding(.bottom, 50)
+                }
+                .transition(.opacity)
             }
         }
         .task {
-            // Only initialize essentials - NO network calls!
-            await initializeEssentials()
+            await initializeWithAnimation()
+        }
+    }
+
+    private func initializeWithAnimation() async {
+        // Start animating progress immediately
+        Task {
+            await animateProgress()
+        }
+
+        // Initialize essentials
+        await initializeEssentials()
+
+        // Make sure progress reaches 100%
+        loadingProgress = 1.0
+
+        // Small delay to show completion
+        try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s
+
+        // Hide loading screen
+        withAnimation(.easeOut(duration: 0.5)) {
+            showLoading = false
+        }
+    }
+
+    private func animateProgress() async {
+        // Smooth progress animation
+        let steps = 30
+        for i in 0...steps {
+            loadingProgress = CGFloat(i) / CGFloat(steps)
+            try? await Task.sleep(nanoseconds: 30_000_000) // 30ms per step = smooth animation
         }
     }
 
