@@ -50,7 +50,7 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
     @Published var isPlaying = false
     @Published var currentProgress: Double = 0.0
     @Published var selectedVoice: VoiceType = .femaleUS
-    @Published var selectedEngine: TTSEngine = .system
+    @Published var selectedEngine: TTSEngine = .minimax  // Default to Neural AI for premium users
     @Published var selectedMinimaxVoice: MinimaxTTSService.Voice = .wiseWoman
 
     private var currentUtterance: AVSpeechUtterance?

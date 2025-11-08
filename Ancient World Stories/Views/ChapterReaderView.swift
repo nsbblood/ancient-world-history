@@ -19,6 +19,7 @@ struct ChapterReaderView: View {
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
     @State private var screenWidth: CGFloat = 0
+    @State private var showPaywall = false
 
     init(chapter: Chapter, story: Story, civilization: Civilization, allChapters: [Chapter]) {
         self.initialChapter = chapter
@@ -105,8 +106,13 @@ struct ChapterReaderView: View {
                                 } else if audioManager.synthesizer.isPaused {
                                     audioManager.resume()
                                 } else {
-                                    audioManager.speak(text: currentChapter.text, language: currentChapter.languageCode)
-                                    markAsRead()
+                                    // Check if premium for Neural AI TTS
+                                    if !profileManager.isPremium {
+                                        showPaywall = true
+                                    } else {
+                                        audioManager.speak(text: currentChapter.text, language: currentChapter.languageCode)
+                                        markAsRead()
+                                    }
                                 }
                             },
                             onStop: {
@@ -185,6 +191,13 @@ struct ChapterReaderView: View {
                     .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
                 }
                 .allowsHitTesting(true)
+
+                // Paywall overlay for Neural AI TTS
+                if showPaywall {
+                    PaywallView(isPresented: $showPaywall)
+                        .transition(.move(edge: .bottom))
+                        .zIndex(2)
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
