@@ -53,3 +53,8 @@ struct AncientWorldStoriesApp: App {
         UITabBar.appearance().unselectedItemTintColor = UIColor(red: 0.588, green: 0.608, blue: 0.655, alpha: 1.0)
     }
 }
+
+#Preview {
+    AppLoadingView()
+}
+
