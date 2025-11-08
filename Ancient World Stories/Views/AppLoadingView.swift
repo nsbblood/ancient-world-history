@@ -100,6 +100,9 @@ struct AppLoadingView: View {
     }
 
     private func initializeWithAnimation() async {
+        // Record start time for minimum display duration
+        let startTime = Date()
+
         // Start animating progress immediately
         Task {
             await animateProgress()
@@ -110,6 +113,14 @@ struct AppLoadingView: View {
 
         // Make sure progress reaches 100%
         loadingProgress = 1.0
+
+        // Ensure minimum display time of 1.5 seconds (so user sees the branding)
+        let elapsed = Date().timeIntervalSince(startTime)
+        let minimumDuration: TimeInterval = 1.5
+        if elapsed < minimumDuration {
+            let remaining = minimumDuration - elapsed
+            try? await Task.sleep(nanoseconds: UInt64(remaining * 1_000_000_000))
+        }
 
         // Small delay to show completion
         try? await Task.sleep(nanoseconds: 200_000_000) // 0.2s
