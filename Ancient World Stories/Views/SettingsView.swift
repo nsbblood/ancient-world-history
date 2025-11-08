@@ -14,11 +14,7 @@ struct SettingsView: View {
     @State private var showVoiceSelector = false
 
     private var currentVoiceDescription: String {
-        if audioManager.selectedEngine == .minimax {
-            return audioManager.selectedMinimaxVoice.displayName + " (Neural AI)"
-        } else {
-            return audioManager.selectedVoice.displayName
-        }
+        return audioManager.selectedMinimaxVoice.displayName
     }
 
     var body: some View {

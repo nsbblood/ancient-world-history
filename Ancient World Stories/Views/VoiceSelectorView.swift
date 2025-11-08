@@ -11,6 +11,7 @@ struct VoiceSelectorView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var audioManager = AudioManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
@@ -18,128 +19,82 @@ struct VoiceSelectorView: View {
                 Color.appBackground.ignoresSafeArea()
 
                 List {
-                    // TTS Engine Selection
-                    Section {
-                        ForEach(TTSEngine.allCases, id: \.self) { engine in
-                            HStack {
+                    // Premium badge section
+                    if !profileManager.isPremium {
+                        Section {
+                            HStack(spacing: 12) {
+                                Image(systemName: "crown.fill")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.appAccent)
+
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(engine.displayName)
+                                    Text("Premium Feature")
                                         .font(.serifBody())
                                         .foregroundColor(.primaryText)
 
-                                    if engine.isPremium {
-                                        HStack(spacing: 4) {
-                                            Image(systemName: "crown.fill")
-                                                .font(.system(size: 10))
-                                                .foregroundColor(.appAccent)
-                                            Text("Premium - Neural AI Voice")
-                                                .font(.serifCaption2())
-                                                .foregroundColor(.secondaryText)
-                                        }
-                                    } else {
-                                        Text("Standard iOS Voice")
-                                            .font(.serifCaption2())
-                                            .foregroundColor(.secondaryText)
-                                    }
+                                    Text("Unlock Neural AI voices with premium")
+                                        .font(.serifCaption2())
+                                        .foregroundColor(.secondaryText)
+                                }
+
+                                Spacer()
+                            }
+                            .padding(.vertical, 8)
+                            .listRowBackground(Color.appAccent.opacity(0.1))
+                        }
+                    }
+
+                    // Neural AI Voice Selection
+                    Section {
+                        ForEach(MinimaxTTSService.Voice.allCases, id: \.self) { voice in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(voice.displayName)
+                                        .font(.serifBody())
+                                        .foregroundColor(.primaryText)
+
+                                    Text(voiceDescription(for: voice))
+                                        .font(.serifCaption2())
+                                        .foregroundColor(.secondaryText)
                                 }
 
                                 Spacer()
 
-                                if audioManager.selectedEngine == engine {
+                                if audioManager.selectedMinimaxVoice == voice {
                                     Image(systemName: "checkmark.circle.fill")
                                         .foregroundColor(.appAccent)
                                 }
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                if engine.isPremium && !profileManager.isPremium {
-                                    // Show premium required message
-                                    print("⚠️ Premium required for Neural AI")
+                                if !profileManager.isPremium {
+                                    showPaywall = true
                                 } else {
-                                    audioManager.selectedEngine = engine
+                                    audioManager.setMinimaxVoice(voice)
                                 }
                             }
                             .listRowBackground(Color.cardBackground)
+                            .opacity(profileManager.isPremium ? 1.0 : 0.6)
                         }
                     } header: {
-                        Text("Voice Engine")
+                        Text("Neural AI Voices")
                             .font(.serifBody())
                             .foregroundColor(.primaryText)
                     } footer: {
-                        if audioManager.selectedEngine.isPremium {
-                            Text("Neural AI provides natural, human-like narration powered by advanced AI.")
-                                .font(.serifCaption())
-                                .foregroundColor(.secondaryText)
-                        }
-                    }
-
-                    // Voice Selection based on engine
-                    if audioManager.selectedEngine == .system {
-                        Section {
-                            ForEach(VoiceType.allCases, id: \.self) { voice in
-                                HStack {
-                                    Text(voice.displayName)
-                                        .font(.serifBody())
-                                        .foregroundColor(.primaryText)
-
-                                    Spacer()
-
-                                    if audioManager.selectedVoice == voice {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.appAccent)
-                                    }
-                                }
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    audioManager.setVoice(voice)
-                                }
-                                .listRowBackground(Color.cardBackground)
-                            }
-                        } header: {
-                            Text("System Voice")
-                                .font(.serifBody())
-                                .foregroundColor(.primaryText)
-                        }
-                    } else {
-                        Section {
-                            ForEach(MinimaxTTSService.Voice.allCases, id: \.self) { voice in
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(voice.displayName)
-                                            .font(.serifBody())
-                                            .foregroundColor(.primaryText)
-
-                                        Text(voiceDescription(for: voice))
-                                            .font(.serifCaption2())
-                                            .foregroundColor(.secondaryText)
-                                    }
-
-                                    Spacer()
-
-                                    if audioManager.selectedMinimaxVoice == voice {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.appAccent)
-                                    }
-                                }
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    audioManager.setMinimaxVoice(voice)
-                                }
-                                .listRowBackground(Color.cardBackground)
-                            }
-                        } header: {
-                            Text("Neural AI Voice Character")
-                                .font(.serifBody())
-                                .foregroundColor(.primaryText)
-                        } footer: {
-                            Text("Choose a voice character that brings ancient stories to life.")
-                                .font(.serifCaption())
-                                .foregroundColor(.secondaryText)
-                        }
+                        Text("Natural, human-like narration powered by advanced AI. Choose a voice character that brings ancient stories to life.")
+                            .font(.serifCaption())
+                            .foregroundColor(.secondaryText)
                     }
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
+
+                // Paywall overlay
+                if showPaywall {
+                    PaywallView(isPresented: $showPaywall)
+                        .transition(.move(edge: .bottom))
+                        .zIndex(2)
+                }
             }
             .navigationTitle("Voice Settings")
             .navigationBarTitleDisplayMode(.inline)
