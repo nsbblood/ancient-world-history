@@ -10,19 +10,59 @@ import RevenueCat
 
 @main
 struct AncientWorldStoriesApp: App {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @State private var selectedTab = 0
+
     init() {
-        // Keep init empty for fastest app launch
-        // UI appearance will be configured when needed
+        // Configure RevenueCat on app launch
+        if !Purchases.isConfigured {
+            Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+        }
+
+        // Initialize ProfileManager
+        let _ = ProfileManager.shared
+
+        // Configure UI appearance
+        configureAppearance()
     }
 
     var body: some Scene {
         WindowGroup {
-            AppLoadingView()
-                .onAppear {
-                    // Configure appearance after first render
-                    configureAppearance()
-                }
+            if !hasCompletedOnboarding {
+                OnboardingView()
+            } else {
+                mainTabView
+            }
         }
+    }
+
+    private var mainTabView: some View {
+        TabView(selection: $selectedTab) {
+            HomeView()
+                .tabItem {
+                    Label("Home", systemImage: "book.fill")
+                }
+                .tag(0)
+
+            CivilizationsView()
+                .tabItem {
+                    Label("Episodes", systemImage: "list.bullet")
+                }
+                .tag(1)
+
+            ExploreView()
+                .tabItem {
+                    Label("Explore", systemImage: "map.fill")
+                }
+                .tag(2)
+
+            ProfileView()
+                .tabItem {
+                    Label("Profile", systemImage: "person.fill")
+                }
+                .tag(3)
+        }
+        .tint(.accentColor)
     }
 
     private func configureAppearance() {
@@ -55,6 +95,6 @@ struct AncientWorldStoriesApp: App {
 }
 
 #Preview {
-    AppLoadingView()
+    OnboardingView()
 }
 
