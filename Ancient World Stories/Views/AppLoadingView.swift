@@ -31,33 +31,6 @@ struct AppLoadingView: View {
                 VStack {
                     Spacer()
 
-                    // App icon with glow effect
-                    ZStack {
-                        // Radial glow
-                        Circle()
-                            .fill(
-                                RadialGradient(
-                                    colors: [
-                                        Color(red: 0.831, green: 0.686, blue: 0.216).opacity(0.3),
-                                        Color.clear
-                                    ],
-                                    center: .center,
-                                    startRadius: 20,
-                                    endRadius: 80
-                                )
-                            )
-                            .frame(width: 160, height: 160)
-
-                        // App icon
-                        Image("AppIconImage")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100)
-                            .cornerRadius(22.37) // iOS app icon corner radius
-                            .shadow(color: Color(red: 0.831, green: 0.686, blue: 0.216).opacity(0.4), radius: 10, x: 0, y: 4)
-                    }
-                    .padding(.bottom, 40)
-
                     // Simple progress bar at bottom
                     VStack(spacing: 8) {
                         GeometryReader { geometry in
@@ -114,9 +87,9 @@ struct AppLoadingView: View {
         // Make sure progress reaches 100%
         loadingProgress = 1.0
 
-        // Ensure minimum display time of 1.5 seconds (so user sees the branding)
+        // Ensure minimum display time of 0.5 seconds (so progress bar is visible)
         let elapsed = Date().timeIntervalSince(startTime)
-        let minimumDuration: TimeInterval = 1.5
+        let minimumDuration: TimeInterval = 0.5
         if elapsed < minimumDuration {
             let remaining = minimumDuration - elapsed
             try? await Task.sleep(nanoseconds: UInt64(remaining * 1_000_000_000))
