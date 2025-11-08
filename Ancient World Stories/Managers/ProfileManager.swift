@@ -16,11 +16,20 @@ class ProfileManager: ObservableObject {
 
     @Published var readChapterIds: Set<UUID> = []
     @Published var profileImage: UIImage?
+    private var hasLoadedData = false
+    private var hasLoadedImage = false
 
     private init() {
-        loadReadChapters()
-        loadProfileImage()
+        // Don't load data in init - wait for explicit call to improve app startup time
         // Don't check premium status in init - wait for explicit call after splash and RevenueCat configuration
+    }
+
+    func loadInitialDataIfNeeded() {
+        guard !hasLoadedData else { return }
+        hasLoadedData = true
+        // Only load critical data - defer image loading
+        loadReadChapters()
+        // Don't load profile image yet - lazy load when ProfileView is opened
     }
 
     func checkPremiumStatus() async {
@@ -31,6 +40,12 @@ class ProfileManager: ObservableObject {
         } catch {
             print("❌ Error checking premium status: \(error)")
         }
+    }
+
+    func ensureProfileImageLoaded() {
+        guard !hasLoadedImage else { return }
+        hasLoadedImage = true
+        loadProfileImage()
     }
 
     private func loadProfileImage() {

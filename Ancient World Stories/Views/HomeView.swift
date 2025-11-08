@@ -146,6 +146,13 @@ struct HomeView: View {
         }
         .toolbarBackground(.visible, for: .tabBar)
         .toolbarBackground(Color.cardBackground, for: .tabBar)
+        .task {
+            // Load data if not already loaded (for users who skip onboarding)
+            if content.chapters.isEmpty && !content.isLoading {
+                print("📚 Loading data from HomeView...")
+                await content.loadAllData()
+            }
+        }
         .onAppear {
             loadRandomChapters()
         }

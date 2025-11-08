@@ -46,14 +46,21 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
     private var currentUtterance: AVSpeechUtterance?
     private var totalCharacterCount: Int = 0
     private var currentCharacterIndex: Int = 0
+    private var hasLoadedVoice = false
 
     private override init() {
         super.init()
         synthesizer.delegate = self
-        loadSelectedVoice()
+        // Don't load voice in init - lazy load on first use
     }
 
     // MARK: - Voice Selection
+    private func ensureVoiceLoaded() {
+        guard !hasLoadedVoice else { return }
+        hasLoadedVoice = true
+        loadSelectedVoice()
+    }
+
     func loadSelectedVoice() {
         if let savedVoice = UserDefaults.standard.string(forKey: "selectedVoice"),
            let voice = VoiceType(rawValue: savedVoice) {
@@ -68,6 +75,9 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
 
     // MARK: - Playback Control
     func speak(text: String, language: String = "en-US") {
+        // Lazy load voice settings on first use
+        ensureVoiceLoaded()
+
         // Stop any current speech
         if synthesizer.isSpeaking {
             stop()
