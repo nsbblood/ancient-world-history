@@ -9,6 +9,14 @@ import AVFoundation
 import SwiftUI
 import Combine
 
+enum TTSEngine: String, CaseIterable {
+    case system = "System (Free)"
+    case minimax = "Neural AI (Premium)"
+
+    var displayName: String { rawValue }
+    var isPremium: Bool { self == .minimax }
+}
+
 enum VoiceType: String, CaseIterable {
     case femaleUS = "com.apple.voice.compact.en-US.Samantha"
     case maleUS = "com.apple.voice.compact.en-US.Aaron"
@@ -42,6 +50,8 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
     @Published var isPlaying = false
     @Published var currentProgress: Double = 0.0
     @Published var selectedVoice: VoiceType = .femaleUS
+    @Published var selectedEngine: TTSEngine = .system
+    @Published var selectedMinimaxVoice: MinimaxTTSService.Voice = .wiseWoman
 
     private var currentUtterance: AVSpeechUtterance?
     private var totalCharacterCount: Int = 0
@@ -73,16 +83,50 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
         UserDefaults.standard.set(voice.rawValue, forKey: "selectedVoice")
     }
 
+    // MARK: - Engine Selection
+    func setEngine(_ engine: TTSEngine) {
+        // Check if premium feature
+        if engine.isPremium && !ProfileManager.shared.isPremium {
+            print("⚠️ Neural AI TTS requires premium subscription")
+            return
+        }
+
+        selectedEngine = engine
+        UserDefaults.standard.set(engine.rawValue, forKey: "selectedTTSEngine")
+        print("🎙️ TTS Engine set to: \(engine.displayName)")
+    }
+
+    func setMinimaxVoice(_ voice: MinimaxTTSService.Voice) {
+        selectedMinimaxVoice = voice
+        UserDefaults.standard.set(voice.rawValue, forKey: "selectedMinimaxVoice")
+    }
+
     // MARK: - Playback Control
     func speak(text: String, language: String = "en-US") {
         // Lazy load voice settings on first use
         ensureVoiceLoaded()
 
         // Stop any current speech
-        if synthesizer.isSpeaking {
-            stop()
-        }
+        stop()
 
+        // Route to appropriate TTS engine
+        switch selectedEngine {
+        case .system:
+            speakWithSystem(text: text, language: language)
+
+        case .minimax:
+            // Check premium status
+            guard ProfileManager.shared.isPremium else {
+                print("⚠️ Neural AI TTS requires premium - falling back to system")
+                speakWithSystem(text: text, language: language)
+                return
+            }
+
+            speakWithMinimax(text: text, language: language)
+        }
+    }
+
+    private func speakWithSystem(text: String, language: String) {
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = 0.5 // Slightly slower for storytelling
         utterance.pitchMultiplier = 1.0
@@ -105,6 +149,32 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
         isPlaying = true
     }
 
+    private func speakWithMinimax(text: String, language: String) {
+        isPlaying = true
+
+        Task {
+            do {
+                let langCode = language.prefix(2).lowercased() // "en-US" -> "en"
+                try await MinimaxTTSService.shared.speak(
+                    text: text,
+                    voice: selectedMinimaxVoice,
+                    speed: 1.0,
+                    language: String(langCode)
+                )
+
+                // Reset playing state when done
+                self.isPlaying = false
+                self.currentProgress = 1.0
+
+            } catch {
+                print("❌ Minimax TTS failed, falling back to system: \(error)")
+
+                // Fallback to system TTS
+                self.speakWithSystem(text: text, language: language)
+            }
+        }
+    }
+
     func pause() {
         if synthesizer.isSpeaking {
             synthesizer.pauseSpeaking(at: .word)
@@ -121,6 +191,7 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
 
     func stop() {
         synthesizer.stopSpeaking(at: .immediate)
+        MinimaxTTSService.shared.stop()
         isPlaying = false
         currentProgress = 0.0
         currentCharacterIndex = 0
