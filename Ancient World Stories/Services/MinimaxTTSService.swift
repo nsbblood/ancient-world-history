@@ -17,8 +17,8 @@ class MinimaxTTSService: ObservableObject {
     @Published var error: String?
 
     private var audioPlayer: AVAudioPlayer?
-    private let supabaseURL = "YOUR_SUPABASE_PROJECT_URL" // TODO: Replace with your Supabase project URL
-    private let supabaseAnonKey = "YOUR_SUPABASE_ANON_KEY" // TODO: Replace with your Supabase anon key
+    private let supabaseURL = "https://njpjehnphsceepechadv.supabase.co"
+    private let supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qcGplaG5waHNjZWVwZWNoYWR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDk5MTEsImV4cCI6MjA3NzU4NTkxMX0.deAvavILAyoKDFR9K3Rw5FwO_lJ1r7_GKoE9WHjiVx0"
 
     // Voice options from Minimax
     enum Voice: String, CaseIterable {
