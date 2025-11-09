@@ -14,16 +14,19 @@ struct AncientWorldStoriesApp: App {
     @State private var selectedTab = 0
 
     init() {
-        // Configure RevenueCat on app launch
-        if !Purchases.isConfigured {
-            Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+        // Configure UI appearance first (fast, synchronous)
+        configureAppearance()
+
+        // Run RevenueCat in BACKGROUND THREAD (non-blocking)
+        Task.detached {
+            if !Purchases.isConfigured {
+                Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+                print("✅ RevenueCat configured in background")
+            }
         }
 
-        // Initialize ProfileManager
-        let _ = ProfileManager.shared
-
-        // Configure UI appearance
-        configureAppearance()
+        // ProfileManager doesn't need to wait - it's lightweight now
+        print("✅ App init completed - showing UI immediately")
     }
 
     var body: some Scene {

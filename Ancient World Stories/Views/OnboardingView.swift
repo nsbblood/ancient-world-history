@@ -113,11 +113,9 @@ struct OnboardingView: View {
             }
         }
         .onChange(of: showPaywall) { oldValue, newValue in
-            // When paywall is dismissed, mark onboarding as complete
+            // When paywall is dismissed, instantly go to home (no flash)
             if oldValue && !newValue {
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                    hasCompletedOnboarding = true
-                }
+                hasCompletedOnboarding = true
             }
         }
         .task {
