@@ -30,12 +30,6 @@ struct OnboardingView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-
-            // Papyrus texture overlay
-            PapyrusTexture()
-                .opacity(0.05)
-                .ignoresSafeArea()
-                .blendMode(.overlay)
             
             VStack(spacing: 0) {
                 // Page indicator
@@ -91,18 +85,9 @@ struct OnboardingView: View {
                         )
                         .cornerRadius(16)
                         .shadow(color: Color.appAccent.opacity(0.4), radius: 8, x: 0, y: 4)
-                        .scaleEffect(buttonPulse)
                 }
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
-                .onAppear {
-                    withAnimation(
-                        Animation.easeInOut(duration: 1.5)
-                            .repeatForever(autoreverses: true)
-                    ) {
-                        buttonPulse = 1.03
-                    }
-                }
             }
             
             // Paywall fades in

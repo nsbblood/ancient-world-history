@@ -93,7 +93,7 @@ struct ChapterReaderView: View {
                         .padding()
                         .id(currentChapter.id)
                     }
-                    .frame(height: geometry.size.height - 150)
+                    .frame(height: max(0, geometry.size.height - 150))
                     .background(Color.backgroundColor)
 
                 // Fixed bottom controls
@@ -222,8 +222,7 @@ struct ChapterReaderView: View {
                         }
                     }
                 }
-                .background(Color.cardBackground.opacity(0.95))
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
+                .background(Color.backgroundColor)
                 }
             }
             .background(Color.backgroundColor)
