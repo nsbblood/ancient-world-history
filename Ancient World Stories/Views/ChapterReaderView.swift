@@ -13,6 +13,7 @@ struct ChapterReaderView: View {
     @ObservedObject private var audioManager = AudioManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
+    @ObservedObject private var analytics = AnalyticsManager.shared
 
     @State private var currentChapter: Chapter
     @State private var hasMarkedAsRead = false
@@ -50,160 +51,190 @@ struct ChapterReaderView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.backgroundColor.ignoresSafeArea()
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    // Scrollable content area
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 24) {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text(civilization.name)
+                                    .font(.serifCaption())
+                                    .foregroundColor(.appAccent)
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text(civilization.name)
+                                Text(story.title)
+                                    .font(.serifBody())
+                                    .foregroundColor(.appText.opacity(0.7))
+
+                                Text(currentChapter.title)
+                                    .font(.serifTitle2())
+                                    .foregroundColor(.appText)
+
+                                HStack(spacing: 12) {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "clock")
+                                            .foregroundColor(.appText.opacity(0.7))
+                                        Text(currentChapter.formattedDuration)
+                                    }
+                                    Text("•")
+                                    Text("Chapter \(currentChapter.orderNo)")
+                                }
                                 .font(.serifCaption())
-                                .foregroundColor(.appAccent)
-
-                            Text(story.title)
-                                .font(.serifBody())
                                 .foregroundColor(.appText.opacity(0.7))
+                            }
 
-                            Text(currentChapter.title)
-                                .font(.serifTitle2())
+                            Divider().background(Color.appSecondary)
+
+                            Text(currentChapter.text)
+                                .font(.readingFont())
                                 .foregroundColor(.appText)
-
-                            HStack(spacing: 12) {
-                                HStack(spacing: 4) {
-                                    Image(systemName: "clock")
-                                        .foregroundColor(.appText.opacity(0.7))
-                                    Text(currentChapter.formattedDuration)
-                                }
-                                Text("•")
-                                Text("Chapter \(currentChapter.orderNo)")
-                            }
-                            .font(.serifCaption())
-                            .foregroundColor(.appText.opacity(0.7))
+                                .lineSpacing(8)
+                                .textSelection(.enabled)
                         }
-
-                        Divider().background(Color.appSecondary)
-
-                        Text(currentChapter.text)
-                            .font(.readingFont())
-                            .foregroundColor(.appText)
-                            .lineSpacing(8)
-                            .textSelection(.enabled)
-                        
-                        Spacer(minLength: 100)
-                    }
-                    .padding()
-                }
-                
-                VStack {
-                    Spacer()
-
-                    VStack(spacing: 0) {
-                        AudioPlayerControls(
-                            isPlaying: audioManager.isPlaying,
-                            progress: audioManager.currentProgress,
-                            onPlayPause: {
-                                if audioManager.isPlaying {
-                                    audioManager.pause()
-                                } else if audioManager.synthesizer.isPaused {
-                                    audioManager.resume()
-                                } else {
-                                    // Check if premium for Neural AI TTS
-                                    if !profileManager.isPremium {
-                                        showPaywall = true
-                                    } else {
-                                        audioManager.speak(text: currentChapter.text, language: currentChapter.languageCode)
-                                        markAsRead()
-                                    }
-                                }
-                            },
-                            onStop: {
-                                audioManager.stop()
-                            }
-                        )
                         .padding()
+                        .id(currentChapter.id)
+                    }
+                    .frame(height: geometry.size.height - 150)
+                    .background(Color.backgroundColor)
 
-                        if previousChapter != nil || nextChapter != nil {
-                            Divider()
-                                .background(Color.appSecondary.opacity(0.3))
+                // Fixed bottom controls
+                VStack(spacing: 0) {
+                    AudioPlayerControls(
+                        isPlaying: audioManager.isPlaying,
+                        progress: audioManager.currentProgress,
+                        onPlayPause: {
+                            if audioManager.isPlaying {
+                                analytics.track(event: .audioPlaybackPaused, parameters: [
+                                    "chapter_id": currentChapter.id.uuidString,
+                                    "progress_percentage": Int(audioManager.currentProgress * 100)
+                                ])
+                                audioManager.pause()
+                            } else if audioManager.synthesizer.isPaused {
+                                analytics.track(event: .audioPlaybackResumed, parameters: [
+                                    "chapter_id": currentChapter.id.uuidString,
+                                    "progress_percentage": Int(audioManager.currentProgress * 100)
+                                ])
+                                audioManager.resume()
+                            } else {
+                                // Check if premium for Neural AI TTS
+                                if !profileManager.isPremium {
+                                    analytics.track(event: .paywallViewed, parameters: [
+                                        "source": "audio_playback",
+                                        "trigger": "non_premium_user"
+                                    ])
+                                    showPaywall = true
+                                } else {
+                                    analytics.track(event: .audioPlaybackStarted, parameters: [
+                                        "chapter_id": currentChapter.id.uuidString,
+                                        "voice_type": "neural_ai",
+                                        "is_premium": true
+                                    ])
+                                    audioManager.speak(text: currentChapter.text, language: currentChapter.languageCode)
+                                    markAsRead()
+                                }
+                            }
+                        },
+                        onStop: {
+                            analytics.track(event: .audioPlaybackStopped, parameters: [
+                                "chapter_id": currentChapter.id.uuidString,
+                                "progress_percentage": Int(audioManager.currentProgress * 100)
+                            ])
+                            audioManager.stop()
+                        }
+                    )
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 4)
 
-                            HStack(spacing: 0) {
-                                if let previous = previousChapter {
-                                    Button {
-                                        navigateToPreviousChapter(previous)
-                                    } label: {
-                                        HStack {
-                                            Image(systemName: "chevron.left")
-                                                .foregroundColor(.accentColor)
+                    if previousChapter != nil || nextChapter != nil {
+                        Divider()
+                            .background(Color.appSecondary.opacity(0.3))
 
-                                            VStack(alignment: .leading, spacing: 4) {
-                                                Text("Previous Chapter")
-                                                    .font(.serifCaption())
-                                                    .foregroundColor(.appText.opacity(0.7))
+                        HStack(spacing: 0) {
+                            if let previous = previousChapter {
+                                Button {
+                                    analytics.track(event: .previousChapterTapped, parameters: [
+                                        "current_chapter_id": currentChapter.id.uuidString,
+                                        "previous_chapter_id": previous.id.uuidString,
+                                        "previous_chapter_title": previous.title
+                                    ])
+                                    navigateToPreviousChapter(previous)
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "chevron.left")
+                                            .foregroundColor(.accentColor)
 
-                                                Text(previous.title)
-                                                    .font(.serifBody())
-                                                    .foregroundColor(.appText)
-                                                    .lineLimit(1)
-                                            }
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text("Previous Chapter")
+                                                .font(.serifCaption())
+                                                .foregroundColor(.appText.opacity(0.7))
 
-                                            Spacer()
+                                            Text(previous.title)
+                                                .font(.serifBody())
+                                                .foregroundColor(.appText)
+                                                .lineLimit(1)
                                         }
-                                        .padding()
+
+                                        Spacer()
                                     }
-                                    .frame(maxWidth: .infinity)
-                                    .buttonStyle(PlainButtonStyle())
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 4)
                                 }
+                                .frame(maxWidth: .infinity)
+                                .buttonStyle(PlainButtonStyle())
+                            }
 
-                                if previousChapter != nil && nextChapter != nil {
-                                    Divider()
-                                        .background(Color.appSecondary.opacity(0.3))
-                                }
+                            if previousChapter != nil && nextChapter != nil {
+                                Divider()
+                                    .background(Color.appSecondary.opacity(0.3))
+                            }
 
-                                if let next = nextChapter {
-                                    Button {
-                                        navigateToNextChapter(next)
-                                    } label: {
-                                        HStack {
-                                            Spacer()
+                            if let next = nextChapter {
+                                Button {
+                                    analytics.track(event: .nextChapterTapped, parameters: [
+                                        "current_chapter_id": currentChapter.id.uuidString,
+                                        "next_chapter_id": next.id.uuidString,
+                                        "next_chapter_title": next.title
+                                    ])
+                                    navigateToNextChapter(next)
+                                } label: {
+                                    HStack {
+                                        Spacer()
 
-                                            VStack(alignment: .trailing, spacing: 4) {
-                                                Text("Next Chapter")
-                                                    .font(.serifCaption())
-                                                    .foregroundColor(.appText.opacity(0.7))
+                                        VStack(alignment: .trailing, spacing: 2) {
+                                            Text("Next Chapter")
+                                                .font(.serifCaption())
+                                                .foregroundColor(.appText.opacity(0.7))
 
-                                                Text(next.title)
-                                                    .font(.serifBody())
-                                                    .foregroundColor(.appText)
-                                                    .lineLimit(1)
-                                            }
-
-                                            Image(systemName: "chevron.right")
-                                                .foregroundColor(.accentColor)
+                                            Text(next.title)
+                                                .font(.serifBody())
+                                                .foregroundColor(.appText)
+                                                .lineLimit(1)
                                         }
-                                        .padding()
+
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.accentColor)
                                     }
-                                    .frame(maxWidth: .infinity)
-                                    .buttonStyle(PlainButtonStyle())
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 4)
                                 }
+                                .frame(maxWidth: .infinity)
+                                .buttonStyle(PlainButtonStyle())
                             }
                         }
                     }
-                    .background(Color.cardBackground.opacity(0.95))
-                    .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
                 }
-                .allowsHitTesting(true)
-
-                // Paywall overlay for Neural AI TTS
-                if showPaywall {
-                    PaywallView(isPresented: $showPaywall)
-                        .transition(.move(edge: .bottom))
-                        .zIndex(2)
+                .background(Color.cardBackground.opacity(0.95))
+                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
                 }
             }
+            .background(Color.backgroundColor)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
+                        analytics.track(event: .backButtonTapped, parameters: [
+                            "chapter_id": currentChapter.id.uuidString,
+                            "reading_time_seconds": 0 // TODO: Track actual reading time
+                        ])
                         audioManager.stop()
                         dismiss()
                     } label: {
@@ -220,6 +251,9 @@ struct ChapterReaderView: View {
                     HStack(spacing: 16) {
                         // Voice selector button
                         Button {
+                            analytics.track(event: .voiceSelectorOpened, parameters: [
+                                "current_voice": audioManager.selectedMinimaxVoice.displayName
+                            ])
                             showVoiceSelector = true
                         } label: {
                             Image(systemName: "speaker.wave.2.fill")
@@ -229,6 +263,18 @@ struct ChapterReaderView: View {
 
                         // Favorite button
                         Button {
+                            if isFavorite {
+                                analytics.track(event: .chapterUnfavorited, parameters: [
+                                    "chapter_id": currentChapter.id.uuidString,
+                                    "chapter_title": currentChapter.title
+                                ])
+                            } else {
+                                analytics.track(event: .chapterFavorited, parameters: [
+                                    "chapter_id": currentChapter.id.uuidString,
+                                    "chapter_title": currentChapter.title,
+                                    "story_title": story.title
+                                ])
+                            }
                             favoritesManager.toggleFavorite(chapterId: currentChapter.id)
                         } label: {
                             Image(systemName: isFavorite ? "heart.fill" : "heart")
@@ -241,48 +287,25 @@ struct ChapterReaderView: View {
             .sheet(isPresented: $showVoiceSelector) {
                 VoiceSelectorView()
             }
+            .fullScreenCover(isPresented: $showPaywall) {
+                PaywallView(isPresented: $showPaywall)
+            }
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.backgroundColor, for: .navigationBar)
         }
         .onAppear {
+            analytics.track(event: .chapterOpened, parameters: [
+                "chapter_id": currentChapter.id.uuidString,
+                "chapter_title": currentChapter.title,
+                "chapter_number": currentChapter.orderNo,
+                "story_title": story.title,
+                "civilization_name": civilization.name
+            ])
             markAsRead()
         }
         .onDisappear {
             audioManager.stop()
         }
-        .background(
-            GeometryReader { geometry in
-                Color.clear.onAppear {
-                    screenWidth = geometry.size.width
-                }
-            }
-        )
-        .offset(x: dragOffset)
-        .gesture(
-            DragGesture(minimumDistance: 10)
-                .onChanged { value in
-                    // Only allow swipe from left edge
-                    if value.startLocation.x < 30 && value.translation.width > 0 {
-                        isDragging = true
-                        dragOffset = min(value.translation.width, screenWidth)
-                    }
-                }
-                .onEnded { value in
-                    if isDragging {
-                        if dragOffset > 100 {
-                            audioManager.stop()
-                            dismiss()
-                        } else {
-                            withAnimation(.spring()) {
-                                dragOffset = 0
-                            }
-                        }
-                        isDragging = false
-                    } else {
-                        withAnimation(.spring()) {
-                            dragOffset = 0
-                        }
-                    }
-                }
-        )
     }
 
     private func navigateToNextChapter(_ next: Chapter) {
@@ -290,10 +313,8 @@ struct ChapterReaderView: View {
         audioManager.stop()
 
         // Update to next chapter
-        withAnimation {
-            currentChapter = next
-            hasMarkedAsRead = false
-        }
+        currentChapter = next
+        hasMarkedAsRead = false
 
         // Mark new chapter as read
         markAsRead()
@@ -304,10 +325,8 @@ struct ChapterReaderView: View {
         audioManager.stop()
 
         // Update to previous chapter
-        withAnimation {
-            currentChapter = previous
-            hasMarkedAsRead = false
-        }
+        currentChapter = previous
+        hasMarkedAsRead = false
 
         // Mark new chapter as read
         markAsRead()
@@ -328,14 +347,14 @@ struct AudioPlayerControls: View {
     let onStop: () -> Void
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 4) {
             ProgressView(value: progress)
                 .tint(.accentColor)
 
             HStack(spacing: 0) {
                 Button(action: onStop) {
                     Image(systemName: "stop.fill")
-                        .font(.system(size: 24))
+                        .font(.system(size: 20))
                         .foregroundColor(.appText.opacity(0.6))
                         .frame(maxWidth: .infinity)
                 }
@@ -344,10 +363,10 @@ struct AudioPlayerControls: View {
                     ZStack {
                         Circle()
                             .fill(Color.accentColor)
-                            .frame(width: 60, height: 60)
+                            .frame(width: 50, height: 50)
 
                         Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                            .font(.system(size: 24))
+                            .font(.system(size: 20))
                             .foregroundColor(.white)
                     }
                     .frame(maxWidth: .infinity)

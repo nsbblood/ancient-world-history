@@ -52,8 +52,8 @@
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "",
-              "displayName" : "",
+              "description" : "Unlock all ancient stories with yearly access",
+              "displayName" : "Premium Annual",
               "locale" : "en_US"
             }
           ],
@@ -84,8 +84,8 @@
           },
           "localizations" : [
             {
-              "description" : "",
-              "displayName" : "",
+              "description" : "Unlock all ancient stories with weekly access",
+              "displayName" : "Premium Weekly",
               "locale" : "en_US"
             }
           ],

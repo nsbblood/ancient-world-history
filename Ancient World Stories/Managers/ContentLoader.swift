@@ -42,27 +42,30 @@ class ContentLoader: ObservableObject {
         isLoading = true
         error = nil
 
-        do {
-            // Try to fetch from Supabase
-            async let civilizationsTask = supabase.fetchCivilizations()
-            async let storiesTask = supabase.fetchStories()
-            async let chaptersTask = supabase.fetchChapters()
-
-            let (fetchedCivs, fetchedStories, fetchedChapters) = try await (civilizationsTask, storiesTask, chaptersTask)
-
-            self.civilizations = fetchedCivs
-            self.stories = fetchedStories
-            self.chapters = fetchedChapters
-
-            print("✅ Successfully loaded \(fetchedCivs.count) civilizations, \(fetchedStories.count) stories, and \(fetchedChapters.count) chapters from Supabase")
-
-        } catch {
-            // Fallback to local JSON
-            print("⚠️ Supabase failed, loading from local JSON: \(error.localizedDescription)")
-            loadFromLocalJSON()
-        }
-
+        // Load local JSON first for instant app launch
+        loadFromLocalJSON()
         isLoading = false
+
+        // Then try to sync from Supabase in background (non-blocking)
+        Task {
+            do {
+                async let civilizationsTask = supabase.fetchCivilizations()
+                async let storiesTask = supabase.fetchStories()
+                async let chaptersTask = supabase.fetchChapters()
+
+                let (fetchedCivs, fetchedStories, fetchedChapters) = try await (civilizationsTask, storiesTask, chaptersTask)
+
+                // Only update if we got data
+                if !fetchedCivs.isEmpty && !fetchedStories.isEmpty && !fetchedChapters.isEmpty {
+                    self.civilizations = fetchedCivs
+                    self.stories = fetchedStories
+                    self.chapters = fetchedChapters
+                    print("✅ Successfully synced \(fetchedCivs.count) civilizations, \(fetchedStories.count) stories, and \(fetchedChapters.count) chapters from Supabase")
+                }
+            } catch {
+                print("ℹ️ Supabase sync skipped: \(error.localizedDescription)")
+            }
+        }
     }
 
     // MARK: - Local JSON Fallback
@@ -74,7 +77,7 @@ class ContentLoader: ObservableObject {
         }
 
         let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        // Don't use convertFromSnakeCase - models have custom CodingKeys
 
         do {
             let content = try decoder.decode(UniverseData.self, from: data)

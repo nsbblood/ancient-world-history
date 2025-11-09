@@ -105,10 +105,10 @@ struct OnboardingView: View {
                 }
             }
             
-            // Paywall slides in from right
+            // Paywall fades in
             if showPaywall {
                 PaywallView(isPresented: $showPaywall)
-                    .transition(.move(edge: .trailing))
+                    .transition(.opacity)
                     .zIndex(1)
             }
         }

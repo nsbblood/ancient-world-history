@@ -88,13 +88,6 @@ struct VoiceSelectorView: View {
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
-
-                // Paywall overlay
-                if showPaywall {
-                    PaywallView(isPresented: $showPaywall)
-                        .transition(.move(edge: .bottom))
-                        .zIndex(2)
-                }
             }
             .navigationTitle("Voice Settings")
             .navigationBarTitleDisplayMode(.inline)
@@ -111,6 +104,9 @@ struct VoiceSelectorView: View {
             }
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(Color.appBackground, for: .navigationBar)
+            .fullScreenCover(isPresented: $showPaywall) {
+                PaywallView(isPresented: $showPaywall)
+            }
         }
     }
 
