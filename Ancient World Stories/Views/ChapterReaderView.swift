@@ -176,7 +176,7 @@ struct ChapterReaderView: View {
                                         Spacer()
                                     }
                                     .padding(.horizontal, 12)
-                                    .padding(.vertical, 4)
+                                    .padding(.vertical, 1.5)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .buttonStyle(PlainButtonStyle())
@@ -214,7 +214,7 @@ struct ChapterReaderView: View {
                                             .foregroundColor(.accentColor)
                                     }
                                     .padding(.horizontal, 12)
-                                    .padding(.vertical, 4)
+                                    .padding(.vertical, 1.5)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .buttonStyle(PlainButtonStyle())
