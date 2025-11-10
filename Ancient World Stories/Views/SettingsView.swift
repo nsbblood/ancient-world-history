@@ -10,12 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var profileManager = ProfileManager.shared
-    @ObservedObject private var audioManager = AudioManager.shared
-    @State private var showVoiceSelector = false
-
-    private var currentVoiceDescription: String {
-        return audioManager.selectedMinimaxVoice.displayName
-    }
+    @ObservedObject private var languageManager = LanguageManager.shared
 
     var body: some View {
         NavigationStack {
@@ -24,18 +19,38 @@ struct SettingsView: View {
 
                 List {
                     Section {
-                        SettingsRow(
-                            icon: "speaker.wave.3.fill",
-                            title: "Voice Settings",
-                            subtitle: currentVoiceDescription
-                        ) {
-                            showVoiceSelector = true
+                        ForEach(AppLanguage.allCases) { language in
+                            Button {
+                                languageManager.setLanguage(language)
+                            } label: {
+                                HStack {
+                                    Text(language.flag)
+                                        .font(.system(size: 24))
+
+                                    Text(language.nativeName)
+                                        .font(.serifBody())
+                                        .foregroundColor(.primaryText)
+
+                                    Spacer()
+
+                                    if languageManager.selectedLanguage == language {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.accentColor)
+                                    }
+                                }
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .listRowBackground(Color.cardBackground)
                         }
-                        .listRowBackground(Color.cardBackground)
                     } header: {
-                        Text("Audio")
+                        Text("Language")
                             .font(.serifBody())
                             .foregroundColor(.primaryText)
+                    } footer: {
+                        Text("Select your preferred language for stories and narration")
+                            .font(.serifCaption())
+                            .foregroundColor(.secondaryText)
                     }
 
                     Section {
@@ -120,9 +135,6 @@ struct SettingsView: View {
             }
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(Color.appBackground, for: .navigationBar)
-        }
-        .sheet(isPresented: $showVoiceSelector) {
-            VoiceSelectorView()
         }
     }
 }

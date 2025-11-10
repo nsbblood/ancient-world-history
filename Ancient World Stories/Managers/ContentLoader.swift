@@ -98,9 +98,12 @@ class ContentLoader: ObservableObject {
         stories.filter { $0.civilizationId == civilizationId }
     }
 
-    /// Get chapters for a specific story
+    /// Get chapters for a specific story (filtered by selected language)
     func chapters(for storyId: UUID) -> [Chapter] {
-        chapters.filter { $0.storyId == storyId }.sorted { $0.orderNo < $1.orderNo }
+        let selectedLang = LanguageManager.shared.currentLanguageCode
+        return chapters
+            .filter { $0.storyId == storyId && $0.languageCode == selectedLang }
+            .sorted { $0.orderNo < $1.orderNo }
     }
 
     /// Get civilization for a story
