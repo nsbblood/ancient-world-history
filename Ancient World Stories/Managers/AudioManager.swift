@@ -51,7 +51,9 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
     @Published var currentProgress: Double = 0.0
     @Published var selectedVoice: VoiceType = .femaleUS
     @Published var selectedEngine: TTSEngine = .minimax  // Default to Neural AI for premium users
-    @Published var selectedMinimaxVoice: MinimaxTTSService.Voice = .wiseWoman
+
+    // DEFAULT VOICE: All users use the same voice for consistent caching
+    let selectedMinimaxVoice: MinimaxTTSService.Voice = .wiseWoman
 
     private var currentUtterance: AVSpeechUtterance?
     private var totalCharacterCount: Int = 0
@@ -96,10 +98,8 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
         print("🎙️ TTS Engine set to: \(engine.displayName)")
     }
 
-    func setMinimaxVoice(_ voice: MinimaxTTSService.Voice) {
-        selectedMinimaxVoice = voice
-        UserDefaults.standard.set(voice.rawValue, forKey: "selectedMinimaxVoice")
-    }
+    // Note: Voice selection removed - all users use default .wiseWoman voice
+    // This ensures consistent audio URLs for caching across all users
 
     // MARK: - Playback Control
     func speak(text: String, language: String = "en-US") {
