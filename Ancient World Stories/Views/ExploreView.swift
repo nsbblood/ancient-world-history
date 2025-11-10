@@ -12,7 +12,7 @@ struct ExploreView: View {
     @StateObject private var contentLoader = ContentLoader.shared
     @State private var selectedCivilization: Civilization?
     @State private var showStoriesSheet = false
-    @State private var timelineYear: Double = -3000
+    @State private var timelineYear: Double = -500 // Start at 500 BC to show more civilizations
     @State private var showTimeTravel = false
     @State private var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(
@@ -106,10 +106,23 @@ struct ExploreView: View {
 // MARK: - Civilization Marker
 struct CivilizationMarker: View {
     let civilization: Civilization
-    
+
     var body: some View {
         VStack(spacing: 4) {
             ZStack {
+                // Outer glow
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [.orange.opacity(0.3), .clear],
+                            center: .center,
+                            startRadius: 10,
+                            endRadius: 25
+                        )
+                    )
+                    .frame(width: 50, height: 50)
+
+                // Main circle
                 Circle()
                     .fill(
                         LinearGradient(
@@ -119,24 +132,26 @@ struct CivilizationMarker: View {
                         )
                     )
                     .frame(width: 40, height: 40)
-                    .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
-                
+                    .shadow(color: .black.opacity(0.4), radius: 4, x: 0, y: 2)
+
                 Image(systemName: "building.columns.fill")
                     .font(.system(size: 18))
                     .foregroundColor(.white)
             }
-            
-            Text(civilization.name.components(separatedBy: " ").last ?? "")
-                .font(.caption2)
-                .fontWeight(.semibold)
+
+            // Better contrast for text
+            Text(civilization.name.components(separatedBy: " ").last ?? civilization.name)
+                .font(.system(size: 11, weight: .bold))
                 .foregroundColor(.white)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
                 .background(
                     Capsule()
-                        .fill(.ultraThinMaterial)
-                        .shadow(color: .black.opacity(0.2), radius: 2)
+                        .fill(Color.black.opacity(0.75))
+                        .shadow(color: .black.opacity(0.3), radius: 2)
                 )
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
     }
 }
