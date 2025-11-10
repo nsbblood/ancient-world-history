@@ -59,12 +59,13 @@ struct OnboardingView: View {
                 
                 // Bottom button with gentle pulsing animation
                 Button(action: {
-                    withAnimation(.easeInOut(duration: 0.4)) {
-                        if currentPage < 2 {
+                    if currentPage < 2 {
+                        withAnimation(.easeInOut(duration: 0.4)) {
                             currentPage += 1
-                        } else {
-                            showPaywall = true
                         }
+                    } else {
+                        // Show paywall with slide animation
+                        showPaywall = true
                     }
                 }) {
                     Text(currentPage < 2 ? "Continue" : "Get Started")
@@ -89,16 +90,16 @@ struct OnboardingView: View {
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
             }
-            
-            // Paywall fades in
+
+            // Paywall slides from right
             if showPaywall {
                 PaywallView(isPresented: $showPaywall)
-                    .transition(.opacity)
-                    .zIndex(1)
+                    .transition(.move(edge: .trailing))
+                    .zIndex(2)
             }
         }
         .onChange(of: showPaywall) { oldValue, newValue in
-            // When paywall is dismissed, instantly go to home (no flash)
+            // When paywall is dismissed, complete onboarding
             if oldValue && !newValue {
                 hasCompletedOnboarding = true
             }
