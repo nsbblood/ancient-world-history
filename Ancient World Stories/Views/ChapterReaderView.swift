@@ -142,7 +142,7 @@ struct ChapterReaderView: View {
                         }
                     )
                     .padding(.horizontal, 12)
-                    .padding(.vertical, 4)
+                    .padding(.vertical, 8)
 
                     if previousChapter != nil || nextChapter != nil {
                         Divider()
@@ -176,7 +176,7 @@ struct ChapterReaderView: View {
                                         Spacer()
                                     }
                                     .padding(.horizontal, 12)
-                                    .padding(.vertical, 1.5)
+                                    .padding(.vertical, 10)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .buttonStyle(PlainButtonStyle())
@@ -214,12 +214,13 @@ struct ChapterReaderView: View {
                                             .foregroundColor(.accentColor)
                                     }
                                     .padding(.horizontal, 12)
-                                    .padding(.vertical, 1.5)
+                                    .padding(.vertical, 10)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .buttonStyle(PlainButtonStyle())
                             }
                         }
+                        .padding(.bottom, 20)
                     }
                 }
                 .background(Color.backgroundColor)
