@@ -132,9 +132,8 @@ class SupabaseClient {
             endpoint += "&story_id=eq.\(storyId.uuidString)"
         }
         if let languageCode = languageCode {
-            // Use 'like' to match both "en" and "en-US" formats
-            // PostgreSQL LIKE uses % as wildcard, URL encoded as %25
-            endpoint += "&language_code=like.\(languageCode)%25"
+            // Use exact match, same as civilizations and stories
+            endpoint += "&language_code=eq.\(languageCode)"
         }
         endpoint += "&order=order_no.asc"
 
