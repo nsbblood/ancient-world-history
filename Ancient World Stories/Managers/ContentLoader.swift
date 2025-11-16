@@ -331,9 +331,26 @@ class ContentLoader: ObservableObject {
         Array(chapters.shuffled().prefix(count))
     }
 
-    /// Get all civilizations (already filtered by language at load time)
+    /// Get civilizations filtered by user's language
+    /// Shows only user's language, fallback to English if no civilizations in user's language
+    /// Only includes civilizations that have stories with chapters
     var filteredCivilizations: [Civilization] {
-        civilizations
+        let currentLang = LanguageManager.shared.currentLanguageCode
+
+        // Filter civilizations by user's language
+        let civsInUserLang = civilizations
+            .filter { $0.languageCode == currentLang }
+            .filter { storyCount(for: $0.id) > 0 } // Only civs with stories that have chapters
+
+        // If user's language has civilizations, use them. Otherwise fallback to English.
+        if !civsInUserLang.isEmpty {
+            return civsInUserLang.sorted { $0.eraStart < $1.eraStart }
+        } else {
+            return civilizations
+                .filter { $0.languageCode == "en" }
+                .filter { storyCount(for: $0.id) > 0 }
+                .sorted { $0.eraStart < $1.eraStart }
+        }
     }
 
     /// Get civilizations grouped by region
@@ -346,9 +363,12 @@ class ContentLoader: ObservableObject {
         chapters.filter { $0.storyId == storyId }.count
     }
 
-    /// Get total story count for a civilization
+    /// Get total story count for a civilization (only stories with chapters)
     func storyCount(for civilizationId: UUID) -> Int {
-        stories.filter { $0.civilizationId == civilizationId }.count
+        stories
+            .filter { $0.civilizationId == civilizationId }
+            .filter { chapterCount(for: $0.id) > 0 }
+            .count
     }
 
     // MARK: - Persistent Cache Management

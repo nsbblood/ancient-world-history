@@ -8,7 +8,9 @@ struct StoriesView: View {
     @State private var selectedStory: Story?
 
     var stories: [Story] {
+        // Only show stories that have chapters available
         content.stories(for: civilization.id)
+            .filter { content.chapterCount(for: $0.id) > 0 }
     }
 
     var body: some View {
