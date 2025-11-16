@@ -89,8 +89,11 @@ class ContentLoader: ObservableObject {
             let currentLanguage = LanguageManager.shared.currentLanguageCode
             print("🌍 Loading content for language: \(currentLanguage)")
 
-            // Load civilizations and stories in selected language
-            async let civsTask = supabase.fetchCivilizations(languageCode: currentLanguage, limit: nil)
+            // CRITICAL: Load ALL civilizations (no language filter)
+            // Because stories reference base English civilization IDs
+            async let civsTask = supabase.fetchCivilizations(languageCode: nil, limit: nil)
+
+            // Load stories in selected language
             async let storiesTask = supabase.fetchStories(languageCode: currentLanguage, limit: nil)
 
             // SMART CHAPTERS LOADING: Load chapters in selected language + English as fallback
@@ -148,8 +151,10 @@ class ContentLoader: ObservableObject {
         do {
             let currentLanguage = LanguageManager.shared.currentLanguageCode
 
-            // Load data for selected language
-            async let allCivsTask = supabase.fetchCivilizations(languageCode: currentLanguage)
+            // Load ALL civilizations (no language filter)
+            async let allCivsTask = supabase.fetchCivilizations(languageCode: nil)
+
+            // Load stories in selected language
             async let allStoriesTask = supabase.fetchStories(languageCode: currentLanguage)
 
             var (allCivs, allStories) = try await (allCivsTask, allStoriesTask)
@@ -186,8 +191,10 @@ class ContentLoader: ObservableObject {
         do {
             let currentLanguage = LanguageManager.shared.currentLanguageCode
 
-            // Load data for selected language
-            async let allCivsTask = supabase.fetchCivilizations(languageCode: currentLanguage)
+            // Load ALL civilizations (no language filter - stories reference base IDs)
+            async let allCivsTask = supabase.fetchCivilizations(languageCode: nil)
+
+            // Load stories in selected language
             async let allStoriesTask = supabase.fetchStories(languageCode: currentLanguage)
 
             // SMART CHAPTERS LOADING: Load chapters in selected language + English as fallback
