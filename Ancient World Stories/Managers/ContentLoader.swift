@@ -124,10 +124,10 @@ class ContentLoader: ObservableObject {
 
             let civsSize = fetchedCivs.count * 200
             let storiesSize = fetchedStories.count * 280
-            let chaptersSize = fetchedChapters.count * 150
+            let chaptersSize = combinedChapters.count * 150
             let totalSizeKB = (civsSize + storiesSize + chaptersSize) / 1024
 
-            print("⚡ Quick start loaded: \(fetchedCivs.count) civs, \(fetchedStories.count) stories, \(fetchedChapters.count) chapters")
+            print("⚡ Quick start loaded: \(fetchedCivs.count) civs, \(fetchedStories.count) stories, \(combinedChapters.count) chapters")
             print("📦 Data size: ~\(totalSizeKB) KB")
 
         } catch {
