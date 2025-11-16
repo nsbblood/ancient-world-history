@@ -128,7 +128,8 @@ struct ChapterReaderView: View {
                                         "voice_type": "neural_ai",
                                         "is_premium": true
                                     ])
-                                    audioManager.speak(text: currentChapter.text, language: currentChapter.languageCode)
+                                    // Use new cached chapter speak for better performance
+                                    audioManager.speakChapter(currentChapter)
                                     markAsRead()
                                 }
                             }

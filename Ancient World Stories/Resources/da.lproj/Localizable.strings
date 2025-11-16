@@ -1,0 +1,124 @@
+/*
+  Localizable.strings - Dansk (Danish)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "Hjem";
+"tab.explore" = "Udforsk";
+"tab.profile" = "Profil";
+
+// MARK: - General
+"app.title" = "Historier fra den Antikke Verden";
+"app.tagline" = "Opdag fortællinger fra tidligere civilisationer";
+"language" = "Sprog";
+"settings" = "Indstillinger";
+"support" = "Support";
+"about" = "Om";
+"version" = "Version";
+"close" = "Luk";
+"save" = "Gem";
+"cancel" = "Annuller";
+"retry" = "Prøv igen";
+"loading" = "Indlæser...";
+"error" = "Fejl";
+
+// MARK: - Home View
+"home.explore_chapters" = "Udforsk kapitler";
+"home.loading_stories" = "Indlæser historier...";
+"home.show_different" = "Vis andre kapitler";
+
+// MARK: - Explore View
+"explore.timeline" = "Tidslinje";
+"explore.time_travel" = "Tidsrejse";
+"explore.no_civilizations" = "Ingen civilisationer fundet";
+"explore.check_back" = "Tjek tilbage senere for at udforske antikke civilisationer.";
+"explore.stories" = "Historier";
+"explore.no_stories" = "Ingen historier endnu";
+"explore.coming_soon" = "Historier for denne civilisation kommer snart.";
+
+// MARK: - Stories View
+"stories.loading" = "Indlæser historier...";
+"stories.coming_soon_title" = "Historier kommer snart";
+"stories.coming_soon_message" = "Nye fortællinger fra %@ vil blive tilføjet snart. Tjek tilbage senere!";
+
+// MARK: - Chapters View
+"chapters.title" = "Kapitler";
+"chapters.progress" = "Fremskridt";
+"chapters.no_chapters" = "Ingen kapitler tilgængelige endnu.";
+
+// MARK: - Settings View
+"settings.language" = "Sprog";
+"settings.language_description" = "Vælg dit foretrukne sprog til historier og fortælling";
+"settings.contact_support" = "Kontakt support";
+"settings.privacy_policy" = "Fortrolighedspolitik";
+"settings.privacy_description" = "Hvordan vi håndterer dine data";
+"settings.terms" = "Servicevilkår";
+"settings.terms_description" = "Vores vilkår og betingelser";
+"settings.legal" = "Juridisk";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Rejse gennem tiden";
+"onboarding.welcome_message" = "Opdag fængslende historier fra antikke civilisationer. Fra Mesopotamien til Grækenland, oplev historie som aldrig før.";
+"onboarding.explore_title" = "Udforsk og lyt";
+"onboarding.explore_message" = "Naviger gennem et interaktivt kort, opdag civilisationer efter æra, og lyt til historier med fordybende lydfortælling.";
+"onboarding.unlock_title" = "Lås op for alle historier";
+"onboarding.get_started" = "Kom i gang";
+"onboarding.next" = "Næste";
+"onboarding.skip" = "Spring over";
+
+// MARK: - Paywall
+"paywall.title" = "Lås op for den antikke verden";
+"paywall.subtitle" = "Rejs gennem tiden. Oplev hver civilisation.";
+"paywall.loading_subscriptions" = "Indlæser abonnementsmuligheder...";
+"paywall.unable_to_load" = "Kunne ikke indlæse abonnementer";
+"paywall.best_value" = "BEDSTE VÆRDI";
+"paywall.trial" = "3-DAGES PRØVEPERIODE";
+"paywall.restore" = "Gendan køb";
+"paywall.continue" = "Fortsæt";
+
+// MARK: - Profile
+"profile.favorites" = "Favoritter";
+"profile.listening_history" = "Lyttehistorik";
+"profile.no_favorites" = "Ingen favoritter endnu";
+"profile.no_history" = "Ingen lyttehistorik endnu";
+
+// MARK: - Reader
+"reader.chapter" = "Kapitel %d";
+"reader.of" = "af %d";
+"reader.play" = "Afspil";
+"reader.pause" = "Pause";
+"reader.speed" = "Hastighed";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "Over 100 episke historier";
+"paywall.epic_stories_subtitle" = "Fra faraoer til kejsere";
+"paywall.immersive_audio" = "Fordybende lyd";
+"paywall.immersive_audio_subtitle" = "Professionel fortælling";
+"paywall.civilizations" = "Over 15 civilisationer";
+"paywall.civilizations_subtitle" = "Gennem tid og rum";
+"paywall.premium_annual" = "Premium årligt";
+"paywall.premium_weekly" = "Premium ugentligt";
+"paywall.save_85" = "Spar 85% • Fuld adgang";
+"paywall.trial_days" = "3 dage gratis, derefter ugentligt";
+"paywall.then_price" = "Derefter %@/år";
+"paywall.then_price_week" = "3 dages gratis prøveperiode, derefter %@/uge";
+"paywall.try_free" = "Prøv gratis";
+"paywall.terms" = "Vilkår";
+"paywall.privacy" = "Privatliv";
+
+// MARK: - Profile (Additional)
+"profile.title" = "Profil";
+"profile.go_premium" = "Bliv Premium";
+"profile.premium_member" = "Premium-medlem";
+"profile.your_statistics" = "Din statistik";
+"profile.chapters_read" = "Læste kapitler";
+"profile.civilizations_explored" = "Udforskede civilisationer";
+"profile.total_reading_time" = "Samlet læsetid";
+"profile.favorite_chapters" = "Favoritkapitler";
+
+// MARK: - Tab Bar
+"tab.startseite" = "Hjem";
+"tab.episodes" = "Episoder";
+"tab.erkunden" = "Udforsk";
+"tab.profil" = "Profil";

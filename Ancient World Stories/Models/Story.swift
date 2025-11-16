@@ -13,6 +13,7 @@ struct Story: Identifiable, Codable, Hashable {
     let title: String
     let summary: String
     let chaptersCount: Int
+    let languageCode: String
     let createdAt: Date?
 
     enum CodingKeys: String, CodingKey {
@@ -21,15 +22,17 @@ struct Story: Identifiable, Codable, Hashable {
         case title
         case summary
         case chaptersCount = "chapters_count"
+        case languageCode = "language_code"
         case createdAt = "created_at"
     }
 
-    init(id: UUID = UUID(), civilizationId: UUID, title: String, summary: String, chaptersCount: Int, createdAt: Date? = nil) {
+    init(id: UUID = UUID(), civilizationId: UUID, title: String, summary: String, chaptersCount: Int, languageCode: String = "en", createdAt: Date? = nil) {
         self.id = id
         self.civilizationId = civilizationId
         self.title = title
         self.summary = summary
         self.chaptersCount = chaptersCount
+        self.languageCode = languageCode
         self.createdAt = createdAt
     }
 
@@ -53,6 +56,7 @@ struct Story: Identifiable, Codable, Hashable {
         title = try container.decode(String.self, forKey: .title)
         summary = try container.decode(String.self, forKey: .summary)
         chaptersCount = try container.decode(Int.self, forKey: .chaptersCount)
+        languageCode = (try? container.decode(String.self, forKey: .languageCode)) ?? "en"
 
         if let timestamp = try? container.decode(String.self, forKey: .createdAt) {
             let formatter = ISO8601DateFormatter()

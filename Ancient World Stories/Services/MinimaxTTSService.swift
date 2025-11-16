@@ -55,8 +55,80 @@ class MinimaxTTSService: ObservableObject {
         }
     }
 
-    // MARK: - Generate and Play Speech
+    // MARK: - Generate and Play Speech (with caching)
 
+    /// Get or generate audio for a chapter with full caching support
+    /// Flow: Chapter audioURL → Local cache → Generate new + Save to Supabase + Cache locally
+    func speakChapter(_ chapter: Chapter) async throws {
+        let cacheKey = AudioCacheService.shared.cacheKey(
+            for: chapter.text,
+            voice: Voice.wiseWoman.rawValue,
+            language: chapter.languageCode
+        )
+
+        // 1. Check if Chapter already has audioURL from Supabase
+        if let audioURLString = chapter.audioURL,
+           !audioURLString.isEmpty {
+            print("✅ Chapter has audioURL from Supabase")
+
+            do {
+                let localURL = try await AudioCacheService.shared.downloadAndCache(
+                    from: audioURLString,
+                    key: cacheKey
+                )
+                let audioData = try Data(contentsOf: localURL)
+                try await playAudio(data: audioData)
+                return
+            } catch {
+                print("⚠️ Failed to use audioURL, will regenerate: \(error)")
+            }
+        }
+
+        // 2. Check local cache
+        if let cachedURL = AudioCacheService.shared.getCachedAudio(key: cacheKey) {
+            print("✅ Found in local cache")
+            let audioData = try Data(contentsOf: cachedURL)
+            try await playAudio(data: audioData)
+            return
+        }
+
+        // 3. Generate new audio
+        print("🎙️ Generating new audio...")
+        isGenerating = true
+        defer { isGenerating = false }
+
+        do {
+            // Generate via AI
+            let audioURL = try await generateSpeech(
+                text: chapter.text,
+                voice: .wiseWoman,
+                speed: 1.0,
+                language: chapter.languageCode
+            )
+
+            // Download and cache locally
+            let audioData = try await downloadAudio(from: audioURL)
+            _ = try AudioCacheService.shared.saveAudio(data: audioData, key: cacheKey)
+
+            // Save audioURL to Supabase for other users
+            Task.detached {
+                try? await SupabaseClient.shared.updateChapterAudioURL(
+                    chapterId: chapter.id,
+                    audioURL: audioURL.absoluteString
+                )
+            }
+
+            // Play audio
+            try await playAudio(data: audioData)
+
+        } catch {
+            self.error = error.localizedDescription
+            print("❌ TTS Error: \(error)")
+            throw error
+        }
+    }
+
+    /// Legacy speak function (kept for backward compatibility)
     func speak(text: String, voice: Voice = .wiseWoman, speed: Double = 1.0, language: String = "en") async throws {
         guard !text.isEmpty else {
             throw TTSError.emptyText

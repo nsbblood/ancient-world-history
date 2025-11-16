@@ -1,0 +1,124 @@
+/*
+  Localizable.strings - Suomi (Finnish)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "Koti";
+"tab.explore" = "Tutkia";
+"tab.profile" = "Profiili";
+
+// MARK: - General
+"app.title" = "Muinaisen Maailman Tarinat";
+"app.tagline" = "Löydä kertomuksia menneistä sivilisaatioista";
+"language" = "Kieli";
+"settings" = "Asetukset";
+"support" = "Tuki";
+"about" = "Tietoja";
+"version" = "Versio";
+"close" = "Sulje";
+"save" = "Tallenna";
+"cancel" = "Peruuta";
+"retry" = "Yritä uudelleen";
+"loading" = "Ladataan...";
+"error" = "Virhe";
+
+// MARK: - Home View
+"home.explore_chapters" = "Tutustu lukuihin";
+"home.loading_stories" = "Ladataan tarinoita...";
+"home.show_different" = "Näytä eri luvut";
+
+// MARK: - Explore View
+"explore.timeline" = "Aikajana";
+"explore.time_travel" = "Aikamatka";
+"explore.no_civilizations" = "Sivilisaatioita ei löytynyt";
+"explore.check_back" = "Tarkista myöhemmin uudelleen tutkiaksesi muinaisia sivilisaatioita.";
+"explore.stories" = "Tarinat";
+"explore.no_stories" = "Ei vielä tarinoita";
+"explore.coming_soon" = "Tarinat tälle sivilisaatiolle tulevat pian.";
+
+// MARK: - Stories View
+"stories.loading" = "Ladataan tarinoita...";
+"stories.coming_soon_title" = "Tarinat tulevat pian";
+"stories.coming_soon_message" = "Uusia tarinoita %@ lisätään pian. Tarkista myöhemmin uudelleen!";
+
+// MARK: - Chapters View
+"chapters.title" = "Luvut";
+"chapters.progress" = "Edistyminen";
+"chapters.no_chapters" = "Ei vielä lukuja saatavilla.";
+
+// MARK: - Settings View
+"settings.language" = "Kieli";
+"settings.language_description" = "Valitse haluamasi kieli tarinoille ja kertojalle";
+"settings.contact_support" = "Ota yhteyttä tukeen";
+"settings.privacy_policy" = "Tietosuojakäytäntö";
+"settings.privacy_description" = "Kuinka käsittelemme tietojasi";
+"settings.terms" = "Käyttöehdot";
+"settings.terms_description" = "Ehtomme ja käytäntömme";
+"settings.legal" = "Oikeudelliset tiedot";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Matka ajassa";
+"onboarding.welcome_message" = "Löydä kiehtovia tarinoita muinaisista sivilisaatioista. Mesopotamiasta Kreikkaan, koe historia kuten ei koskaan ennen.";
+"onboarding.explore_title" = "Tutkia ja kuunnella";
+"onboarding.explore_message" = "Navigoi interaktiivisen kartan läpi, löydä sivilisaatioita aikakausittain ja kuuntele tarinoita mukaansatempaavalla äänikertomuksella.";
+"onboarding.unlock_title" = "Avaa kaikki tarinat";
+"onboarding.get_started" = "Aloita";
+"onboarding.next" = "Seuraava";
+"onboarding.skip" = "Ohita";
+
+// MARK: - Paywall
+"paywall.title" = "Avaa muinainen maailma";
+"paywall.subtitle" = "Matkusta ajassa. Koe jokainen sivilisaatio.";
+"paywall.loading_subscriptions" = "Ladataan tilausvaihtoehtoja...";
+"paywall.unable_to_load" = "Tilauksia ei voitu ladata";
+"paywall.best_value" = "PARAS ARVO";
+"paywall.trial" = "3 PÄIVÄN KOKEILU";
+"paywall.restore" = "Palauta ostokset";
+"paywall.continue" = "Jatka";
+
+// MARK: - Profile
+"profile.favorites" = "Suosikit";
+"profile.listening_history" = "Kuunteluhistoria";
+"profile.no_favorites" = "Ei vielä suosikkeja";
+"profile.no_history" = "Ei vielä kuunteluhistoriaa";
+
+// MARK: - Reader
+"reader.chapter" = "Luku %d";
+"reader.of" = "/ %d";
+"reader.play" = "Toista";
+"reader.pause" = "Tauko";
+"reader.speed" = "Nopeus";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "Yli 100 eeppistä tarinaa";
+"paywall.epic_stories_subtitle" = "Faaraoista keisareihin";
+"paywall.immersive_audio" = "Mukaansatempaava ääni";
+"paywall.immersive_audio_subtitle" = "Ammattimainen kertomus";
+"paywall.civilizations" = "Yli 15 sivilisaatiota";
+"paywall.civilizations_subtitle" = "Ajan ja paikan yli";
+"paywall.premium_annual" = "Premium vuosittain";
+"paywall.premium_weekly" = "Premium viikoittain";
+"paywall.save_85" = "Säästä 85% • Täysi pääsy";
+"paywall.trial_days" = "3 päivää ilmaiseksi, sitten viikoittain";
+"paywall.then_price" = "Sitten %@/vuosi";
+"paywall.then_price_week" = "3 päivän ilmainen kokeilu, sitten %@/viikko";
+"paywall.try_free" = "Kokeile ilmaiseksi";
+"paywall.terms" = "Ehdot";
+"paywall.privacy" = "Tietosuoja";
+
+// MARK: - Profile (Additional)
+"profile.title" = "Profiili";
+"profile.go_premium" = "Hanki Premium";
+"profile.premium_member" = "Premium-jäsen";
+"profile.your_statistics" = "Tilastosi";
+"profile.chapters_read" = "Luetut luvut";
+"profile.civilizations_explored" = "Tutkitut sivilisaatiot";
+"profile.total_reading_time" = "Kokonaislukuaika";
+"profile.favorite_chapters" = "Suosikkiluvut";
+
+// MARK: - Tab Bar
+"tab.startseite" = "Koti";
+"tab.episodes" = "Jaksot";
+"tab.erkunden" = "Tutkia";
+"tab.profil" = "Profiili";

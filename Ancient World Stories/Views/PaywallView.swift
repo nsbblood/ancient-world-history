@@ -50,21 +50,21 @@ struct PaywallView: View {
     
     // Computed property for button text
     private var buttonText: String {
-        selectedPlan == "$rc_annual" ? "Continue" : "Try Free"
+        selectedPlan == "$rc_annual" ? "paywall.continue".localized : "paywall.try_free".localized
     }
-    
+
     // Computed property for trial info
     private var trialInfo: String {
         if selectedPlan == "$rc_annual" {
             if let package = yearlyPackage {
-                return "Then \(package.storeProduct.localizedPriceString)/year"
+                return "paywall.then_price".localized(with: package.storeProduct.localizedPriceString)
             }
-            return "Then $39.99/year"
+            return "paywall.then_price".localized(with: "$39.99")
         } else {
             if let package = weeklyPackage {
-                return "3-day free trial, then \(package.storeProduct.localizedPriceString)/week"
+                return "paywall.then_price_week".localized(with: package.storeProduct.localizedPriceString)
             }
-            return "3-day free trial, then $4.99/week"
+            return "paywall.then_price_week".localized(with: "$4.99")
         }
     }
     
@@ -160,12 +160,12 @@ struct PaywallView: View {
                                 .shadow(color: Color.appAccent.opacity(0.4), radius: 10, x: 0, y: 4)
                         }
 
-                        Text("Unlock the Ancient World")
+                        Text("paywall.title".localized)
                             .font(.system(size: 26, weight: .bold, design: .serif))
                             .foregroundColor(.appText)
                             .multilineTextAlignment(.center)
 
-                        Text("Journey through time. Experience every civilization.")
+                        Text("paywall.subtitle".localized)
                             .font(.system(size: 13, weight: .medium, design: .serif))
                             .foregroundColor(.secondaryText)
                             .multilineTextAlignment(.center)
@@ -176,9 +176,9 @@ struct PaywallView: View {
 
                     // Features (more compact, only 3 features)
                     VStack(spacing: 10) {
-                        VibrantFeature(icon: "scroll.fill", title: "100+ Epic Stories", description: "From pharaohs to emperors")
-                        VibrantFeature(icon: "waveform", title: "Immersive Audio", description: "Professional narration")
-                        VibrantFeature(icon: "globe.americas.fill", title: "15+ Civilizations", description: "Across time and space")
+                        VibrantFeature(icon: "scroll.fill", title: "paywall.epic_stories".localized, description: "paywall.epic_stories_subtitle".localized)
+                        VibrantFeature(icon: "waveform", title: "paywall.immersive_audio".localized, description: "paywall.immersive_audio_subtitle".localized)
+                        VibrantFeature(icon: "globe.americas.fill", title: "paywall.civilizations".localized, description: "paywall.civilizations_subtitle".localized)
                     }
                     .padding(.horizontal, 24)
 
@@ -217,7 +217,7 @@ struct PaywallView: View {
                                     .font(.system(size: 40))
                                     .foregroundColor(.red.opacity(0.8))
 
-                                Text("Unable to load subscriptions")
+                                Text("paywall.unable_to_load".localized)
                                     .font(.system(size: 16, weight: .semibold, design: .serif))
                                     .foregroundColor(.appText)
 
@@ -231,7 +231,7 @@ struct PaywallView: View {
                                     errorMessage = nil
                                     fetchOfferings()
                                 } label: {
-                                    Text("Retry")
+                                    Text("retry".localized)
                                         .font(.system(size: 14, weight: .semibold, design: .serif))
                                         .foregroundColor(.white)
                                         .padding(.horizontal, 24)
@@ -244,7 +244,7 @@ struct PaywallView: View {
                                 ProgressView()
                                     .tint(.appAccent)
 
-                                Text("Loading subscription options...")
+                                Text("paywall.loading_subscriptions".localized)
                                     .font(.system(size: 14, design: .serif))
                                     .foregroundColor(.secondaryText)
                             }
@@ -299,7 +299,7 @@ struct PaywallView: View {
 
                     // Legal links
                     HStack(spacing: 16) {
-                        Button("Terms") {
+                        Button("paywall.terms".localized) {
                             if let url = URL(string: "https://dainty.app/terms") {
                                 UIApplication.shared.open(url)
                             }
@@ -307,7 +307,7 @@ struct PaywallView: View {
                         .font(.system(size: 10, weight: .medium, design: .serif))
                         .foregroundColor(.secondaryText)
 
-                        Button("Privacy") {
+                        Button("paywall.privacy".localized) {
                             if let url = URL(string: "https://dainty.app/privacy") {
                                 UIApplication.shared.open(url)
                             }
@@ -315,7 +315,7 @@ struct PaywallView: View {
                         .font(.system(size: 10, weight: .medium, design: .serif))
                         .foregroundColor(.secondaryText)
 
-                        Button("Restore") {
+                        Button("paywall.restore".localized) {
                             restorePurchases()
                         }
                         .font(.system(size: 10, weight: .medium, design: .serif))
@@ -597,7 +597,7 @@ struct SubscriptionCard: View {
                             .foregroundColor(.appText)
 
                         if showBadge {
-                            Text("BEST VALUE")
+                            Text("paywall.best_value".localized)
                                 .font(.system(size: 9, weight: .black, design: .serif))
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 8)
@@ -616,7 +616,7 @@ struct SubscriptionCard: View {
                                         )
                                 )
                         } else if isWeekly {
-                            Text("3-DAY TRIAL")
+                            Text("paywall.trial".localized)
                                 .font(.system(size: 9, weight: .black, design: .serif))
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 8)
@@ -634,7 +634,7 @@ struct SubscriptionCard: View {
                         }
                     }
 
-                    Text(package.storeProduct.subscriptionPeriod?.unit == .year ? "Save 85% • Full Access" : "3 days free, then weekly")
+                    Text(package.storeProduct.subscriptionPeriod?.unit == .year ? "paywall.save_85".localized : "paywall.trial_days".localized)
                         .font(.system(size: 11, design: .serif))
                         .foregroundColor(.secondaryText)
                 }

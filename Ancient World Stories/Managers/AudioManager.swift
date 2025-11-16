@@ -102,6 +102,33 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
     // This ensures consistent audio URLs for caching across all users
 
     // MARK: - Playback Control
+
+    /// Speak chapter with full caching support (recommended)
+    func speakChapter(_ chapter: Chapter) {
+        // Lazy load voice settings on first use
+        ensureVoiceLoaded()
+
+        // Stop any current speech
+        stop()
+
+        // Route to appropriate TTS engine
+        switch selectedEngine {
+        case .system:
+            speakWithSystem(text: chapter.text, language: "\(chapter.languageCode)-US")
+
+        case .minimax:
+            // Check premium status
+            guard ProfileManager.shared.isPremium else {
+                print("⚠️ Neural AI TTS requires premium - falling back to system")
+                speakWithSystem(text: chapter.text, language: "\(chapter.languageCode)-US")
+                return
+            }
+
+            speakWithMinimaxChapter(chapter: chapter)
+        }
+    }
+
+    /// Legacy speak function (for backward compatibility)
     func speak(text: String, language: String = "en-US") {
         // Lazy load voice settings on first use
         ensureVoiceLoaded()
@@ -147,6 +174,27 @@ class AudioManager: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
 
         synthesizer.speak(utterance)
         isPlaying = true
+    }
+
+    private func speakWithMinimaxChapter(chapter: Chapter) {
+        isPlaying = true
+
+        Task {
+            do {
+                // Use new cached chapter speak function
+                try await MinimaxTTSService.shared.speakChapter(chapter)
+
+                // Reset playing state when done
+                self.isPlaying = false
+                self.currentProgress = 1.0
+
+            } catch {
+                print("❌ Minimax TTS failed, falling back to system: \(error)")
+
+                // Fallback to system TTS
+                self.speakWithSystem(text: chapter.text, language: "\(chapter.languageCode)-US")
+            }
+        }
     }
 
     private func speakWithMinimax(text: String, language: String) {

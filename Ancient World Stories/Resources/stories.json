@@ -26,6 +26,114 @@
       "region": "Mediterranean",
       "description": "Birthplace of democracy, philosophy, and Olympic games.",
       "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "7fa7b811-9dad-11d1-80b4-00c04fd430c9",
+      "name": "Persian Empire",
+      "era_start": "550 BC",
+      "era_end": "330 BC",
+      "region": "Middle East",
+      "description": "The vast Achaemenid Empire that connected East and West.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "8fa7b812-9dad-11d1-80b4-00c04fd430d0",
+      "name": "Phoenicia",
+      "era_start": "1500 BC",
+      "era_end": "300 BC",
+      "region": "Mediterranean",
+      "description": "Master seafarers and traders who invented the alphabet.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "9fa7b813-9dad-11d1-80b4-00c04fd430d1",
+      "name": "Kingdom of Kush",
+      "era_start": "1070 BC",
+      "era_end": "350 AD",
+      "region": "North Africa",
+      "description": "Powerful African kingdom south of Egypt, known for pyramids and gold.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "afa7b814-9dad-11d1-80b4-00c04fd430d2",
+      "name": "Carthage",
+      "era_start": "814 BC",
+      "era_end": "146 BC",
+      "region": "North Africa",
+      "description": "Phoenician trading empire that challenged Rome.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "bfa7b815-9dad-11d1-80b4-00c04fd430d3",
+      "name": "Indus Valley Civilization",
+      "era_start": "3300 BC",
+      "era_end": "1300 BC",
+      "region": "South Asia",
+      "description": "Advanced urban civilization with sophisticated city planning.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "cfa7b816-9dad-11d1-80b4-00c04fd430d4",
+      "name": "Ancient China",
+      "era_start": "2070 BC",
+      "era_end": "220 AD",
+      "region": "East Asia",
+      "description": "Dynasty of dynasties, inventors of paper, gunpowder, and the compass.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "dfa7b817-9dad-11d1-80b4-00c04fd430d5",
+      "name": "Etruscan Civilization",
+      "era_start": "900 BC",
+      "era_end": "27 BC",
+      "region": "Europe",
+      "description": "Mysterious civilization that preceded and influenced Rome.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "efa7b818-9dad-11d1-80b4-00c04fd430d6",
+      "name": "Assyria",
+      "era_start": "2500 BC",
+      "era_end": "609 BC",
+      "region": "Middle East",
+      "description": "Fearsome military empire known for iron weapons and brutal conquests.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "ffa7b819-9dad-11d1-80b4-00c04fd430d7",
+      "name": "Celtic Tribes",
+      "era_start": "1200 BC",
+      "era_end": "400 AD",
+      "region": "Europe",
+      "description": "Iron Age peoples who spread across Europe with rich culture.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "0fa7b820-9dad-11d1-80b4-00c04fd430d8",
+      "name": "Ancient Sparta",
+      "era_start": "900 BC",
+      "era_end": "192 BC",
+      "region": "Mediterranean",
+      "description": "Legendary warrior society of ancient Greece.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "1fa7b821-9dad-11d1-80b4-00c04fd430d9",
+      "name": "Maurya Empire",
+      "era_start": "322 BC",
+      "era_end": "185 BC",
+      "region": "South Asia",
+      "description": "First pan-Indian empire, spreading Buddhism across Asia.",
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "2fa7b822-9dad-11d1-80b4-00c04fd430e0",
+      "name": "Olmec Civilization",
+      "era_start": "1500 BC",
+      "era_end": "400 BC",
+      "region": "Mesoamerica",
+      "description": "Mother culture of Mesoamerica, creators of colossal stone heads.",
+      "created_at": "2025-01-01T00:00:00Z"
     }
   ],
   "stories": [

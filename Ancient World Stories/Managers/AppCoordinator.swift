@@ -11,31 +11,26 @@ class AppCoordinator: ObservableObject {
     
     func startInitialization() async {
         print("🚀 Starting app initialization...")
-        
+
         // Configure UI Appearance first - this is synchronous and fast
         configureAppearance()
-        
+
         // Initialize ProfileManager and load its local data
         profileManager.loadInitialDataIfNeeded()
-        
-        // Load remote data and configure RevenueCat concurrently
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask {
-                await self.contentLoader.loadAllData()
-            }
-            
-            group.addTask {
-                await self.configureRevenueCat()
-                await self.profileManager.checkPremiumStatus()
-            }
-        }
-        
-        // Add a small delay to ensure the splash screen is visible for a minimum duration
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-        
+
+        // FAST PATH: Only load essential data for quick launch
+        await contentLoader.loadInitialData()
+
+        // Show UI immediately after essential data is loaded
         withAnimation {
             isDataLoaded = true
-            print("✨ Splash complete, showing main app")
+            print("✨ App ready - showing UI (\(contentLoader.civilizations.count) civs loaded)")
+        }
+
+        // BACKGROUND: Configure RevenueCat and load remaining data
+        Task.detached(priority: .background) { [weak self] in
+            await self?.configureRevenueCat()
+            await self?.profileManager.checkPremiumStatus()
         }
     }
     
@@ -44,19 +39,22 @@ class AppCoordinator: ObservableObject {
             print("⚠️ RevenueCat already configured, skipping setup...")
             return
         }
-        
+
         print("🔧 Configuring RevenueCat...")
         Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
         print("✅ RevenueCat configured successfully")
-        
-        do {
-            let offerings = try await Purchases.shared.offerings()
-            print("✅ Offerings pre-fetched: \(offerings.current?.identifier ?? "none")")
-            if let current = offerings.current {
-                print("   Packages: \(current.availablePackages.map { $0.identifier })")
+
+        // Pre-fetch offerings in background - don't block if it fails
+        Task.detached(priority: .utility) {
+            do {
+                let offerings = try await Purchases.shared.offerings()
+                print("✅ Offerings pre-fetched: \(offerings.current?.identifier ?? "none")")
+                if let current = offerings.current {
+                    print("   Packages: \(current.availablePackages.map { $0.identifier })")
+                }
+            } catch {
+                print("⚠️ Failed to pre-fetch offerings: \(error)")
             }
-        } catch {
-            print("⚠️ Failed to pre-fetch offerings: \(error)")
         }
     }
     

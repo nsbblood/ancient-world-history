@@ -19,36 +19,24 @@ struct SettingsView: View {
 
                 List {
                     Section {
-                        ForEach(AppLanguage.allCases) { language in
-                            Button {
-                                languageManager.setLanguage(language)
-                            } label: {
-                                HStack {
-                                    Text(language.flag)
-                                        .font(.system(size: 24))
-
-                                    Text(language.nativeName)
-                                        .font(.serifBody())
-                                        .foregroundColor(.primaryText)
-
-                                    Spacer()
-
-                                    if languageManager.selectedLanguage == language {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.accentColor)
-                                    }
-                                }
-                                .contentShape(Rectangle())
+                        Picker("settings.language".localized, selection: Binding(
+                            get: { languageManager.selectedLanguage },
+                            set: { languageManager.setLanguage($0) }
+                        )) {
+                            ForEach(AppLanguage.allCases) { language in
+                                Text("\(language.flag) \(language.nativeName)")
+                                    .tag(language)
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .listRowBackground(Color.cardBackground)
                         }
+                        .pickerStyle(.menu)
+                        .font(.serifBody())
+                        .listRowBackground(Color.cardBackground)
                     } header: {
-                        Text("Language")
+                        Text(localized: "settings.language")
                             .font(.serifBody())
                             .foregroundColor(.primaryText)
                     } footer: {
-                        Text("Select your preferred language for stories and narration")
+                        Text(localized: "settings.language_description")
                             .font(.serifCaption())
                             .foregroundColor(.secondaryText)
                     }
@@ -56,7 +44,7 @@ struct SettingsView: View {
                     Section {
                         SettingsRow(
                             icon: "envelope.fill",
-                            title: "Contact Support",
+                            title: "settings.contact_support".localized,
                             subtitle: "hi@dainty.app"
                         ) {
                             if let url = URL(string: "mailto:hi@dainty.app") {
@@ -65,7 +53,7 @@ struct SettingsView: View {
                         }
                         .listRowBackground(Color.cardBackground)
                     } header: {
-                        Text("Support")
+                        Text(localized: "support")
                             .font(.serifBody())
                             .foregroundColor(.primaryText)
                     }
@@ -73,8 +61,8 @@ struct SettingsView: View {
                     Section {
                         SettingsRow(
                             icon: "doc.text.fill",
-                            title: "Privacy Policy",
-                            subtitle: "How we handle your data"
+                            title: "settings.privacy_policy".localized,
+                            subtitle: "settings.privacy_description".localized
                         ) {
                             if let url = URL(string: "https://dainty.app/privacy") {
                                 UIApplication.shared.open(url)
@@ -84,8 +72,8 @@ struct SettingsView: View {
 
                         SettingsRow(
                             icon: "doc.text.fill",
-                            title: "Terms of Service",
-                            subtitle: "Our terms and conditions"
+                            title: "settings.terms".localized,
+                            subtitle: "settings.terms_description".localized
                         ) {
                             if let url = URL(string: "https://dainty.app/terms") {
                                 UIApplication.shared.open(url)
@@ -93,14 +81,14 @@ struct SettingsView: View {
                         }
                         .listRowBackground(Color.cardBackground)
                     } header: {
-                        Text("Legal")
+                        Text(localized: "settings.legal")
                             .font(.serifBody())
                             .foregroundColor(.primaryText)
                     }
 
                     Section {
                         HStack {
-                            Text("Version")
+                            Text(localized: "version")
                                 .font(.serifBody())
                                 .foregroundColor(.primaryText)
 
@@ -112,7 +100,7 @@ struct SettingsView: View {
                         }
                         .listRowBackground(Color.cardBackground)
                     } header: {
-                        Text("About")
+                        Text(localized: "about")
                             .font(.serifBody())
                             .foregroundColor(.primaryText)
                     }
@@ -120,7 +108,7 @@ struct SettingsView: View {
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle("Settings")
+            .navigationTitle(Text(localized: "settings"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

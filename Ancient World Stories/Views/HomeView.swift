@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject private var content = ContentLoader.shared
+    @ObservedObject private var languageManager = LanguageManager.shared
     @State private var selectedChapter: Chapter?
     @State private var randomChapters: [Chapter] = []
 
@@ -14,11 +15,11 @@ struct HomeView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Ancient World Stories")
+                            Text(localized: "app.title")
                                 .font(.serifTitle())
                                 .foregroundColor(.primaryText)
-                            
-                            Text("Discover tales from civilizations past")
+
+                            Text(localized: "app.tagline")
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
                         }
@@ -28,7 +29,7 @@ struct HomeView: View {
                         if content.isLoading {
                             VStack(spacing: 16) {
                                 ProgressView().tint(.accentColor)
-                                Text("Loading stories...")
+                                Text(localized: "home.loading_stories")
                                     .font(.serifBody())
                                     .foregroundColor(.secondaryText)
                             }
@@ -43,9 +44,9 @@ struct HomeView: View {
                                     .font(.serifBody())
                                     .foregroundColor(.secondaryText)
                                     .multilineTextAlignment(.center)
-                                Button("Retry") {
+                                Button("retry".localized) {
                                     Task {
-                                        await content.loadAllData()
+                                        await content.loadInitialData()
                                         loadRandomChapters()
                                     }
                                 }
@@ -60,7 +61,7 @@ struct HomeView: View {
                             .padding(.vertical, 40)
                         } else {
                             VStack(alignment: .leading, spacing: 16) {
-                                Text("Explore Chapters")
+                                Text(localized: "home.explore_chapters")
                                     .font(.serifTitle2())
                                     .foregroundColor(.primaryText)
                                     .padding(.horizontal)
@@ -113,7 +114,7 @@ struct HomeView: View {
                             } label: {
                                 HStack {
                                     Image(systemName: "arrow.clockwise")
-                                    Text("Show different chapters")
+                                    Text("home.show_different".localized)
                                 }
                                 .font(.serifBody())
                                 .foregroundColor(.accentColor)
@@ -128,7 +129,7 @@ struct HomeView: View {
                     .padding(.bottom, 24)
                 }
                 .refreshable {
-                    await content.loadAllData()
+                    await content.loadInitialData()
                     loadRandomChapters()
                 }
             }
@@ -154,6 +155,10 @@ struct HomeView: View {
             if !content.chapters.isEmpty && randomChapters.isEmpty {
                 loadRandomChapters()
             }
+        }
+        .onChange(of: languageManager.selectedLanguage) {
+            // Reload random chapters when language changes
+            loadRandomChapters()
         }
     }
 

@@ -1,0 +1,124 @@
+/*
+  Localizable.strings - 한국어 (Korean)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "홈";
+"tab.explore" = "탐험";
+"tab.profile" = "프로필";
+
+// MARK: - General
+"app.title" = "고대 세계 이야기";
+"app.tagline" = "과거 문명의 이야기를 발견하세요";
+"language" = "언어";
+"settings" = "설정";
+"support" = "지원";
+"about" = "정보";
+"version" = "버전";
+"close" = "닫기";
+"save" = "저장";
+"cancel" = "취소";
+"retry" = "재시도";
+"loading" = "로딩 중...";
+"error" = "오류";
+
+// MARK: - Home View
+"home.explore_chapters" = "챕터 탐험하기";
+"home.loading_stories" = "이야기를 불러오는 중...";
+"home.show_different" = "다른 챕터 보기";
+
+// MARK: - Explore View
+"explore.timeline" = "타임라인";
+"explore.time_travel" = "시간 여행";
+"explore.no_civilizations" = "문명을 찾을 수 없음";
+"explore.check_back" = "나중에 다시 확인하여 고대 문명을 탐험하세요.";
+"explore.stories" = "이야기";
+"explore.no_stories" = "아직 이야기가 없습니다";
+"explore.coming_soon" = "이 문명의 이야기가 곧 공개됩니다.";
+
+// MARK: - Stories View
+"stories.loading" = "이야기를 불러오는 중...";
+"stories.coming_soon_title" = "이야기 곧 공개";
+"stories.coming_soon_message" = "%@의 새로운 이야기가 곧 추가됩니다. 나중에 다시 확인해주세요!";
+
+// MARK: - Chapters View
+"chapters.title" = "챕터";
+"chapters.progress" = "진행률";
+"chapters.no_chapters" = "아직 챕터가 없습니다.";
+
+// MARK: - Settings View
+"settings.language" = "언어";
+"settings.language_description" = "이야기와 나레이션을 위한 선호 언어를 선택하세요";
+"settings.contact_support" = "지원팀에 문의";
+"settings.privacy_policy" = "개인정보 처리방침";
+"settings.privacy_description" = "데이터 처리 방법";
+"settings.terms" = "서비스 약관";
+"settings.terms_description" = "이용 약관";
+"settings.legal" = "법적 고지";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "시간을 통한 여행";
+"onboarding.welcome_message" = "고대 문명의 매혹적인 이야기를 발견하세요. 메소포타미아에서 그리스까지, 전에 없던 방식으로 역사를 경험하세요.";
+"onboarding.explore_title" = "탐험하고 듣기";
+"onboarding.explore_message" = "인터랙티브 지도를 탐색하고, 시대별로 문명을 발견하며, 몰입감 있는 오디오 나레이션으로 이야기를 들어보세요.";
+"onboarding.unlock_title" = "모든 이야기 잠금 해제";
+"onboarding.get_started" = "시작하기";
+"onboarding.next" = "다음";
+"onboarding.skip" = "건너뛰기";
+
+// MARK: - Paywall
+"paywall.title" = "고대 세계 잠금 해제";
+"paywall.subtitle" = "시간을 여행하세요. 모든 문명을 경험하세요.";
+"paywall.loading_subscriptions" = "구독 옵션을 불러오는 중...";
+"paywall.unable_to_load" = "구독을 불러올 수 없습니다";
+"paywall.best_value" = "최고 가치";
+"paywall.trial" = "3일 무료 체험";
+"paywall.restore" = "구매 복원";
+"paywall.continue" = "계속하기";
+
+// MARK: - Profile
+"profile.favorites" = "즐겨찾기";
+"profile.listening_history" = "듣기 기록";
+"profile.no_favorites" = "아직 즐겨찾기가 없습니다";
+"profile.no_history" = "아직 듣기 기록이 없습니다";
+
+// MARK: - Reader
+"reader.chapter" = "챕터 %d";
+"reader.of" = "/ %d";
+"reader.play" = "재생";
+"reader.pause" = "일시정지";
+"reader.speed" = "속도";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "100개 이상의 서사시";
+"paywall.epic_stories_subtitle" = "파라오부터 황제까지";
+"paywall.immersive_audio" = "몰입형 오디오";
+"paywall.immersive_audio_subtitle" = "전문 나레이션";
+"paywall.civilizations" = "15개 이상의 문명";
+"paywall.civilizations_subtitle" = "시간과 공간을 넘어";
+"paywall.premium_annual" = "프리미엄 연간";
+"paywall.premium_weekly" = "프리미엄 주간";
+"paywall.save_85" = "85% 절약 • 전체 액세스";
+"paywall.trial_days" = "3일 무료, 그 후 주간";
+"paywall.then_price" = "그 후 %@/년";
+"paywall.then_price_week" = "3일 무료 체험, 그 후 %@/주";
+"paywall.try_free" = "무료로 시도";
+"paywall.terms" = "약관";
+"paywall.privacy" = "개인정보";
+
+// MARK: - Profile (Additional)
+"profile.title" = "프로필";
+"profile.go_premium" = "프리미엄 되기";
+"profile.premium_member" = "프리미엄 회원";
+"profile.your_statistics" = "통계";
+"profile.chapters_read" = "읽은 챕터";
+"profile.civilizations_explored" = "탐험한 문명";
+"profile.total_reading_time" = "총 읽기 시간";
+"profile.favorite_chapters" = "즐겨찾는 챕터";
+
+// MARK: - Tab Bar
+"tab.startseite" = "홈";
+"tab.episodes" = "에피소드";
+"tab.erkunden" = "탐험";
+"tab.profil" = "프로필";

@@ -110,10 +110,31 @@ class LanguageManager: ObservableObject {
     func setLanguage(_ language: AppLanguage) {
         selectedLanguage = language
         UserDefaults.standard.set(language.rawValue, forKey: "selectedLanguage")
+        UserDefaults.standard.set([language.rawValue], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
         print("🌍 Language changed to: \(language.displayName)")
+
+        // Reload content from Supabase with new language
+        Task {
+            await ContentLoader.shared.syncFromSupabase()
+        }
     }
 
     var currentLanguageCode: String {
         selectedLanguage.rawValue
+    }
+
+    // Get bundle for current language
+    var currentBundle: Bundle {
+        guard let path = Bundle.main.path(forResource: selectedLanguage.rawValue, ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            return Bundle.main
+        }
+        return bundle
+    }
+
+    // Localized string helper
+    func localizedString(_ key: String) -> String {
+        return NSLocalizedString(key, bundle: currentBundle, comment: "")
     }
 }

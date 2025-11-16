@@ -1,0 +1,124 @@
+/*
+  Localizable.strings - Svenska (Swedish)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "Hem";
+"tab.explore" = "Utforska";
+"tab.profile" = "Profil";
+
+// MARK: - General
+"app.title" = "Antika Världens Berättelser";
+"app.tagline" = "Upptäck berättelser från forntida civilisationer";
+"language" = "Språk";
+"settings" = "Inställningar";
+"support" = "Support";
+"about" = "Om";
+"version" = "Version";
+"close" = "Stäng";
+"save" = "Spara";
+"cancel" = "Avbryt";
+"retry" = "Försök igen";
+"loading" = "Laddar...";
+"error" = "Fel";
+
+// MARK: - Home View
+"home.explore_chapters" = "Utforska kapitel";
+"home.loading_stories" = "Laddar berättelser...";
+"home.show_different" = "Visa andra kapitel";
+
+// MARK: - Explore View
+"explore.timeline" = "Tidslinje";
+"explore.time_travel" = "Tidsresa";
+"explore.no_civilizations" = "Inga civilisationer hittades";
+"explore.check_back" = "Kom tillbaka senare för att utforska antika civilisationer.";
+"explore.stories" = "Berättelser";
+"explore.no_stories" = "Inga berättelser ännu";
+"explore.coming_soon" = "Berättelser för denna civilisation kommer snart.";
+
+// MARK: - Stories View
+"stories.loading" = "Laddar berättelser...";
+"stories.coming_soon_title" = "Berättelser kommer snart";
+"stories.coming_soon_message" = "Nya berättelser från %@ kommer att läggas till snart. Kom tillbaka senare!";
+
+// MARK: - Chapters View
+"chapters.title" = "Kapitel";
+"chapters.progress" = "Framsteg";
+"chapters.no_chapters" = "Inga kapitel tillgängliga ännu.";
+
+// MARK: - Settings View
+"settings.language" = "Språk";
+"settings.language_description" = "Välj ditt föredragna språk för berättelser och uppläsning";
+"settings.contact_support" = "Kontakta support";
+"settings.privacy_policy" = "Integritetspolicy";
+"settings.privacy_description" = "Hur vi hanterar dina data";
+"settings.terms" = "Användarvillkor";
+"settings.terms_description" = "Våra villkor och bestämmelser";
+"settings.legal" = "Juridiskt";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Resa genom tiden";
+"onboarding.welcome_message" = "Upptäck fängslande berättelser från antika civilisationer. Från Mesopotamien till Grekland, upplev historien som aldrig förr.";
+"onboarding.explore_title" = "Utforska och lyssna";
+"onboarding.explore_message" = "Navigera genom en interaktiv karta, upptäck civilisationer efter epok och lyssna på berättelser med uppslukande ljudberättelse.";
+"onboarding.unlock_title" = "Lås upp alla berättelser";
+"onboarding.get_started" = "Kom igång";
+"onboarding.next" = "Nästa";
+"onboarding.skip" = "Hoppa över";
+
+// MARK: - Paywall
+"paywall.title" = "Lås upp den antika världen";
+"paywall.subtitle" = "Res genom tiden. Upplev varje civilisation.";
+"paywall.loading_subscriptions" = "Laddar prenumerationsalternativ...";
+"paywall.unable_to_load" = "Kunde inte ladda prenumerationer";
+"paywall.best_value" = "BÄSTA VÄRDE";
+"paywall.trial" = "3-DAGARS PROVPERIOD";
+"paywall.restore" = "Återställ köp";
+"paywall.continue" = "Fortsätt";
+
+// MARK: - Profile
+"profile.favorites" = "Favoriter";
+"profile.listening_history" = "Lyssningshistorik";
+"profile.no_favorites" = "Inga favoriter ännu";
+"profile.no_history" = "Ingen lyssningshistorik ännu";
+
+// MARK: - Reader
+"reader.chapter" = "Kapitel %d";
+"reader.of" = "av %d";
+"reader.play" = "Spela";
+"reader.pause" = "Pausa";
+"reader.speed" = "Hastighet";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "Över 100 episka berättelser";
+"paywall.epic_stories_subtitle" = "Från faraoner till kejsare";
+"paywall.immersive_audio" = "Uppslukande ljud";
+"paywall.immersive_audio_subtitle" = "Professionell uppläsning";
+"paywall.civilizations" = "Över 15 civilisationer";
+"paywall.civilizations_subtitle" = "Genom tid och rum";
+"paywall.premium_annual" = "Premium årsvis";
+"paywall.premium_weekly" = "Premium veckovis";
+"paywall.save_85" = "Spara 85% • Full tillgång";
+"paywall.trial_days" = "3 dagar gratis, sedan veckovis";
+"paywall.then_price" = "Sedan %@/år";
+"paywall.then_price_week" = "3 dagars gratis provperiod, sedan %@/vecka";
+"paywall.try_free" = "Prova gratis";
+"paywall.terms" = "Villkor";
+"paywall.privacy" = "Integritet";
+
+// MARK: - Profile (Additional)
+"profile.title" = "Profil";
+"profile.go_premium" = "Bli Premium";
+"profile.premium_member" = "Premium-medlem";
+"profile.your_statistics" = "Din statistik";
+"profile.chapters_read" = "Lästa kapitel";
+"profile.civilizations_explored" = "Utforskade civilisationer";
+"profile.total_reading_time" = "Total lästid";
+"profile.favorite_chapters" = "Favoritkapitel";
+
+// MARK: - Tab Bar
+"tab.startseite" = "Hem";
+"tab.episodes" = "Avsnitt";
+"tab.erkunden" = "Utforska";
+"tab.profil" = "Profil";

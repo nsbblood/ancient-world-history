@@ -4,6 +4,7 @@ import SwiftUI
 struct StoriesView: View {
     let civilization: Civilization
     @ObservedObject private var content = ContentLoader.shared
+    @ObservedObject private var languageManager = LanguageManager.shared
     @State private var selectedStory: Story?
 
     var stories: [Story] {
@@ -36,7 +37,7 @@ struct StoriesView: View {
                         VStack(spacing: 16) {
                             ProgressView()
                                 .tint(.accentColor)
-                            Text("Loading stories...")
+                            Text("stories.loading".localized)
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
                         }
@@ -47,12 +48,12 @@ struct StoriesView: View {
                             Image(systemName: "book.closed")
                                 .font(.system(size: 60))
                                 .foregroundColor(.accentColor.opacity(0.5))
-                            
-                            Text("Stories Coming Soon")
+
+                            Text("stories.coming_soon_title".localized)
                                 .font(.serifTitle3())
                                 .foregroundColor(.primaryText)
-                            
-                            Text("New tales from \(civilization.name) will be added here soon. Check back later!")
+
+                            Text("stories.coming_soon_message".localized(with: civilization.name))
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
                                 .multilineTextAlignment(.center)

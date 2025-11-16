@@ -15,6 +15,7 @@ struct Chapter: Identifiable, Codable, Hashable {
     let text: String
     let duration: Int // in seconds
     let languageCode: String
+    let audioURL: String? // Cached audio URL from Supabase/AI
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -24,9 +25,10 @@ struct Chapter: Identifiable, Codable, Hashable {
         case text
         case duration
         case languageCode = "language_code"
+        case audioURL = "audio_url"
     }
 
-    init(id: UUID = UUID(), storyId: UUID, title: String, orderNo: Int, text: String, duration: Int, languageCode: String = "en-US") {
+    init(id: UUID = UUID(), storyId: UUID, title: String, orderNo: Int, text: String, duration: Int, languageCode: String = "en", audioURL: String? = nil) {
         self.id = id
         self.storyId = storyId
         self.title = title
@@ -34,6 +36,7 @@ struct Chapter: Identifiable, Codable, Hashable {
         self.text = text
         self.duration = duration
         self.languageCode = languageCode
+        self.audioURL = audioURL
     }
 
     init(from decoder: Decoder) throws {
@@ -57,7 +60,8 @@ struct Chapter: Identifiable, Codable, Hashable {
         orderNo = try container.decode(Int.self, forKey: .orderNo)
         text = try container.decode(String.self, forKey: .text)
         duration = try container.decode(Int.self, forKey: .duration)
-        languageCode = (try? container.decode(String.self, forKey: .languageCode)) ?? "en-US"
+        languageCode = (try? container.decode(String.self, forKey: .languageCode)) ?? "en"
+        audioURL = try? container.decode(String.self, forKey: .audioURL)
     }
 
     var formattedDuration: String {

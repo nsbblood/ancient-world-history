@@ -99,15 +99,17 @@ struct OnboardingView: View {
             }
         }
         .onChange(of: showPaywall) { oldValue, newValue in
-            // When paywall is dismissed, complete onboarding
+            // When paywall is dismissed, complete onboarding immediately
             if oldValue && !newValue {
-                hasCompletedOnboarding = true
+                withAnimation {
+                    hasCompletedOnboarding = true
+                }
             }
         }
         .task {
             // Load Supabase data in background while user sees onboarding
             print("📚 Loading data during onboarding...")
-            await ContentLoader.shared.loadAllData()
+            await ContentLoader.shared.loadInitialData()
             print("✅ Data loaded and ready!")
         }
     }

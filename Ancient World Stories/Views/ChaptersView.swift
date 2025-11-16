@@ -4,12 +4,13 @@ import SwiftUI
 struct ChaptersView: View {
     let story: Story
     let civilization: Civilization
-    
+
     @StateObject private var content = ContentLoader.shared
+    @ObservedObject private var languageManager = LanguageManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
     @State private var selectedChapter: Chapter?
-    
+
     var chapters: [Chapter] {
         content.chapters(for: story.id)
     }
@@ -48,7 +49,7 @@ struct ChaptersView: View {
                         if readProgress > 0 {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
-                                    Text("Progress")
+                                    Text("chapters.progress".localized)
                                         .font(.serifCaption())
                                         .foregroundColor(.secondaryText)
                                     Spacer()
@@ -67,12 +68,12 @@ struct ChaptersView: View {
                     .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
                     
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Chapters (\(chapters.count))")
+                        Text("\("chapters.title".localized) (\(chapters.count))")
                             .font(.serifTitle3())
                             .foregroundColor(.primaryText)
-                        
+
                         if chapters.isEmpty {
-                            Text("No chapters available yet.")
+                            Text("chapters.no_chapters".localized)
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
                                 .frame(maxWidth: .infinity)
@@ -103,5 +104,9 @@ struct ChaptersView: View {
         }
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarBackground(Color.appBackground, for: .navigationBar)
+        .task {
+            // Load chapters for this story when view appears
+            await content.loadChapters(for: story.id)
+        }
     }
 }

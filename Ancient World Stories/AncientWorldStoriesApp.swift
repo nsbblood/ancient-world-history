@@ -43,7 +43,7 @@ struct AncientWorldStoriesApp: App {
         TabView(selection: $selectedTab) {
             HomeView()
                 .tabItem {
-                    Label("Home", systemImage: "book.fill")
+                    Label("tab.home".localized, systemImage: "book.fill")
                 }
                 .tag(0)
 
@@ -55,13 +55,13 @@ struct AncientWorldStoriesApp: App {
 
             ExploreView()
                 .tabItem {
-                    Label("Explore", systemImage: "map.fill")
+                    Label("tab.explore".localized, systemImage: "map.fill")
                 }
                 .tag(2)
 
             ProfileView()
                 .tabItem {
-                    Label("Profile", systemImage: "person.fill")
+                    Label("tab.profile".localized, systemImage: "person.fill")
                 }
                 .tag(3)
         }

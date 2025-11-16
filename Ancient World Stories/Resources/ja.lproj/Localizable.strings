@@ -1,0 +1,124 @@
+/*
+  Localizable.strings - 日本語 (Japanese)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "ホーム";
+"tab.explore" = "探索";
+"tab.profile" = "プロフィール";
+
+// MARK: - General
+"app.title" = "古代世界の物語";
+"app.tagline" = "過去の文明から物語を発見する";
+"language" = "言語";
+"settings" = "設定";
+"support" = "サポート";
+"about" = "について";
+"version" = "バージョン";
+"close" = "閉じる";
+"save" = "保存";
+"cancel" = "キャンセル";
+"retry" = "再試行";
+"loading" = "読み込み中...";
+"error" = "エラー";
+
+// MARK: - Home View
+"home.explore_chapters" = "チャプターを探索";
+"home.loading_stories" = "物語を読み込んでいます...";
+"home.show_different" = "別のチャプターを表示";
+
+// MARK: - Explore View
+"explore.timeline" = "タイムライン";
+"explore.time_travel" = "タイムトラベル";
+"explore.no_civilizations" = "文明が見つかりません";
+"explore.check_back" = "探索する古代文明については、後でもう一度確認してください。";
+"explore.stories" = "物語";
+"explore.no_stories" = "まだ物語はありません";
+"explore.coming_soon" = "この文明の物語は近日公開予定です。";
+
+// MARK: - Stories View
+"stories.loading" = "物語を読み込んでいます...";
+"stories.coming_soon_title" = "物語は近日公開";
+"stories.coming_soon_message" = "%@の新しい物語がまもなく追加されます。後でもう一度確認してください！";
+
+// MARK: - Chapters View
+"chapters.title" = "チャプター";
+"chapters.progress" = "進捗";
+"chapters.no_chapters" = "まだチャプターはありません。";
+
+// MARK: - Settings View
+"settings.language" = "言語";
+"settings.language_description" = "物語とナレーションの優先言語を選択してください";
+"settings.contact_support" = "サポートに連絡";
+"settings.privacy_policy" = "プライバシーポリシー";
+"settings.privacy_description" = "データの取り扱い方法";
+"settings.terms" = "利用規約";
+"settings.terms_description" = "私たちの利用規約";
+"settings.legal" = "法的情報";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "時間を旅する";
+"onboarding.welcome_message" = "古代文明の魅力的な物語を発見してください。";
+"onboarding.explore_title" = "探索＆リスニング";
+"onboarding.explore_message" = "インタラクティブな地図をナビゲート。";
+"onboarding.unlock_title" = "すべての物語をアンロック";
+"onboarding.get_started" = "始める";
+"onboarding.next" = "次へ";
+"onboarding.skip" = "スキップ";
+
+// MARK: - Paywall
+"paywall.title" = "古代世界をアンロック";
+"paywall.subtitle" = "時間を旅する。";
+"paywall.loading_subscriptions" = "読み込み中...";
+"paywall.unable_to_load" = "読み込めません";
+"paywall.best_value" = "最もお得";
+"paywall.trial" = "3日間トライアル";
+"paywall.restore" = "購入を復元";
+"paywall.continue" = "続ける";
+
+// MARK: - Profile
+"profile.favorites" = "お気に入り";
+"profile.listening_history" = "履歴";
+"profile.no_favorites" = "お気に入りなし";
+"profile.no_history" = "履歴なし";
+
+// MARK: - Reader
+"reader.chapter" = "チャプター %d";
+"reader.of" = "/ %d";
+"reader.play" = "再生";
+"reader.pause" = "一時停止";
+"reader.speed" = "速度";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "100以上の壮大な物語";
+"paywall.epic_stories_subtitle" = "ファラオから皇帝まで";
+"paywall.immersive_audio" = "没入型オーディオ";
+"paywall.immersive_audio_subtitle" = "プロのナレーション";
+"paywall.civilizations" = "15以上の文明";
+"paywall.civilizations_subtitle" = "時間と空間を超えて";
+"paywall.premium_annual" = "プレミアム年間";
+"paywall.premium_weekly" = "プレミアム週間";
+"paywall.save_85" = "85%節約 • フルアクセス";
+"paywall.trial_days" = "3日間無料、その後週間";
+"paywall.then_price" = "その後 %@/年";
+"paywall.then_price_week" = "3日間無料トライアル、その後 %@/週";
+"paywall.try_free" = "無料で試す";
+"paywall.terms" = "利用規約";
+"paywall.privacy" = "プライバシー";
+
+// MARK: - Profile (Additional)
+"profile.title" = "プロフィール";
+"profile.go_premium" = "プレミアムになる";
+"profile.premium_member" = "プレミアム会員";
+"profile.your_statistics" = "あなたの統計";
+"profile.chapters_read" = "読んだチャプター";
+"profile.civilizations_explored" = "探索した文明";
+"profile.total_reading_time" = "総読書時間";
+"profile.favorite_chapters" = "お気に入りのチャプター";
+
+// MARK: - Tab Bar
+"tab.startseite" = "ホーム";
+"tab.episodes" = "エピソード";
+"tab.erkunden" = "探索";
+"tab.profil" = "プロフィール";

@@ -41,8 +41,15 @@ class SupabaseClient {
     }
 
     // MARK: - Fetch Civilizations
-    func fetchCivilizations() async throws -> [Civilization] {
-        let endpoint = "\(projectURL)/rest/v1/civilizations?select=*&order=era_start.asc"
+    func fetchCivilizations(languageCode: String? = nil, limit: Int? = nil) async throws -> [Civilization] {
+        var endpoint = "\(projectURL)/rest/v1/civilizations?select=*"
+        if let languageCode = languageCode {
+            endpoint += "&language_code=eq.\(languageCode)"
+        }
+        endpoint += "&order=era_start.asc"
+        if let limit = limit {
+            endpoint += "&limit=\(limit)"
+        }
 
         guard let url = URL(string: endpoint) else {
             throw SupabaseError.invalidURL
@@ -63,7 +70,8 @@ class SupabaseClient {
             let decoder = JSONDecoder()
             let civilizations = try decoder.decode([Civilization].self, from: data)
 
-            cacheData(data, filename: "civilizations_cache.json")
+            let filename = limit != nil ? "civilizations_quick_\(limit!)_cache.json" : "civilizations_cache.json"
+            cacheData(data, filename: filename)
             return civilizations
         } catch let error as DecodingError {
             throw SupabaseError.decodingError(error)
@@ -73,12 +81,19 @@ class SupabaseClient {
     }
 
     // MARK: - Fetch Stories
-    func fetchStories(forCivilization civilizationId: UUID? = nil) async throws -> [Story] {
+    func fetchStories(forCivilization civilizationId: UUID? = nil, languageCode: String? = nil, limit: Int? = nil) async throws -> [Story] {
         var endpoint = "\(projectURL)/rest/v1/stories?select=*"
         if let civilizationId = civilizationId {
             endpoint += "&civilization_id=eq.\(civilizationId.uuidString)"
         }
+        if let languageCode = languageCode {
+            endpoint += "&language_code=eq.\(languageCode)"
+        }
         endpoint += "&order=created_at.desc"
+
+        if let limit = limit {
+            endpoint += "&limit=\(limit)"
+        }
 
         guard let url = URL(string: endpoint) else {
             throw SupabaseError.invalidURL
@@ -111,10 +126,15 @@ class SupabaseClient {
     }
 
     // MARK: - Fetch Chapters
-    func fetchChapters(forStory storyId: UUID? = nil) async throws -> [Chapter] {
+    func fetchChapters(forStory storyId: UUID? = nil, languageCode: String? = nil) async throws -> [Chapter] {
         var endpoint = "\(projectURL)/rest/v1/chapters?select=*"
         if let storyId = storyId {
             endpoint += "&story_id=eq.\(storyId.uuidString)"
+        }
+        if let languageCode = languageCode {
+            // Use 'like' to match both "en" and "en-US" formats
+            // PostgreSQL LIKE uses % as wildcard, URL encoded as %25
+            endpoint += "&language_code=like.\(languageCode)%25"
         }
         endpoint += "&order=order_no.asc"
 
@@ -144,6 +164,38 @@ class SupabaseClient {
         } catch let error as DecodingError {
             throw SupabaseError.decodingError(error)
         } catch {
+            throw SupabaseError.networkError(error)
+        }
+    }
+
+    // MARK: - Update Chapter Audio URL
+    func updateChapterAudioURL(chapterId: UUID, audioURL: String) async throws {
+        let endpoint = "\(projectURL)/rest/v1/chapters?id=eq.\(chapterId.uuidString)"
+
+        guard let url = URL(string: endpoint) else {
+            throw SupabaseError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue(anonKey, forHTTPHeaderField: "apikey")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("return=minimal", forHTTPHeaderField: "Prefer")
+
+        let payload: [String: String] = ["audio_url": audioURL]
+        request.httpBody = try JSONEncoder().encode(payload)
+
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                throw SupabaseError.invalidResponse
+            }
+
+            print("✅ Updated audio_url for chapter \(chapterId)")
+        } catch {
+            print("❌ Failed to update audio_url: \(error)")
             throw SupabaseError.networkError(error)
         }
     }

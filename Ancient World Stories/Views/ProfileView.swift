@@ -5,6 +5,7 @@ import PhotosUI
 struct ProfileView: View {
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
+    @ObservedObject private var languageManager = LanguageManager.shared
     @StateObject private var content = ContentLoader.shared
     @State private var selectedChapter: Chapter?
     @State private var showPaywall = false
@@ -23,7 +24,7 @@ struct ProfileView: View {
             VStack(spacing: 0) {
                 // Fixed Header
                 HStack {
-                    Text("Profile")
+                    Text("profile.title".localized)
                         .font(.serifLargeTitle())
                         .foregroundColor(.primaryText)
 
@@ -91,7 +92,7 @@ struct ProfileView: View {
                                 } label: {
                                     HStack {
                                         Image(systemName: "crown.fill")
-                                        Text("Go Premium")
+                                        Text("profile.go_premium".localized)
                                     }
                                     .font(.serifHeadline())
                                     .foregroundColor(.white)
@@ -110,7 +111,7 @@ struct ProfileView: View {
                                 HStack {
                                     Image(systemName: "crown.fill")
                                         .foregroundColor(.accentColor)
-                                    Text("Premium Member")
+                                    Text("profile.premium_member".localized)
                                         .font(.serifHeadline())
                                         .foregroundColor(.accentColor)
                                 }
@@ -124,32 +125,32 @@ struct ProfileView: View {
                         .padding()
                         
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Your Statistics")
+                            Text("profile.your_statistics".localized)
                                 .font(.serifTitle3())
                                 .foregroundColor(.primaryText)
-                            
+
                             VStack(spacing: 12) {
                                 StatisticRow(
                                     icon: "book.fill",
-                                    title: "Chapters Read",
+                                    title: "profile.chapters_read".localized,
                                     value: "\(profileManager.totalChaptersRead())"
                                 )
-                                
+
                                 StatisticRow(
                                     icon: "globe",
-                                    title: "Civilizations Explored",
+                                    title: "profile.civilizations_explored".localized,
                                     value: "\(profileManager.civilizationsExplored())"
                                 )
-                                
+
                                 StatisticRow(
                                     icon: "clock.fill",
-                                    title: "Total Reading Time",
+                                    title: "profile.total_reading_time".localized,
                                     value: profileManager.formattedTotalReadingTime()
                                 )
-                                
+
                                 StatisticRow(
                                     icon: "heart.fill",
-                                    title: "Favorite Chapters",
+                                    title: "profile.favorite_chapters".localized,
                                     value: "\(favoritesManager.favoriteCount())"
                                 )
                             }
@@ -158,7 +159,7 @@ struct ProfileView: View {
 
                         if !favoriteChapters.isEmpty {
                             VStack(alignment: .leading, spacing: 16) {
-                                Text("Favorite Chapters")
+                                Text("profile.favorite_chapters".localized)
                                     .font(.serifTitle3())
                                     .foregroundColor(.primaryText)
 
@@ -243,7 +244,7 @@ struct FavoriteChapterRow: View {
                         Text(chapter.formattedDuration)
                     }
                     Text("•")
-                    Text("Chapter \(chapter.orderNo)")
+                    Text("reader.chapter".localized(with: chapter.orderNo))
                 }
                 .font(.serifCaption())
                 .foregroundColor(.secondaryText)
