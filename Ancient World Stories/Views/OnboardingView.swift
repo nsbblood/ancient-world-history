@@ -90,21 +90,12 @@ struct OnboardingView: View {
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
             }
-
-            // Paywall slides from right
-            if showPaywall {
-                PaywallView(isPresented: $showPaywall)
-                    .transition(.move(edge: .trailing))
-                    .zIndex(2)
-            }
         }
-        .onChange(of: showPaywall) { oldValue, newValue in
+        .fullScreenCover(isPresented: $showPaywall) {
             // When paywall is dismissed, complete onboarding immediately
-            if oldValue && !newValue {
-                withAnimation {
-                    hasCompletedOnboarding = true
-                }
-            }
+            hasCompletedOnboarding = true
+        } content: {
+            PaywallView(isPresented: $showPaywall)
         }
         .task {
             // Load Supabase data in background while user sees onboarding

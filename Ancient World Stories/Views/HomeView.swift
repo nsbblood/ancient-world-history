@@ -4,8 +4,10 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject private var content = ContentLoader.shared
     @ObservedObject private var languageManager = LanguageManager.shared
+    @ObservedObject private var profileManager = ProfileManager.shared
     @State private var selectedChapter: Chapter?
     @State private var randomChapters: [Chapter] = []
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
@@ -70,36 +72,70 @@ struct HomeView: View {
                                     if let story = content.story(for: chapter),
                                        let civ = content.civilization(for: story) {
                                         Button {
-                                            selectedChapter = chapter
+                                            // First chapter is always free, rest require premium
+                                            if chapter.orderNo == 1 || profileManager.isPremium {
+                                                selectedChapter = chapter
+                                            } else {
+                                                // Show paywall for non-premium users on chapters 2+
+                                                showPaywall = true
+                                            }
                                         } label: {
+                                            let isLocked = chapter.orderNo > 1 && !profileManager.isPremium
+
                                             VStack(alignment: .leading, spacing: 12) {
-                                                Text(civ.name)
-                                                    .font(.serifCaption())
-                                                    .foregroundColor(.accentColor)
-                                                
+                                                HStack {
+                                                    Text(civ.name)
+                                                        .font(.serifCaption())
+                                                        .foregroundColor(.accentColor)
+
+                                                    Spacer()
+
+                                                    if isLocked {
+                                                        HStack(spacing: 4) {
+                                                            Image(systemName: "crown.fill")
+                                                                .font(.system(size: 12))
+                                                            Text("Premium")
+                                                                .font(.serifCaption2())
+                                                        }
+                                                        .foregroundColor(.appAccent)
+                                                        .padding(.horizontal, 8)
+                                                        .padding(.vertical, 4)
+                                                        .background(Color.appAccent.opacity(0.1))
+                                                        .cornerRadius(6)
+                                                    }
+                                                }
+
                                                 Text(story.title)
                                                     .font(.serifHeadline())
-                                                    .foregroundColor(.primaryText)
-                                                
+                                                    .foregroundColor(isLocked ? .primaryText.opacity(0.6) : .primaryText)
+
                                                 Text(chapter.excerpt)
                                                     .font(.serifBody())
-                                                    .foregroundColor(.secondaryText)
+                                                    .foregroundColor(isLocked ? .secondaryText.opacity(0.6) : .secondaryText)
                                                     .lineLimit(3)
-                                                
+
                                                 HStack {
                                                     Image(systemName: "clock")
                                                         .font(.system(size: 12))
                                                     Text(chapter.formattedDuration)
                                                     Text("• Chapter \(chapter.orderNo)")
+
+                                                    if isLocked {
+                                                        Spacer()
+                                                        Image(systemName: "lock.fill")
+                                                            .font(.system(size: 14))
+                                                            .foregroundColor(.appAccent)
+                                                    }
                                                 }
                                                 .font(.serifCaption2())
-                                                .foregroundColor(.secondaryText)
+                                                .foregroundColor(isLocked ? .secondaryText.opacity(0.6) : .secondaryText)
                                             }
                                             .padding(16)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .background(Color.cardBackground)
                                             .cornerRadius(12)
                                             .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+                                            .opacity(isLocked ? 0.8 : 1.0)
                                         }
                                         .buttonStyle(PlainButtonStyle())
                                         .padding(.horizontal)
@@ -143,6 +179,9 @@ struct HomeView: View {
                         allChapters: content.chapters(for: story.id)
                     )
                 }
+            }
+            .fullScreenCover(isPresented: $showPaywall) {
+                PaywallView(isPresented: $showPaywall)
             }
         }
         .toolbarBackground(.visible, for: .tabBar)

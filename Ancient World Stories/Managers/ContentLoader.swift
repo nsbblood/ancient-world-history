@@ -23,8 +23,24 @@ class ContentLoader: ObservableObject {
     private var hasInitialized = false
     private var loadedStoryIds: Set<UUID> = [] // Track which stories have chapters loaded
 
+    // Persistent cache configuration
+    private let cacheExpirationHours = 24 // Cache expires after 24 hours
+    private var cacheDirectory: URL? {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
+            .appendingPathComponent("ContentCache")
+    }
+
     private init() {
         // Don't load data in init - wait for explicit call after splash
+        createCacheDirectoryIfNeeded()
+    }
+
+    private func createCacheDirectoryIfNeeded() {
+        guard let cacheDir = cacheDirectory else { return }
+        if !FileManager.default.fileExists(atPath: cacheDir.path) {
+            try? FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
+            print("📁 Created persistent cache directory")
+        }
     }
 
     // MARK: - Progressive Loading Strategy
@@ -53,6 +69,22 @@ class ContentLoader: ObservableObject {
         isLoading = true
         error = nil
 
+        // Try loading from persistent cache first
+        if let cachedData = loadFromPersistentCache(), !isCacheExpired() {
+            print("✨ Loaded data from persistent cache")
+            self.civilizations = cachedData.civilizations
+            self.stories = cachedData.stories
+            self.chapters = cachedData.chapters
+            isLoading = false
+
+            // Sync in background to get latest updates
+            Task.detached { [weak self] in
+                await self?.syncFromSupabaseInBackground()
+            }
+            return
+        }
+
+        // Cache miss or expired - fetch from Supabase
         do {
             let currentLanguage = LanguageManager.shared.currentLanguageCode
 
@@ -66,6 +98,9 @@ class ContentLoader: ObservableObject {
             self.civilizations = fetchedCivs
             self.stories = fetchedStories
             self.chapters = fetchedChapters
+
+            // Save to persistent cache
+            saveToPersistentCache()
 
             let civsSize = fetchedCivs.count * 200
             let storiesSize = fetchedStories.count * 280
@@ -103,7 +138,46 @@ class ContentLoader: ObservableObject {
                 self.civilizations = allCivs
                 self.stories = allStories
                 self.isFullySynced = true
+
+                // Save updated data to persistent cache
+                self.saveToPersistentCache()
+
                 print("✅ Full sync complete: \(allCivs.count) civilizations, \(allStories.count) stories")
+            }
+
+        } catch {
+            print("ℹ️ Background sync failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// Background sync from Supabase (used when loading from cache)
+    private func syncFromSupabaseInBackground() async {
+        print("🔄 Background sync: Checking for updates...")
+
+        do {
+            let currentLanguage = LanguageManager.shared.currentLanguageCode
+
+            // Load all data silently in background
+            async let allCivsTask = supabase.fetchCivilizations(languageCode: currentLanguage)
+            async let allStoriesTask = supabase.fetchStories(languageCode: currentLanguage)
+            async let allChaptersTask = supabase.fetchChapters(languageCode: currentLanguage)
+
+            let (allCivs, allStories, allChapters) = try await (allCivsTask, allStoriesTask, allChaptersTask)
+
+            await MainActor.run {
+                // Only update if data has changed
+                if allCivs.count != self.civilizations.count ||
+                   allStories.count != self.stories.count ||
+                   allChapters.count != self.chapters.count {
+                    self.civilizations = allCivs
+                    self.stories = allStories
+                    self.chapters = allChapters
+                    self.saveToPersistentCache()
+                    print("✅ Background sync: Updated with new data")
+                } else {
+                    print("✅ Background sync: No updates needed")
+                }
+                self.isFullySynced = true
             }
 
         } catch {
@@ -225,6 +299,93 @@ class ContentLoader: ObservableObject {
     /// Get total story count for a civilization
     func storyCount(for civilizationId: UUID) -> Int {
         stories.filter { $0.civilizationId == civilizationId }.count
+    }
+
+    // MARK: - Persistent Cache Management
+
+    private func saveToPersistentCache() {
+        guard let cacheDir = cacheDirectory else {
+            print("❌ Cache directory not available")
+            return
+        }
+
+        let data = UniverseData(
+            civilizations: civilizations,
+            stories: stories,
+            chapters: chapters
+        )
+
+        do {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let jsonData = try encoder.encode(data)
+
+            let cacheFile = cacheDir.appendingPathComponent("content_cache.json")
+            try jsonData.write(to: cacheFile)
+
+            // Save timestamp
+            UserDefaults.standard.set(Date(), forKey: "contentCacheTimestamp")
+
+            let sizeKB = jsonData.count / 1024
+            print("💾 Saved \(sizeKB)KB to persistent cache")
+        } catch {
+            print("❌ Failed to save to persistent cache: \(error)")
+        }
+    }
+
+    private func loadFromPersistentCache() -> UniverseData? {
+        guard let cacheDir = cacheDirectory else {
+            print("❌ Cache directory not available")
+            return nil
+        }
+
+        let cacheFile = cacheDir.appendingPathComponent("content_cache.json")
+
+        guard FileManager.default.fileExists(atPath: cacheFile.path) else {
+            print("ℹ️ No persistent cache found")
+            return nil
+        }
+
+        do {
+            let jsonData = try Data(contentsOf: cacheFile)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let data = try decoder.decode(UniverseData.self, from: jsonData)
+
+            let sizeKB = jsonData.count / 1024
+            print("📂 Loaded \(sizeKB)KB from persistent cache")
+            return data
+        } catch {
+            print("❌ Failed to load from persistent cache: \(error)")
+            return nil
+        }
+    }
+
+    private func isCacheExpired() -> Bool {
+        guard let timestamp = UserDefaults.standard.object(forKey: "contentCacheTimestamp") as? Date else {
+            print("ℹ️ No cache timestamp found")
+            return true
+        }
+
+        let hoursSinceCache = Date().timeIntervalSince(timestamp) / 3600
+        let isExpired = hoursSinceCache >= Double(cacheExpirationHours)
+
+        if isExpired {
+            print("⏰ Cache expired (\(Int(hoursSinceCache)) hours old)")
+        } else {
+            print("✅ Cache is fresh (\(Int(hoursSinceCache)) hours old)")
+        }
+
+        return isExpired
+    }
+
+    func clearPersistentCache() {
+        guard let cacheDir = cacheDirectory else { return }
+        let cacheFile = cacheDir.appendingPathComponent("content_cache.json")
+
+        try? FileManager.default.removeItem(at: cacheFile)
+        UserDefaults.standard.removeObject(forKey: "contentCacheTimestamp")
+        print("🗑️ Persistent cache cleared")
     }
 }
 

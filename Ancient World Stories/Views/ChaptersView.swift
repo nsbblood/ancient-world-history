@@ -10,6 +10,7 @@ struct ChaptersView: View {
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
     @State private var selectedChapter: Chapter?
+    @State private var showPaywall = false
 
     var chapters: [Chapter] {
         content.chapters(for: story.id)
@@ -81,9 +82,15 @@ struct ChaptersView: View {
                         } else {
                             ForEach(chapters) { chapter in
                                 Button {
-                                    selectedChapter = chapter
+                                    // First chapter is always free, rest require premium
+                                    if chapter.orderNo == 1 || profileManager.isPremium {
+                                        selectedChapter = chapter
+                                    } else {
+                                        // Show paywall for non-premium users on chapters 2+
+                                        showPaywall = true
+                                    }
                                 } label: {
-                                    ChapterRow(chapter: chapter)
+                                    ChapterRow(chapter: chapter, isLocked: chapter.orderNo > 1 && !profileManager.isPremium)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
@@ -101,6 +108,9 @@ struct ChaptersView: View {
                 civilization: civilization,
                 allChapters: chapters
             )
+        }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(isPresented: $showPaywall)
         }
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarBackground(Color.appBackground, for: .navigationBar)

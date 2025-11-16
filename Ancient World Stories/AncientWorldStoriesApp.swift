@@ -11,6 +11,7 @@ import RevenueCat
 @main
 struct AncientWorldStoriesApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @StateObject private var contentLoader = ContentLoader.shared
     @State private var selectedTab = 0
 
     init() {
@@ -33,9 +34,36 @@ struct AncientWorldStoriesApp: App {
         WindowGroup {
             if !hasCompletedOnboarding {
                 OnboardingView()
+            } else if contentLoader.civilizations.isEmpty || contentLoader.chapters.isEmpty {
+                // Show loading screen if data isn't ready yet
+                loadingScreen
             } else {
                 mainTabView
             }
+        }
+    }
+
+    private var loadingScreen: some View {
+        ZStack {
+            Color.appBackground.ignoresSafeArea()
+
+            VStack(spacing: 20) {
+                Image(systemName: "building.columns.fill")
+                    .font(.system(size: 60))
+                    .foregroundColor(.appAccent)
+
+                ProgressView()
+                    .tint(.appAccent)
+                    .scaleEffect(1.2)
+
+                Text("Loading your stories...")
+                    .font(.system(size: 16, design: .serif))
+                    .foregroundColor(.appText.opacity(0.7))
+            }
+        }
+        .task {
+            // Ensure data is loaded
+            contentLoader.loadInitialData()
         }
     }
 
