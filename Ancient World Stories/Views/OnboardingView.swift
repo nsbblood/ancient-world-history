@@ -10,7 +10,6 @@ import SwiftUI
 struct OnboardingView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var currentPage = 0
-    @State private var showPaywall = false
     @State private var buttonPulse: CGFloat = 1.0
 
     var body: some View {
@@ -64,8 +63,9 @@ struct OnboardingView: View {
                             currentPage += 1
                         }
                     } else {
-                        // Show paywall with slide animation
-                        showPaywall = true
+                        // IMMEDIATELY complete onboarding
+                        // Paywall will be shown by AncientWorldStoriesApp
+                        hasCompletedOnboarding = true
                     }
                 }) {
                     Text(currentPage < 2 ? "Continue" : "Get Started")
@@ -90,12 +90,6 @@ struct OnboardingView: View {
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
             }
-        }
-        .fullScreenCover(isPresented: $showPaywall) {
-            // When paywall is dismissed, complete onboarding immediately
-            hasCompletedOnboarding = true
-        } content: {
-            PaywallView(isPresented: $showPaywall)
         }
         .task {
             // Load Supabase data in background while user sees onboarding

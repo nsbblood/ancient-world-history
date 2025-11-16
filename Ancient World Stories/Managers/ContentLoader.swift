@@ -89,13 +89,28 @@ class ContentLoader: ObservableObject {
             let currentLanguage = LanguageManager.shared.currentLanguageCode
             print("🌍 Loading content for language: \(currentLanguage)")
 
-            // Load data WITHOUT language filter (we'll filter in memory)
-            // This ensures we always have content, even if selected language has no content
-            async let civsTask = supabase.fetchCivilizations(languageCode: nil, limit: nil)
-            async let storiesTask = supabase.fetchStories(languageCode: nil, limit: nil)
-            async let chaptersTask = supabase.fetchChapters(languageCode: nil)
+            // TRY 1: Load data for selected language
+            async let civsTask = supabase.fetchCivilizations(languageCode: currentLanguage, limit: nil)
+            async let storiesTask = supabase.fetchStories(languageCode: currentLanguage, limit: nil)
+            async let chaptersTask = supabase.fetchChapters(languageCode: currentLanguage)
 
-            let (fetchedCivs, fetchedStories, fetchedChapters) = try await (civsTask, storiesTask, chaptersTask)
+            var (fetchedCivs, fetchedStories, fetchedChapters) = try await (civsTask, storiesTask, chaptersTask)
+
+            // If selected language has no content, fallback to English
+            if fetchedCivs.isEmpty || fetchedStories.isEmpty || fetchedChapters.isEmpty {
+                print("⚠️ Selected language '\(currentLanguage)' has incomplete content, loading English as fallback...")
+
+                async let engCivsTask = supabase.fetchCivilizations(languageCode: "en", limit: nil)
+                async let engStoriesTask = supabase.fetchStories(languageCode: "en", limit: nil)
+                async let engChaptersTask = supabase.fetchChapters(languageCode: "en")
+
+                let (engCivs, engStories, engChapters) = try await (engCivsTask, engStoriesTask, engChaptersTask)
+
+                // Use English data for empty categories
+                if fetchedCivs.isEmpty { fetchedCivs = engCivs }
+                if fetchedStories.isEmpty { fetchedStories = engStories }
+                if fetchedChapters.isEmpty { fetchedChapters = engChapters }
+            }
 
             self.civilizations = fetchedCivs
             self.stories = fetchedStories
@@ -111,10 +126,6 @@ class ContentLoader: ObservableObject {
 
             print("⚡ Quick start loaded: \(fetchedCivs.count) civs, \(fetchedStories.count) stories, \(fetchedChapters.count) chapters")
             print("📦 Data size: ~\(totalSizeKB) KB")
-            print("📊 Language breakdown:")
-            print("   Civs: \(fetchedCivs.filter { $0.languageCode == currentLanguage }.count) in \(currentLanguage), \(fetchedCivs.filter { $0.languageCode == "en" }.count) in English")
-            print("   Stories: \(fetchedStories.filter { $0.languageCode == currentLanguage }.count) in \(currentLanguage), \(fetchedStories.filter { $0.languageCode == "en" }.count) in English")
-            print("   Chapters: \(fetchedChapters.filter { $0.languageCode == currentLanguage }.count) in \(currentLanguage), \(fetchedChapters.filter { $0.languageCode == "en" }.count) in English")
 
         } catch {
             print("⚠️ Quick start failed, loading from local JSON: \(error.localizedDescription)")
@@ -132,11 +143,22 @@ class ContentLoader: ObservableObject {
         print("🔄 Background sync: Loading remaining data...")
 
         do {
-            // Load all data without language filter (we filter in memory)
-            async let allCivsTask = supabase.fetchCivilizations(languageCode: nil)
-            async let allStoriesTask = supabase.fetchStories(languageCode: nil)
+            let currentLanguage = LanguageManager.shared.currentLanguageCode
 
-            let (allCivs, allStories) = try await (allCivsTask, allStoriesTask)
+            // Load data for selected language
+            async let allCivsTask = supabase.fetchCivilizations(languageCode: currentLanguage)
+            async let allStoriesTask = supabase.fetchStories(languageCode: currentLanguage)
+
+            var (allCivs, allStories) = try await (allCivsTask, allStoriesTask)
+
+            // Fallback to English if empty
+            if allCivs.isEmpty || allStories.isEmpty {
+                async let engCivsTask = supabase.fetchCivilizations(languageCode: "en")
+                async let engStoriesTask = supabase.fetchStories(languageCode: "en")
+                let (engCivs, engStories) = try await (engCivsTask, engStoriesTask)
+                if allCivs.isEmpty { allCivs = engCivs }
+                if allStories.isEmpty { allStories = engStories }
+            }
 
             await MainActor.run {
                 self.civilizations = allCivs
@@ -159,10 +181,12 @@ class ContentLoader: ObservableObject {
         print("🔄 Background sync: Checking for updates...")
 
         do {
-            // Load all data without language filter (we filter in memory)
-            async let allCivsTask = supabase.fetchCivilizations(languageCode: nil)
-            async let allStoriesTask = supabase.fetchStories(languageCode: nil)
-            async let allChaptersTask = supabase.fetchChapters(languageCode: nil)
+            let currentLanguage = LanguageManager.shared.currentLanguageCode
+
+            // Load data for selected language
+            async let allCivsTask = supabase.fetchCivilizations(languageCode: currentLanguage)
+            async let allStoriesTask = supabase.fetchStories(languageCode: currentLanguage)
+            async let allChaptersTask = supabase.fetchChapters(languageCode: currentLanguage)
 
             let (allCivs, allStories, allChapters) = try await (allCivsTask, allStoriesTask, allChaptersTask)
 
@@ -252,36 +276,16 @@ class ContentLoader: ObservableObject {
 
     // MARK: - Helper Methods
 
-    /// Get stories for a specific civilization (filtered by selected language, fallback to English)
+    /// Get stories for a specific civilization
     func stories(for civilizationId: UUID) -> [Story] {
-        let selectedLang = LanguageManager.shared.currentLanguageCode
-        let storiesInSelectedLang = stories.filter { $0.civilizationId == civilizationId && $0.languageCode == selectedLang }
-
-        // Fallback to English if no content in selected language
-        if storiesInSelectedLang.isEmpty && selectedLang != "en" {
-            print("⚠️ No stories found in \(selectedLang) for civilization \(civilizationId), falling back to English")
-            return stories.filter { $0.civilizationId == civilizationId && $0.languageCode == "en" }
-        }
-
-        return storiesInSelectedLang
+        stories.filter { $0.civilizationId == civilizationId }
     }
 
-    /// Get chapters for a specific story (filtered by selected language, fallback to English)
+    /// Get chapters for a specific story
     func chapters(for storyId: UUID) -> [Chapter] {
-        let selectedLang = LanguageManager.shared.currentLanguageCode
-        let chaptersInSelectedLang = chapters
-            .filter { $0.storyId == storyId && $0.languageCode == selectedLang }
+        chapters
+            .filter { $0.storyId == storyId }
             .sorted { $0.orderNo < $1.orderNo }
-
-        // Fallback to English if no content in selected language
-        if chaptersInSelectedLang.isEmpty && selectedLang != "en" {
-            print("⚠️ No chapters found in \(selectedLang) for story \(storyId), falling back to English")
-            return chapters
-                .filter { $0.storyId == storyId && $0.languageCode == "en" }
-                .sorted { $0.orderNo < $1.orderNo }
-        }
-
-        return chaptersInSelectedLang
     }
 
     /// Get civilization for a story
@@ -299,33 +303,14 @@ class ContentLoader: ObservableObject {
         stories.first { $0.id == storyId }
     }
 
-    /// Get random chapters from all stories (filtered by selected language, fallback to English)
+    /// Get random chapters from all stories
     func randomChapters(count: Int = 10) -> [Chapter] {
-        let selectedLang = LanguageManager.shared.currentLanguageCode
-        let filteredChapters = chapters.filter { $0.languageCode == selectedLang }
-
-        // Fallback to English if no content in selected language
-        if filteredChapters.isEmpty && selectedLang != "en" {
-            print("⚠️ No chapters found in \(selectedLang), falling back to English for random chapters")
-            let englishChapters = chapters.filter { $0.languageCode == "en" }
-            return Array(englishChapters.shuffled().prefix(count))
-        }
-
-        return Array(filteredChapters.shuffled().prefix(count))
+        Array(chapters.shuffled().prefix(count))
     }
 
-    /// Get civilizations for selected language (fallback to English)
+    /// Get all civilizations (already filtered by language at load time)
     var filteredCivilizations: [Civilization] {
-        let selectedLang = LanguageManager.shared.currentLanguageCode
-        let civsInSelectedLang = civilizations.filter { $0.languageCode == selectedLang }
-
-        // Fallback to English if no content in selected language
-        if civsInSelectedLang.isEmpty && selectedLang != "en" {
-            print("⚠️ No civilizations found in \(selectedLang), falling back to English")
-            return civilizations.filter { $0.languageCode == "en" }
-        }
-
-        return civsInSelectedLang
+        civilizations
     }
 
     /// Get civilizations grouped by region
