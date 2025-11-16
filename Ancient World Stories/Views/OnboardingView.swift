@@ -11,8 +11,33 @@ struct OnboardingView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var currentPage = 0
     @State private var buttonPulse: CGFloat = 1.0
+    @State private var showPaywall = false
 
     var body: some View {
+        ZStack {
+            // Main onboarding content
+            onboardingContent
+
+            // Paywall slides from right (like next page)
+            if showPaywall {
+                PaywallView(isPresented: $showPaywall)
+                    .transition(.move(edge: .trailing))
+                    .zIndex(2)
+                    .onDisappear {
+                        // Ensure onboarding is marked complete when paywall closes
+                        hasCompletedOnboarding = true
+                    }
+            }
+        }
+        .task {
+            // Load Supabase data in background while user sees onboarding
+            print("📚 Loading data during onboarding...")
+            await ContentLoader.shared.loadInitialData()
+            print("✅ Data loaded and ready!")
+        }
+    }
+
+    var onboardingContent: some View {
         ZStack {
             // App theme parchment background
             Color.appBackground
@@ -63,9 +88,10 @@ struct OnboardingView: View {
                             currentPage += 1
                         }
                     } else {
-                        // IMMEDIATELY complete onboarding
-                        // Paywall will be shown by AncientWorldStoriesApp
-                        hasCompletedOnboarding = true
+                        // Show paywall with slide animation from right
+                        withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
+                            showPaywall = true
+                        }
                     }
                 }) {
                     Text(currentPage < 2 ? "Continue" : "Get Started")
@@ -90,12 +116,6 @@ struct OnboardingView: View {
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
             }
-        }
-        .task {
-            // Load Supabase data in background while user sees onboarding
-            print("📚 Loading data during onboarding...")
-            await ContentLoader.shared.loadInitialData()
-            print("✅ Data loaded and ready!")
         }
     }
 }

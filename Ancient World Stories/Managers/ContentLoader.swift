@@ -89,28 +89,47 @@ class ContentLoader: ObservableObject {
             let currentLanguage = LanguageManager.shared.currentLanguageCode
             print("🌍 Loading content for language: \(currentLanguage)")
 
-            // TRY 1: Load data for selected language
+            // SMART MULTI-LANGUAGE LOADING:
+            // Load user's language + English chapters (to cover gaps)
+
             async let civsTask = supabase.fetchCivilizations(languageCode: currentLanguage, limit: nil)
             async let storiesTask = supabase.fetchStories(languageCode: currentLanguage, limit: nil)
             async let chaptersTask = supabase.fetchChapters(languageCode: currentLanguage)
 
-            var (fetchedCivs, fetchedStories, fetchedChapters) = try await (civsTask, storiesTask, chaptersTask)
+            // Also load English chapters as backup
+            async let engChaptersTask = supabase.fetchChapters(languageCode: "en")
 
-            // If selected language has no content, fallback to English
-            if fetchedCivs.isEmpty || fetchedStories.isEmpty || fetchedChapters.isEmpty {
-                print("⚠️ Selected language '\(currentLanguage)' has incomplete content, loading English as fallback...")
+            var (fetchedCivs, fetchedStories, fetchedChapters) = try await (civsTask, storiesTask, chaptersTask)
+            let engChapters = try await engChaptersTask
+
+            // Combine chapters: user language + English (deduplicate by story_id)
+            var allChapters = fetchedChapters
+            for engChapter in engChapters {
+                // Add English chapter if story doesn't have chapters in user's language
+                let storyHasChaptersInUserLang = allChapters.contains { $0.storyId == engChapter.storyId }
+                if !storyHasChaptersInUserLang {
+                    // Check if this chapter's story exists in our loaded stories
+                    if fetchedStories.contains(where: { $0.id == engChapter.storyId }) {
+                        allChapters.append(engChapter)
+                    }
+                }
+            }
+            fetchedChapters = allChapters
+
+            // If selected language has no civs/stories, fallback to English
+            if fetchedCivs.isEmpty || fetchedStories.isEmpty {
+                print("⚠️ Selected language '\(currentLanguage)' has no civs/stories, loading English...")
 
                 async let engCivsTask = supabase.fetchCivilizations(languageCode: "en", limit: nil)
                 async let engStoriesTask = supabase.fetchStories(languageCode: "en", limit: nil)
-                async let engChaptersTask = supabase.fetchChapters(languageCode: "en")
 
-                let (engCivs, engStories, engChapters) = try await (engCivsTask, engStoriesTask, engChaptersTask)
+                let (engCivs, engStories) = try await (engCivsTask, engStoriesTask)
 
-                // Use English data for empty categories
                 if fetchedCivs.isEmpty { fetchedCivs = engCivs }
                 if fetchedStories.isEmpty { fetchedStories = engStories }
-                if fetchedChapters.isEmpty { fetchedChapters = engChapters }
             }
+
+            print("📊 Loaded: \(fetchedCivs.count) civs, \(fetchedStories.count) stories, \(fetchedChapters.count) chapters (multi-language)")
 
             self.civilizations = fetchedCivs
             self.stories = fetchedStories

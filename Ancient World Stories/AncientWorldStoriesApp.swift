@@ -11,10 +11,8 @@ import RevenueCat
 @main
 struct AncientWorldStoriesApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
-    @AppStorage("hasSeenInitialPaywall") private var hasSeenInitialPaywall = false
     @StateObject private var contentLoader = ContentLoader.shared
     @State private var selectedTab = 0
-    @State private var showPaywall = false
 
     init() {
         // Configure UI appearance first (fast, synchronous)
@@ -41,19 +39,6 @@ struct AncientWorldStoriesApp: App {
                 loadingScreen
             } else {
                 mainTabView
-                    .fullScreenCover(isPresented: $showPaywall) {
-                        hasSeenInitialPaywall = true
-                    } content: {
-                        PaywallView(isPresented: $showPaywall)
-                    }
-                    .onAppear {
-                        // Show paywall on first launch after onboarding
-                        if hasCompletedOnboarding && !hasSeenInitialPaywall {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                showPaywall = true
-                            }
-                        }
-                    }
             }
         }
     }
