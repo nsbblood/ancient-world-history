@@ -22,7 +22,7 @@ struct CivilizationsView: View {
                             ProgressView().tint(.accentColor)
                                 .frame(maxWidth: .infinity).padding(.vertical, 40)
                         } else {
-                            ForEach(content.civilizations) { civ in
+                            ForEach(content.filteredCivilizations) { civ in
                                 Button {
                                     selectedCivilization = civ
                                 } label: {

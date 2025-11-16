@@ -57,7 +57,7 @@ struct ExploreView: View {
     
     // Filter civilizations based on timeline
     private var filteredCivilizations: [Civilization] {
-        contentLoader.civilizations.filter { civilization in
+        contentLoader.filteredCivilizations.filter { civilization in
             let year = Int(timelineYear)
             return civilization.startYear <= year && civilization.endYear >= year
         }
@@ -122,7 +122,7 @@ struct ExploreView: View {
                     .padding(.horizontal, 20)
 
                     Button {
-                        selectedCivilization = contentLoader.civilizations.randomElement()
+                        selectedCivilization = contentLoader.filteredCivilizations.randomElement()
                         showTimeTravel = true
                     } label: {
                         HStack(spacing: 8) {

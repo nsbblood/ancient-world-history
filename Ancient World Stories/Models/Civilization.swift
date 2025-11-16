@@ -15,6 +15,7 @@ struct Civilization: Identifiable, Codable, Hashable {
     let eraEnd: String
     let region: String
     let description: String
+    let languageCode: String
     let createdAt: Date?
     
     // Map coordinates (not stored in DB, computed based on name)
@@ -116,16 +117,18 @@ struct Civilization: Identifiable, Codable, Hashable {
         case eraEnd = "era_end"
         case region
         case description
+        case languageCode = "language_code"
         case createdAt = "created_at"
     }
 
-    init(id: UUID = UUID(), name: String, eraStart: String, eraEnd: String, region: String, description: String, createdAt: Date? = nil) {
+    init(id: UUID = UUID(), name: String, eraStart: String, eraEnd: String, region: String, description: String, languageCode: String = "en", createdAt: Date? = nil) {
         self.id = id
         self.name = name
         self.eraStart = eraStart
         self.eraEnd = eraEnd
         self.region = region
         self.description = description
+        self.languageCode = languageCode
         self.createdAt = createdAt
     }
 
@@ -144,6 +147,7 @@ struct Civilization: Identifiable, Codable, Hashable {
         eraEnd = try container.decode(String.self, forKey: .eraEnd)
         region = try container.decode(String.self, forKey: .region)
         description = try container.decode(String.self, forKey: .description)
+        languageCode = try container.decodeIfPresent(String.self, forKey: .languageCode) ?? "en"
 
         if let timestamp = try? container.decode(String.self, forKey: .createdAt) {
             let formatter = ISO8601DateFormatter()

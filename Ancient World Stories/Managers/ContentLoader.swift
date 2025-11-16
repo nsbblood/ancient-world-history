@@ -314,9 +314,23 @@ class ContentLoader: ObservableObject {
         return Array(filteredChapters.shuffled().prefix(count))
     }
 
+    /// Get civilizations for selected language (fallback to English)
+    var filteredCivilizations: [Civilization] {
+        let selectedLang = LanguageManager.shared.currentLanguageCode
+        let civsInSelectedLang = civilizations.filter { $0.languageCode == selectedLang }
+
+        // Fallback to English if no content in selected language
+        if civsInSelectedLang.isEmpty && selectedLang != "en" {
+            print("⚠️ No civilizations found in \(selectedLang), falling back to English")
+            return civilizations.filter { $0.languageCode == "en" }
+        }
+
+        return civsInSelectedLang
+    }
+
     /// Get civilizations grouped by region
     func civilizationsGroupedByRegion() -> [String: [Civilization]] {
-        Dictionary(grouping: civilizations, by: { $0.region })
+        Dictionary(grouping: filteredCivilizations, by: { $0.region })
     }
 
     /// Get total chapter count for a story
