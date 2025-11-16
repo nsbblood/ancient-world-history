@@ -86,20 +86,38 @@ class ContentLoader: ObservableObject {
 
         // Cache miss or expired - fetch from Supabase
         do {
-            // TEMPORARY FIX: Just load English until multi-language is properly tested
-            print("🌍 Loading English content (multi-language disabled temporarily)")
+            let currentLanguage = LanguageManager.shared.currentLanguageCode
+            print("🌍 Loading content for language: \(currentLanguage)")
 
-            async let civsTask = supabase.fetchCivilizations(languageCode: "en", limit: nil)
-            async let storiesTask = supabase.fetchStories(languageCode: "en", limit: nil)
-            async let chaptersTask = supabase.fetchChapters(languageCode: "en")
+            // Load civilizations and stories in selected language
+            async let civsTask = supabase.fetchCivilizations(languageCode: currentLanguage, limit: nil)
+            async let storiesTask = supabase.fetchStories(languageCode: currentLanguage, limit: nil)
 
-            let (fetchedCivs, fetchedStories, fetchedChapters) = try await (civsTask, storiesTask, chaptersTask)
+            // SMART CHAPTERS LOADING: Load chapters in selected language + English as fallback
+            async let chaptersSelectedLangTask = supabase.fetchChapters(languageCode: currentLanguage)
+            async let chaptersEnglishTask = supabase.fetchChapters(languageCode: "en")
 
-            print("📊 Loaded: \(fetchedCivs.count) civs, \(fetchedStories.count) stories, \(fetchedChapters.count) chapters")
+            let (fetchedCivs, fetchedStories, chaptersInSelectedLang, chaptersInEnglish) =
+                try await (civsTask, storiesTask, chaptersSelectedLangTask, chaptersEnglishTask)
+
+            // Combine chapters: Prefer selected language, but include English if story has no chapters in selected language
+            var combinedChapters = chaptersInSelectedLang
+
+            // Find stories that have no chapters in selected language
+            let storyIdsWithChapters = Set(chaptersInSelectedLang.map { $0.storyId })
+            let allStoryIds = Set(fetchedStories.map { $0.id })
+            let storyIdsWithoutChapters = allStoryIds.subtracting(storyIdsWithChapters)
+
+            // Add English chapters for stories that don't have chapters in selected language
+            let englishFallbackChapters = chaptersInEnglish.filter { storyIdsWithoutChapters.contains($0.storyId) }
+            combinedChapters.append(contentsOf: englishFallbackChapters)
+
+            print("📊 Loaded: \(fetchedCivs.count) civs, \(fetchedStories.count) stories")
+            print("📖 Chapters: \(chaptersInSelectedLang.count) in \(currentLanguage), \(englishFallbackChapters.count) English fallback, \(combinedChapters.count) total")
 
             self.civilizations = fetchedCivs
             self.stories = fetchedStories
-            self.chapters = fetchedChapters
+            self.chapters = combinedChapters
 
             // Save to persistent cache
             saveToPersistentCache()
@@ -171,20 +189,33 @@ class ContentLoader: ObservableObject {
             // Load data for selected language
             async let allCivsTask = supabase.fetchCivilizations(languageCode: currentLanguage)
             async let allStoriesTask = supabase.fetchStories(languageCode: currentLanguage)
-            async let allChaptersTask = supabase.fetchChapters(languageCode: currentLanguage)
 
-            let (allCivs, allStories, allChapters) = try await (allCivsTask, allStoriesTask, allChaptersTask)
+            // SMART CHAPTERS LOADING: Load chapters in selected language + English as fallback
+            async let chaptersSelectedLangTask = supabase.fetchChapters(languageCode: currentLanguage)
+            async let chaptersEnglishTask = supabase.fetchChapters(languageCode: "en")
+
+            let (allCivs, allStories, chaptersInSelectedLang, chaptersInEnglish) =
+                try await (allCivsTask, allStoriesTask, chaptersSelectedLangTask, chaptersEnglishTask)
+
+            // Combine chapters with English fallback for stories without chapters
+            var combinedChapters = chaptersInSelectedLang
+            let storyIdsWithChapters = Set(chaptersInSelectedLang.map { $0.storyId })
+            let allStoryIds = Set(allStories.map { $0.id })
+            let storyIdsWithoutChapters = allStoryIds.subtracting(storyIdsWithChapters)
+            let englishFallbackChapters = chaptersInEnglish.filter { storyIdsWithoutChapters.contains($0.storyId) }
+            combinedChapters.append(contentsOf: englishFallbackChapters)
 
             await MainActor.run {
                 // Only update if data has changed
                 if allCivs.count != self.civilizations.count ||
                    allStories.count != self.stories.count ||
-                   allChapters.count != self.chapters.count {
+                   combinedChapters.count != self.chapters.count {
                     self.civilizations = allCivs
                     self.stories = allStories
-                    self.chapters = allChapters
+                    self.chapters = combinedChapters
                     self.saveToPersistentCache()
                     print("✅ Background sync: Updated with new data")
+                    print("📖 Chapters: \(chaptersInSelectedLang.count) in \(currentLanguage), \(englishFallbackChapters.count) English fallback")
                 } else {
                     print("✅ Background sync: No updates needed")
                 }
