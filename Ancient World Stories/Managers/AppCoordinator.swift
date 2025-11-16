@@ -19,7 +19,7 @@ class AppCoordinator: ObservableObject {
         profileManager.loadInitialDataIfNeeded()
 
         // FAST PATH: Only load essential data for quick launch
-        await contentLoader.loadInitialData()
+        contentLoader.loadInitialData()
 
         // Show UI immediately after essential data is loaded
         withAnimation {

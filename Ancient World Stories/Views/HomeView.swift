@@ -48,7 +48,7 @@ struct HomeView: View {
                                     .multilineTextAlignment(.center)
                                 Button("retry".localized) {
                                     Task {
-                                        await content.loadInitialData()
+                                        content.loadInitialData()
                                         loadRandomChapters()
                                     }
                                 }
@@ -165,7 +165,7 @@ struct HomeView: View {
                     .padding(.bottom, 24)
                 }
                 .refreshable {
-                    await content.loadInitialData()
+                    content.loadInitialData()
                     loadRandomChapters()
                 }
             }

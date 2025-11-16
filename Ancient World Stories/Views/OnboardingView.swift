@@ -32,7 +32,7 @@ struct OnboardingView: View {
         .task {
             // Load Supabase data in background while user sees onboarding
             print("📚 Loading data during onboarding...")
-            await ContentLoader.shared.loadInitialData()
+            ContentLoader.shared.loadInitialData()
             print("✅ Data loaded and ready!")
         }
     }

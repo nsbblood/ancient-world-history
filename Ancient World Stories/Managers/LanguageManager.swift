@@ -114,10 +114,9 @@ class LanguageManager: ObservableObject {
         UserDefaults.standard.synchronize()
         print("🌍 Language changed to: \(language.displayName)")
 
-        // Reload content from Supabase with new language
-        Task {
-            await ContentLoader.shared.syncFromSupabase()
-        }
+        // Clear cache and reload content with new language
+        ContentLoader.shared.clearPersistentCache()
+        ContentLoader.shared.loadInitialData()
     }
 
     var currentLanguageCode: String {
