@@ -1,6 +1,5 @@
 // ChapterReaderView.swift
 import SwiftUI
-import AVFoundation
 
 struct ChapterReaderView: View {
     let initialChapter: Chapter
@@ -9,19 +8,13 @@ struct ChapterReaderView: View {
     let allChapters: [Chapter]
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.displayScale) private var displayScale
-    @ObservedObject private var audioManager = AudioManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @ObservedObject private var analytics = AnalyticsManager.shared
 
     @State private var currentChapter: Chapter
     @State private var hasMarkedAsRead = false
-    @State private var dragOffset: CGFloat = 0
-    @State private var isDragging = false
-    @State private var screenWidth: CGFloat = 0
-    @State private var showPaywall = false
-    @State private var showVoiceSelector = false
+    @State private var isCinematicMode = false
 
     init(chapter: Chapter, story: Story, civilization: Civilization, allChapters: [Chapter]) {
         self.initialChapter = chapter
@@ -48,195 +41,191 @@ struct ChapterReaderView: View {
     var isFavorite: Bool {
         favoritesManager.isFavorite(chapterId: currentChapter.id)
     }
-    
+
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                VStack(spacing: 0) {
-                    // Scrollable content area
-                    ScrollView {
+                ZStack {
+                    if isCinematicMode {
+                        Color.black.ignoresSafeArea()
+                    }
+                    
+                    VStack(spacing: 0) {
+                        // Scrollable content area
+                        ScrollView {
                         VStack(alignment: .leading, spacing: 24) {
-                            VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: isCinematicMode ? .center : .leading, spacing: 12) {
                                 Text(civilization.name)
                                     .font(.serifCaption())
-                                    .foregroundColor(.appAccent)
+                                    .foregroundColor(isCinematicMode ? .orange : .appAccent)
 
                                 Text(story.title)
                                     .font(.serifBody())
-                                    .foregroundColor(.appText.opacity(0.7))
+                                    .foregroundColor(isCinematicMode ? .white.opacity(0.7) : .appText.opacity(0.7))
 
                                 Text(currentChapter.title)
-                                    .font(.serifTitle2())
-                                    .foregroundColor(.appText)
+                                    .font(isCinematicMode ? .system(size: 32, weight: .bold, design: .serif) : .serifTitle2())
+                                    .foregroundColor(isCinematicMode ? .white : .appText)
 
                                 HStack(spacing: 12) {
                                     HStack(spacing: 4) {
                                         Image(systemName: "clock")
-                                            .foregroundColor(.appText.opacity(0.7))
+                                            .foregroundColor(isCinematicMode ? .white.opacity(0.7) : .appText.opacity(0.7))
                                         Text(currentChapter.formattedDuration)
                                     }
                                     Text("•")
                                     Text("Chapter \(currentChapter.orderNo)")
                                 }
                                 .font(.serifCaption())
-                                .foregroundColor(.appText.opacity(0.7))
+                                .foregroundColor(isCinematicMode ? .white.opacity(0.7) : .appText.opacity(0.7))
                             }
+                            .frame(maxWidth: .infinity, alignment: isCinematicMode ? .center : .leading)
 
-                            Divider().background(Color.appSecondary)
+                            Divider().background(isCinematicMode ? Color.white.opacity(0.2) : Color.appSecondary)
 
                             Text(currentChapter.text)
-                                .font(.readingFont())
-                                .foregroundColor(.appText)
-                                .lineSpacing(8)
+                                .font(isCinematicMode ? .system(size: 22, weight: .medium, design: .serif) : .readingFont())
+                                .foregroundColor(isCinematicMode ? Color(hex: "F4A261") : .appText)
+                                .lineSpacing(isCinematicMode ? 12 : 8)
+                                .multilineTextAlignment(isCinematicMode ? .center : .leading)
                                 .textSelection(.enabled)
+                                
+                            Divider().background(Color.appSecondary).padding(.vertical, 16)
+                            
+                            Button(action: {
+                                Task { @MainActor in
+                                    generateAndShareQuote()
+                                }
+                            }) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "square.and.arrow.up")
+                                    Text("Share Quote")
+                                }
+                                .font(.serifHeadline())
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 16)
+                                .background(Color.accentColor)
+                                .cornerRadius(12)
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.bottom, 8)
                         }
                         .padding()
                         .id(currentChapter.id)
                     }
-                    .frame(height: max(0, geometry.size.height - 150))
-                    .background(Color.backgroundColor)
+                    .frame(height: max(0, geometry.size.height - (isCinematicMode ? 0 : 80)))
+                    .background(isCinematicMode ? Color.black : Color.backgroundColor)
 
-                // Fixed bottom controls
-                VStack(spacing: 0) {
-                    AudioPlayerControls(
-                        isPlaying: audioManager.isPlaying,
-                        progress: audioManager.currentProgress,
-                        onPlayPause: {
-                            if audioManager.isPlaying {
-                                analytics.track(event: .audioPlaybackPaused, parameters: [
-                                    "chapter_id": currentChapter.id.uuidString,
-                                    "progress_percentage": Int(audioManager.currentProgress * 100)
-                                ])
-                                audioManager.pause()
-                            } else if audioManager.synthesizer.isPaused {
-                                analytics.track(event: .audioPlaybackResumed, parameters: [
-                                    "chapter_id": currentChapter.id.uuidString,
-                                    "progress_percentage": Int(audioManager.currentProgress * 100)
-                                ])
-                                audioManager.resume()
-                            } else {
-                                // Check if premium for Neural AI TTS
-                                if !profileManager.isPremium {
-                                    analytics.track(event: .paywallViewed, parameters: [
-                                        "source": "audio_playback",
-                                        "trigger": "non_premium_user"
-                                    ])
-                                    showPaywall = true
-                                } else {
-                                    analytics.track(event: .audioPlaybackStarted, parameters: [
-                                        "chapter_id": currentChapter.id.uuidString,
-                                        "voice_type": "neural_ai",
-                                        "is_premium": true
-                                    ])
-                                    // Use new cached chapter speak for better performance
-                                    audioManager.speakChapter(currentChapter)
-                                    markAsRead()
-                                }
-                            }
-                        },
-                        onStop: {
-                            analytics.track(event: .audioPlaybackStopped, parameters: [
-                                "chapter_id": currentChapter.id.uuidString,
-                                "progress_percentage": Int(audioManager.currentProgress * 100)
-                            ])
-                            audioManager.stop()
-                        }
-                    )
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
+                    // Chapter navigation
+                    if !isCinematicMode && (previousChapter != nil || nextChapter != nil) {
+                        VStack(spacing: 0) {
+                            Divider()
+                                .background(Color.appSecondary.opacity(0.3))
 
-                    if previousChapter != nil || nextChapter != nil {
-                        Divider()
-                            .background(Color.appSecondary.opacity(0.3))
+                            HStack(spacing: 0) {
+                                if let previous = previousChapter {
+                                    Button {
+                                        analytics.track(event: .previousChapterTapped, parameters: [
+                                            "current_chapter_id": currentChapter.id.uuidString,
+                                            "previous_chapter_id": previous.id.uuidString,
+                                            "previous_chapter_title": previous.title
+                                        ])
+                                        navigateToPreviousChapter(previous)
+                                    } label: {
+                                        HStack {
+                                            Image(systemName: "chevron.left")
+                                                .foregroundColor(.accentColor)
 
-                        HStack(spacing: 0) {
-                            if let previous = previousChapter {
-                                Button {
-                                    analytics.track(event: .previousChapterTapped, parameters: [
-                                        "current_chapter_id": currentChapter.id.uuidString,
-                                        "previous_chapter_id": previous.id.uuidString,
-                                        "previous_chapter_title": previous.title
-                                    ])
-                                    navigateToPreviousChapter(previous)
-                                } label: {
-                                    HStack {
-                                        Image(systemName: "chevron.left")
-                                            .foregroundColor(.accentColor)
+                                            VStack(alignment: .leading, spacing: 2) {
+                                                Text("Previous Chapter")
+                                                    .font(.serifCaption())
+                                                    .foregroundColor(.appText.opacity(0.7))
 
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text("Previous Chapter")
-                                                .font(.serifCaption())
-                                                .foregroundColor(.appText.opacity(0.7))
+                                                Text(previous.title)
+                                                    .font(.serifBody())
+                                                    .foregroundColor(.appText)
+                                                    .lineLimit(1)
+                                            }
 
-                                            Text(previous.title)
-                                                .font(.serifBody())
-                                                .foregroundColor(.appText)
-                                                .lineLimit(1)
+                                            Spacer()
                                         }
-
-                                        Spacer()
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 10)
                                     }
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
-                                .frame(maxWidth: .infinity)
-                                .buttonStyle(PlainButtonStyle())
-                            }
 
-                            if previousChapter != nil && nextChapter != nil {
-                                Divider()
-                                    .background(Color.appSecondary.opacity(0.3))
-                            }
+                                if previousChapter != nil && nextChapter != nil {
+                                    Divider()
+                                        .background(Color.appSecondary.opacity(0.3))
+                                }
 
-                            if let next = nextChapter {
-                                Button {
-                                    analytics.track(event: .nextChapterTapped, parameters: [
-                                        "current_chapter_id": currentChapter.id.uuidString,
-                                        "next_chapter_id": next.id.uuidString,
-                                        "next_chapter_title": next.title
-                                    ])
-                                    navigateToNextChapter(next)
-                                } label: {
-                                    HStack {
-                                        Spacer()
+                                if let next = nextChapter {
+                                    Button {
+                                        analytics.track(event: .nextChapterTapped, parameters: [
+                                            "current_chapter_id": currentChapter.id.uuidString,
+                                            "next_chapter_id": next.id.uuidString,
+                                            "next_chapter_title": next.title
+                                        ])
+                                        navigateToNextChapter(next)
+                                    } label: {
+                                        HStack {
+                                            Spacer()
 
-                                        VStack(alignment: .trailing, spacing: 2) {
-                                            Text("Next Chapter")
-                                                .font(.serifCaption())
-                                                .foregroundColor(.appText.opacity(0.7))
+                                            VStack(alignment: .trailing, spacing: 2) {
+                                                Text("Next Chapter")
+                                                    .font(.serifCaption())
+                                                    .foregroundColor(.appText.opacity(0.7))
 
-                                            Text(next.title)
-                                                .font(.serifBody())
-                                                .foregroundColor(.appText)
-                                                .lineLimit(1)
+                                                Text(next.title)
+                                                    .font(.serifBody())
+                                                    .foregroundColor(.appText)
+                                                    .lineLimit(1)
+                                            }
+
+                                            Image(systemName: "chevron.right")
+                                                .foregroundColor(.accentColor)
                                         }
-
-                                        Image(systemName: "chevron.right")
-                                            .foregroundColor(.accentColor)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 10)
                                     }
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .buttonStyle(PlainButtonStyle())
                                 }
-                                .frame(maxWidth: .infinity)
-                                .buttonStyle(PlainButtonStyle())
                             }
+                            .padding(.bottom, 20)
                         }
-                        .padding(.bottom, 20)
+                        .background(Color.backgroundColor)
                     }
                 }
-                .background(Color.backgroundColor)
+                .overlay(alignment: .topTrailing) {
+                    if isCinematicMode {
+                        Button {
+                            withAnimation {
+                                isCinematicMode = false
+                            }
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 30))
+                                .foregroundColor(.white.opacity(0.6))
+                                .padding()
+                        }
+                    }
                 }
             }
-            .background(Color.backgroundColor)
+            .background(isCinematicMode ? Color.black : Color.backgroundColor)
+            .navigationBarHidden(isCinematicMode)
+            .statusBarHidden(isCinematicMode)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         analytics.track(event: .backButtonTapped, parameters: [
                             "chapter_id": currentChapter.id.uuidString,
-                            "reading_time_seconds": 0 // TODO: Track actual reading time
+                            "reading_time_seconds": 0
                         ])
-                        audioManager.stop()
                         dismiss()
                     } label: {
                         HStack(spacing: 4) {
@@ -250,19 +239,17 @@ struct ChapterReaderView: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
-                        // Voice selector button
                         Button {
-                            analytics.track(event: .voiceSelectorOpened, parameters: [
-                                "current_voice": audioManager.selectedMinimaxVoice.displayName
-                            ])
-                            showVoiceSelector = true
+                            withAnimation {
+                                isCinematicMode = true
+                                analytics.track(event: .featureUsed, parameters: ["feature": "cinematic_mode"])
+                            }
                         } label: {
-                            Image(systemName: "speaker.wave.2.fill")
+                            Image(systemName: "theatermasks")
                                 .foregroundColor(.accentColor)
                                 .font(.system(size: 20))
                         }
-
-                        // Favorite button
+                        
                         Button {
                             if isFavorite {
                                 analytics.track(event: .chapterUnfavorited, parameters: [
@@ -285,12 +272,6 @@ struct ChapterReaderView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showVoiceSelector) {
-                VoiceSelectorView()
-            }
-            .fullScreenCover(isPresented: $showPaywall) {
-                PaywallView(isPresented: $showPaywall)
-            }
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbarBackground(Color.backgroundColor, for: .navigationBar)
         }
@@ -304,32 +285,17 @@ struct ChapterReaderView: View {
             ])
             markAsRead()
         }
-        .onDisappear {
-            audioManager.stop()
-        }
     }
 
     private func navigateToNextChapter(_ next: Chapter) {
-        // Stop current audio
-        audioManager.stop()
-
-        // Update to next chapter
         currentChapter = next
         hasMarkedAsRead = false
-
-        // Mark new chapter as read
         markAsRead()
     }
 
     private func navigateToPreviousChapter(_ previous: Chapter) {
-        // Stop current audio
-        audioManager.stop()
-
-        // Update to previous chapter
         currentChapter = previous
         hasMarkedAsRead = false
-
-        // Mark new chapter as read
         markAsRead()
     }
 
@@ -339,44 +305,32 @@ struct ChapterReaderView: View {
             hasMarkedAsRead = true
         }
     }
-}
 
-struct AudioPlayerControls: View {
-    let isPlaying: Bool
-    let progress: Double
-    let onPlayPause: () -> Void
-    let onStop: () -> Void
-
-    var body: some View {
-        VStack(spacing: 4) {
-            ProgressView(value: progress)
-                .tint(.accentColor)
-
-            HStack(spacing: 0) {
-                Button(action: onStop) {
-                    Image(systemName: "stop.fill")
-                        .font(.system(size: 20))
-                        .foregroundColor(.appText.opacity(0.6))
-                        .frame(maxWidth: .infinity)
+    @MainActor
+    private func generateAndShareQuote() {
+        let quoteCard = QuoteCardView(chapter: currentChapter, civilization: civilization)
+        let renderer = ImageRenderer(content: quoteCard)
+        renderer.scale = UIScreen.main.scale
+        
+        if let uiImage = renderer.uiImage {
+            let activityVC = UIActivityViewController(activityItems: [uiImage], applicationActivities: nil)
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first,
+               let rootVC = window.rootViewController {
+                
+                // iPad support
+                if let popover = activityVC.popoverPresentationController {
+                    popover.sourceView = window
+                    popover.sourceRect = CGRect(x: window.bounds.midX, y: window.bounds.midY, width: 0, height: 0)
+                    popover.permittedArrowDirections = []
                 }
-
-                Button(action: onPlayPause) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.accentColor)
-                            .frame(width: 50, height: 50)
-
-                        Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.white)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-
-                Text("\(Int(progress * 100))%")
-                    .font(.serifBody())
-                    .foregroundColor(.appText.opacity(0.7))
-                    .frame(maxWidth: .infinity)
+                
+                rootVC.present(activityVC, animated: true)
+                analytics.track(event: .shareQuoteTapped, parameters: [
+                    "chapter_id": currentChapter.id.uuidString,
+                    "civilization_name": civilization.name
+                ])
             }
         }
     }

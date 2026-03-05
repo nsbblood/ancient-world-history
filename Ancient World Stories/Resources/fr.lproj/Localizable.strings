@@ -58,14 +58,17 @@
 "settings.legal" = "Mentions légales";
 
 // MARK: - Onboarding
-"onboarding.welcome" = "Voyage à travers le temps";
-"onboarding.welcome_message" = "Découvrez des histoires captivantes des civilisations antiques. De la Mésopotamie à la Grèce, vivez l'histoire comme jamais auparavant.";
-"onboarding.explore_title" = "Explorer et Écouter";
-"onboarding.explore_message" = "Naviguez sur une carte interactive, découvrez les civilisations par époque et écoutez des histoires avec une narration audio immersive.";
-"onboarding.unlock_title" = "Débloquer toutes les histoires";
+"onboarding.welcome" = "Voyage à Travers le Temps";
+"onboarding.welcome_message" = "Découvrez des histoires captivantes des civilisations anciennes. De la Mésopotamie à la Grèce, vivez l'histoire comme jamais auparavant.";
+"onboarding.explore_title" = "Explorez et Écoutez";
+"onboarding.explore_message" = "Naviguez sur une carte interactive, découvrez les civilisations par époque et écoutez des histoires avec narration audio immersive.";
+"onboarding.unlock_title" = "Débloquez Toutes les Histoires";
+"onboarding.feature_stories" = "Accès à plus de 100 histoires anciennes";
+"onboarding.feature_audio" = "Narration audio pour tous les chapitres";
+"onboarding.feature_offline" = "Mode de lecture hors ligne";
+"onboarding.feature_weekly" = "Nouvelles histoires ajoutées chaque semaine";
+"onboarding.continue" = "Continuer";
 "onboarding.get_started" = "Commencer";
-"onboarding.next" = "Suivant";
-"onboarding.skip" = "Passer";
 
 // MARK: - Paywall
 "paywall.title" = "Débloquez le monde antique";

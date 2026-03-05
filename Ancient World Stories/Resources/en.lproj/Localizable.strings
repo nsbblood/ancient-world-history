@@ -63,9 +63,12 @@
 "onboarding.explore_title" = "Explore & Listen";
 "onboarding.explore_message" = "Navigate through an interactive map, discover civilizations by era, and listen to stories with immersive audio narration.";
 "onboarding.unlock_title" = "Unlock All Stories";
+"onboarding.feature_stories" = "Access 100+ ancient stories";
+"onboarding.feature_audio" = "Audio narration for all chapters";
+"onboarding.feature_offline" = "Offline reading mode";
+"onboarding.feature_weekly" = "New stories added weekly";
+"onboarding.continue" = "Continue";
 "onboarding.get_started" = "Get Started";
-"onboarding.next" = "Next";
-"onboarding.skip" = "Skip";
 
 // MARK: - Paywall
 "paywall.title" = "Unlock the Ancient World";

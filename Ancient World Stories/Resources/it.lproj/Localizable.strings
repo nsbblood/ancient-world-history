@@ -58,14 +58,17 @@
 "settings.legal" = "Legale";
 
 // MARK: - Onboarding
-"onboarding.welcome" = "Viaggio nel tempo";
-"onboarding.welcome_message" = "Scopri storie affascinanti da civiltà antiche. Dalla Mesopotamia alla Grecia, vivi la storia come mai prima d'ora.";
+"onboarding.welcome" = "Viaggio nel Tempo";
+"onboarding.welcome_message" = "Scopri storie affascinanti dalle antiche civiltà. Dalla Mesopotamia alla Grecia, vivi la storia come mai prima d'ora.";
 "onboarding.explore_title" = "Esplora e Ascolta";
-"onboarding.explore_message" = "Naviga attraverso una mappa interattiva, scopri civiltà per era e ascolta storie con narrazione audio immersiva.";
-"onboarding.unlock_title" = "Sblocca tutte le storie";
+"onboarding.explore_message" = "Naviga attraverso una mappa interattiva, scopri le civiltà per epoca e ascolta storie con narrazione audio immersiva.";
+"onboarding.unlock_title" = "Sblocca Tutte le Storie";
+"onboarding.feature_stories" = "Accesso a oltre 100 storie antiche";
+"onboarding.feature_audio" = "Narrazione audio per tutti i capitoli";
+"onboarding.feature_offline" = "Modalità di lettura offline";
+"onboarding.feature_weekly" = "Nuove storie aggiunte settimanalmente";
+"onboarding.continue" = "Continua";
 "onboarding.get_started" = "Inizia";
-"onboarding.next" = "Avanti";
-"onboarding.skip" = "Salta";
 
 // MARK: - Paywall
 "paywall.title" = "Sblocca il mondo antico";

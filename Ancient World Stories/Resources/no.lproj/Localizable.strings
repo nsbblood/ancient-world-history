@@ -58,14 +58,17 @@
 "settings.legal" = "Juridisk";
 
 // MARK: - Onboarding
-"onboarding.welcome" = "Reise gjennom tiden";
-"onboarding.welcome_message" = "Oppdag fengslende historier fra antikke sivilisasjoner. Fra Mesopotamia til Hellas, opplev historie som aldri før.";
-"onboarding.explore_title" = "Utforsk og lytt";
-"onboarding.explore_message" = "Naviger gjennom et interaktivt kart, oppdag sivilisasjoner etter epoke, og lytt til historier med oppslukende lydfortelling.";
-"onboarding.unlock_title" = "Lås opp alle historier";
+"onboarding.welcome" = "Reise Gjennom Tiden";
+"onboarding.welcome_message" = "Oppdag fengende historier fra gamle sivilisasjoner. Fra Mesopotamia til Hellas, opplev historie som aldri før.";
+"onboarding.explore_title" = "Utforsk og Lytt";
+"onboarding.explore_message" = "Naviger gjennom et interaktivt kart, oppdag sivilisasjoner etter tidsalder og lytt til historier med oppslukende lydfortelling.";
+"onboarding.unlock_title" = "Lås Opp Alle Historier";
+"onboarding.feature_stories" = "Tilgang til 100+ gamle historier";
+"onboarding.feature_audio" = "Lydfortelling for alle kapitler";
+"onboarding.feature_offline" = "Offline lesemodus";
+"onboarding.feature_weekly" = "Nye historier legges til ukentlig";
+"onboarding.continue" = "Fortsett";
 "onboarding.get_started" = "Kom i gang";
-"onboarding.next" = "Neste";
-"onboarding.skip" = "Hopp over";
 
 // MARK: - Paywall
 "paywall.title" = "Lås opp den antikke verden";

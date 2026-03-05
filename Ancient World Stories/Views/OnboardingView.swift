@@ -94,7 +94,7 @@ struct OnboardingView: View {
                         }
                     }
                 }) {
-                    Text(currentPage < 2 ? "Continue" : "Get Started")
+                    Text(currentPage < 2 ? NSLocalizedString("onboarding.continue", comment: "") : NSLocalizedString("onboarding.get_started", comment: ""))
                         .font(.system(size: 18, weight: .semibold, design: .serif))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -169,13 +169,13 @@ struct OnboardingPage1: View {
             }
 
             VStack(spacing: 16) {
-                Text("Journey Through Time")
+                Text(NSLocalizedString("onboarding.welcome", comment: ""))
                     .font(.system(size: 34, weight: .bold, design: .serif))
                     .foregroundColor(.appText)
                     .multilineTextAlignment(.center)
                     .opacity(titleOpacity)
 
-                Text("Discover captivating stories from ancient civilizations. From Mesopotamia to Greece, experience history like never before.")
+                Text(NSLocalizedString("onboarding.welcome_message", comment: ""))
                     .font(.system(size: 18, design: .serif))
                     .foregroundColor(.appText.opacity(0.75))
                     .multilineTextAlignment(.center)
@@ -247,13 +247,13 @@ struct OnboardingPage2: View {
             }
 
             VStack(spacing: 16) {
-                Text("Explore & Listen")
+                Text(NSLocalizedString("onboarding.explore_title", comment: ""))
                     .font(.system(size: 34, weight: .bold, design: .serif))
                     .foregroundColor(.appText)
                     .multilineTextAlignment(.center)
                     .opacity(titleOpacity)
 
-                Text("Navigate through an interactive map, discover civilizations by era, and listen to stories with immersive audio narration.")
+                Text(NSLocalizedString("onboarding.explore_message", comment: ""))
                     .font(.system(size: 18, design: .serif))
                     .foregroundColor(.appText.opacity(0.75))
                     .multilineTextAlignment(.center)
@@ -325,17 +325,17 @@ struct OnboardingPage3: View {
             }
 
             VStack(spacing: 24) {
-                Text("Unlock All Stories")
+                Text(NSLocalizedString("onboarding.unlock_title", comment: ""))
                     .font(.system(size: 34, weight: .bold, design: .serif))
                     .foregroundColor(.appText)
                     .multilineTextAlignment(.center)
                     .opacity(titleOpacity)
 
                 VStack(alignment: .leading, spacing: 16) {
-                    FeatureRow(icon: "checkmark.circle.fill", text: "Access 100+ ancient stories")
-                    FeatureRow(icon: "checkmark.circle.fill", text: "Audio narration for all chapters")
-                    FeatureRow(icon: "checkmark.circle.fill", text: "Offline reading mode")
-                    FeatureRow(icon: "checkmark.circle.fill", text: "New stories added weekly")
+                    FeatureRow(icon: "checkmark.circle.fill", text: NSLocalizedString("onboarding.feature_stories", comment: ""))
+                    FeatureRow(icon: "checkmark.circle.fill", text: NSLocalizedString("onboarding.feature_audio", comment: ""))
+                    FeatureRow(icon: "checkmark.circle.fill", text: NSLocalizedString("onboarding.feature_offline", comment: ""))
+                    FeatureRow(icon: "checkmark.circle.fill", text: NSLocalizedString("onboarding.feature_weekly", comment: ""))
                 }
                 .padding(.horizontal, 32)
                 .opacity(featuresOpacity)

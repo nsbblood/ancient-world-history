@@ -59,13 +59,16 @@
 
 // MARK: - Onboarding
 "onboarding.welcome" = "Zamanda Yolculuk";
-"onboarding.welcome_message" = "Antik uygarlıklardan büyüleyici hikayeleri keşfedin. Mezopotamya'dan Yunanistan'a, tarihi daha önce hiç olmadığı gibi yaşayın.";
+"onboarding.welcome_message" = "Antik medeniyetlerden büyüleyici hikayeleri keşfedin. Mezopotamya'dan Yunanistan'a, tarihi daha önce hiç olmadığı gibi deneyimleyin.";
 "onboarding.explore_title" = "Keşfet & Dinle";
-"onboarding.explore_message" = "İnteraktif haritada gezinin, çağlara göre uygarlıkları keşfedin ve hikayeleri sürükleyici sesli anlatımla dinleyin.";
+"onboarding.explore_message" = "İnteraktif haritada gezinin, medeniyetleri çağlara göre keşfedin ve hikayeleri sürükleyici sesli anlatımla dinleyin.";
 "onboarding.unlock_title" = "Tüm Hikayelerin Kilidini Aç";
+"onboarding.feature_stories" = "100+ antik hikayeye erişim";
+"onboarding.feature_audio" = "Tüm bölümler için sesli anlatım";
+"onboarding.feature_offline" = "Çevrimdışı okuma modu";
+"onboarding.feature_weekly" = "Her hafta yeni hikayeler";
+"onboarding.continue" = "Devam Et";
 "onboarding.get_started" = "Başla";
-"onboarding.next" = "İleri";
-"onboarding.skip" = "Atla";
 
 // MARK: - Paywall
 "paywall.title" = "Antik Dünya'nın Kilidini Aç";

@@ -63,9 +63,12 @@
 "onboarding.explore_title" = "استكشف واستمع";
 "onboarding.explore_message" = "تنقل عبر خريطة تفاعلية، اكتشف الحضارات حسب العصر، واستمع إلى القصص مع سرد صوتي غامر.";
 "onboarding.unlock_title" = "افتح جميع القصص";
+"onboarding.feature_stories" = "الوصول إلى أكثر من 100 قصة قديمة";
+"onboarding.feature_audio" = "سرد صوتي لجميع الفصول";
+"onboarding.feature_offline" = "وضع القراءة دون اتصال";
+"onboarding.feature_weekly" = "قصص جديدة تُضاف أسبوعيًا";
+"onboarding.continue" = "متابعة";
 "onboarding.get_started" = "ابدأ";
-"onboarding.next" = "التالي";
-"onboarding.skip" = "تخطي";
 
 // MARK: - Paywall
 "paywall.title" = "افتح العالم القديم";

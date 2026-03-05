@@ -58,14 +58,17 @@
 "settings.legal" = "Oikeudelliset tiedot";
 
 // MARK: - Onboarding
-"onboarding.welcome" = "Matka ajassa";
+"onboarding.welcome" = "Matka Ajassa";
 "onboarding.welcome_message" = "Löydä kiehtovia tarinoita muinaisista sivilisaatioista. Mesopotamiasta Kreikkaan, koe historia kuten ei koskaan ennen.";
-"onboarding.explore_title" = "Tutkia ja kuunnella";
-"onboarding.explore_message" = "Navigoi interaktiivisen kartan läpi, löydä sivilisaatioita aikakausittain ja kuuntele tarinoita mukaansatempaavalla äänikertomuksella.";
-"onboarding.unlock_title" = "Avaa kaikki tarinat";
+"onboarding.explore_title" = "Tutustu ja Kuuntele";
+"onboarding.explore_message" = "Navigoi interaktiivisen kartan kautta, löydä sivilisaatioita aikakauden mukaan ja kuuntele tarinoita mukaansatempaavalla äänikerronnalla.";
+"onboarding.unlock_title" = "Avaa Kaikki Tarinat";
+"onboarding.feature_stories" = "Pääsy yli 100 muinaistarinaan";
+"onboarding.feature_audio" = "Äänikerronta kaikille luvuille";
+"onboarding.feature_offline" = "Offline-lukutila";
+"onboarding.feature_weekly" = "Uusia tarinoita lisätään viikoittain";
+"onboarding.continue" = "Jatka";
 "onboarding.get_started" = "Aloita";
-"onboarding.next" = "Seuraava";
-"onboarding.skip" = "Ohita";
 
 // MARK: - Paywall
 "paywall.title" = "Avaa muinainen maailma";

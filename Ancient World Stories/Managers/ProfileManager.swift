@@ -13,6 +13,8 @@ class ProfileManager: ObservableObject {
     @AppStorage("isPremium") var isPremium: Bool = false
     @AppStorage("totalReadingTime") var totalReadingTime: Int = 0
     @AppStorage("profileImageData") private var profileImageData: Data?
+    @AppStorage("currentStreak") var currentStreak: Int = 0
+    @AppStorage("lastReadDate") var lastReadDate: Double = 0
 
     @Published var readChapterIds: Set<UUID> = []
     @Published var profileImage: UIImage?
@@ -77,6 +79,38 @@ class ProfileManager: ObservableObject {
         readChapterIds.insert(chapterId)
         totalReadingTime += duration
         saveReadChapters()
+        updateStreak()
+    }
+    
+    private func updateStreak() {
+        let calendar = Calendar.current
+        let today = Date()
+        let todayStart = calendar.startOfDay(for: today)
+        
+        if lastReadDate == 0 {
+            // First time reading
+            currentStreak = 1
+            lastReadDate = todayStart.timeIntervalSince1970
+            return
+        }
+        
+        let lastRead = Date(timeIntervalSince1970: lastReadDate)
+        let lastReadStart = calendar.startOfDay(for: lastRead)
+        
+        let components = calendar.dateComponents([.day], from: lastReadStart, to: todayStart)
+        
+        if let days = components.day {
+            if days == 1 {
+                // Read yesterday, increment streak
+                currentStreak += 1
+                lastReadDate = todayStart.timeIntervalSince1970
+            } else if days > 1 {
+                // Missed a day, reset streak
+                currentStreak = 1
+                lastReadDate = todayStart.timeIntervalSince1970
+            }
+            // If days == 0, already read today, do nothing to streak
+        }
     }
     
     func isChapterRead(_ chapterId: UUID) -> Bool {

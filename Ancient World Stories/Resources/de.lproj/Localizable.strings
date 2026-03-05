@@ -59,13 +59,16 @@
 
 // MARK: - Onboarding
 "onboarding.welcome" = "Reise durch die Zeit";
-"onboarding.welcome_message" = "Entdecke faszinierende Geschichten aus antiken Zivilisationen. Von Mesopotamien bis Griechenland, erlebe Geschichte wie nie zuvor.";
-"onboarding.explore_title" = "Erkunden & Anhören";
-"onboarding.explore_message" = "Navigiere durch eine interaktive Karte, entdecke Zivilisationen nach Epochen und höre Geschichten mit immersiver Audioerzählung.";
+"onboarding.welcome_message" = "Entdecken Sie fesselnde Geschichten aus antiken Zivilisationen. Von Mesopotamien bis Griechenland, erleben Sie Geschichte wie nie zuvor.";
+"onboarding.explore_title" = "Erkunden & Hören";
+"onboarding.explore_message" = "Navigieren Sie durch eine interaktive Karte, entdecken Sie Zivilisationen nach Epochen und hören Sie Geschichten mit immersiver Audioerzählung.";
 "onboarding.unlock_title" = "Alle Geschichten freischalten";
-"onboarding.get_started" = "Los geht's";
-"onboarding.next" = "Weiter";
-"onboarding.skip" = "Überspringen";
+"onboarding.feature_stories" = "Zugriff auf über 100 antike Geschichten";
+"onboarding.feature_audio" = "Audioerzählung für alle Kapitel";
+"onboarding.feature_offline" = "Offline-Lesemodus";
+"onboarding.feature_weekly" = "Wöchentlich neue Geschichten";
+"onboarding.continue" = "Weiter";
+"onboarding.get_started" = "Jetzt starten";
 
 // MARK: - Paywall
 "paywall.title" = "Die antike Welt freischalten";

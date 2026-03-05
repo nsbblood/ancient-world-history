@@ -58,14 +58,17 @@
 "settings.legal" = "Juridisch";
 
 // MARK: - Onboarding
-"onboarding.welcome" = "Reis door de tijd";
-"onboarding.welcome_message" = "Ontdek boeiende verhalen uit oude beschavingen. Van Mesopotamië tot Griekenland, ervaar geschiedenis als nooit tevoren.";
-"onboarding.explore_title" = "Verkennen en Luisteren";
-"onboarding.explore_message" = "Navigeer door een interactieve kaart, ontdek beschavingen per tijdperk en luister naar verhalen met meeslepende audiovertelling.";
-"onboarding.unlock_title" = "Ontgrendel alle verhalen";
-"onboarding.get_started" = "Aan de slag";
-"onboarding.next" = "Volgende";
-"onboarding.skip" = "Overslaan";
+"onboarding.welcome" = "Reis Door de Tijd";
+"onboarding.welcome_message" = "Ontdek boeiende verhalen uit oude beschavingen. Van Mesopotamië tot Griekenland, ervaar geschiedenis zoals nooit tevoren.";
+"onboarding.explore_title" = "Verken en Luister";
+"onboarding.explore_message" = "Navigeer door een interactieve kaart, ontdek beschavingen per tijdperk en luister naar verhalen met meeslepende audionaratie.";
+"onboarding.unlock_title" = "Ontgrendel Alle Verhalen";
+"onboarding.feature_stories" = "Toegang tot 100+ oude verhalen";
+"onboarding.feature_audio" = "Audionaratie voor alle hoofdstukken";
+"onboarding.feature_offline" = "Offline leesmodus";
+"onboarding.feature_weekly" = "Wekelijks nieuwe verhalen toegevoegd";
+"onboarding.continue" = "Doorgaan";
+"onboarding.get_started" = "Begin";
 
 // MARK: - Paywall
 "paywall.title" = "Ontgrendel de oude wereld";

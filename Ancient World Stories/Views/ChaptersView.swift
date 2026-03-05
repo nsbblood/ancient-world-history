@@ -114,9 +114,5 @@ struct ChaptersView: View {
         }
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarBackground(Color.appBackground, for: .navigationBar)
-        .task {
-            // Load chapters for this story when view appears
-            await content.loadChapters(for: story.id)
-        }
     }
 }

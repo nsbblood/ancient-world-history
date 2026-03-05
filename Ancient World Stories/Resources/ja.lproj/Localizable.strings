@@ -58,14 +58,17 @@
 "settings.legal" = "法的情報";
 
 // MARK: - Onboarding
-"onboarding.welcome" = "時間を旅する";
-"onboarding.welcome_message" = "古代文明の魅力的な物語を発見してください。";
-"onboarding.explore_title" = "探索＆リスニング";
-"onboarding.explore_message" = "インタラクティブな地図をナビゲート。";
+"onboarding.welcome" = "時を超える旅";
+"onboarding.welcome_message" = "古代文明の魅力的な物語を発見しましょう。メソポタミアからギリシャまで、これまでにない歴史を体験してください。";
+"onboarding.explore_title" = "探索して聴く";
+"onboarding.explore_message" = "インタラクティブな地図をナビゲートし、時代ごとに文明を発見し、没入型のオーディオナレーションで物語を聴きましょう。";
 "onboarding.unlock_title" = "すべての物語をアンロック";
+"onboarding.feature_stories" = "100以上の古代物語にアクセス";
+"onboarding.feature_audio" = "すべての章の音声ナレーション";
+"onboarding.feature_offline" = "オフライン読書モード";
+"onboarding.feature_weekly" = "毎週新しい物語を追加";
+"onboarding.continue" = "続ける";
 "onboarding.get_started" = "始める";
-"onboarding.next" = "次へ";
-"onboarding.skip" = "スキップ";
 
 // MARK: - Paywall
 "paywall.title" = "古代世界をアンロック";
