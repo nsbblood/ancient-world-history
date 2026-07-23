@@ -1,0 +1,127 @@
+/*
+  Localizable.strings - Nederlands (Dutch)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "Start";
+"tab.explore" = "Verkennen";
+"tab.profile" = "Profiel";
+
+// MARK: - General
+"app.title" = "Verhalen van de Oude Wereld";
+"app.tagline" = "Ontdek verhalen uit vroegere beschavingen";
+"language" = "Taal";
+"settings" = "Instellingen";
+"support" = "Ondersteuning";
+"about" = "Over";
+"version" = "Versie";
+"close" = "Sluiten";
+"save" = "Opslaan";
+"cancel" = "Annuleren";
+"retry" = "Opnieuw proberen";
+"loading" = "Laden...";
+"error" = "Fout";
+
+// MARK: - Home View
+"home.explore_chapters" = "Hoofdstukken verkennen";
+"home.loading_stories" = "Verhalen laden...";
+"home.show_different" = "Andere hoofdstukken tonen";
+
+// MARK: - Explore View
+"explore.timeline" = "Tijdlijn";
+"explore.time_travel" = "Tijdreis";
+"explore.no_civilizations" = "Geen beschavingen gevonden";
+"explore.check_back" = "Kom later terug om oude beschavingen te verkennen.";
+"explore.stories" = "Verhalen";
+"explore.no_stories" = "Nog geen verhalen";
+"explore.coming_soon" = "Verhalen voor deze beschaving komen binnenkort.";
+
+// MARK: - Stories View
+"stories.loading" = "Verhalen laden...";
+"stories.coming_soon_title" = "Verhalen komen binnenkort";
+"stories.coming_soon_message" = "Nieuwe verhalen van %@ worden binnenkort toegevoegd. Kom later terug!";
+
+// MARK: - Chapters View
+"chapters.title" = "Hoofdstukken";
+"chapters.progress" = "Voortgang";
+"chapters.no_chapters" = "Nog geen hoofdstukken beschikbaar.";
+
+// MARK: - Settings View
+"settings.language" = "Taal";
+"settings.language_description" = "Selecteer uw voorkeurstaal voor verhalen en vertelling";
+"settings.contact_support" = "Contact opnemen met ondersteuning";
+"settings.privacy_policy" = "Privacybeleid";
+"settings.privacy_description" = "Hoe we uw gegevens behandelen";
+"settings.terms" = "Servicevoorwaarden";
+"settings.terms_description" = "Onze algemene voorwaarden";
+"settings.legal" = "Juridisch";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Reis Door de Tijd";
+"onboarding.welcome_message" = "Ontdek boeiende verhalen uit oude beschavingen. Van Mesopotamië tot Griekenland, ervaar geschiedenis zoals nooit tevoren.";
+"onboarding.explore_title" = "Verken en Luister";
+"onboarding.explore_message" = "Navigeer door een interactieve kaart, ontdek beschavingen per tijdperk en luister naar verhalen met meeslepende audionaratie.";
+"onboarding.unlock_title" = "Ontgrendel Alle Verhalen";
+"onboarding.feature_stories" = "Toegang tot 100+ oude verhalen";
+"onboarding.feature_audio" = "Audionaratie voor alle hoofdstukken";
+"onboarding.feature_offline" = "Offline leesmodus";
+"onboarding.feature_weekly" = "Wekelijks nieuwe verhalen toegevoegd";
+"onboarding.continue" = "Doorgaan";
+"onboarding.get_started" = "Begin";
+
+// MARK: - Paywall
+"paywall.title" = "Ontgrendel de oude wereld";
+"paywall.subtitle" = "Reis door de tijd. Beleef elke beschaving.";
+"paywall.loading_subscriptions" = "Abonnementsopties laden...";
+"paywall.unable_to_load" = "Kan abonnementen niet laden";
+"paywall.best_value" = "BESTE WAARDE";
+"paywall.trial" = "3-DAAGSE PROEFPERIODE";
+"paywall.restore" = "Aankopen herstellen";
+"paywall.continue" = "Doorgaan";
+
+// MARK: - Profile
+"profile.favorites" = "Favorieten";
+"profile.listening_history" = "Luistergeschiedenis";
+"profile.no_favorites" = "Nog geen favorieten";
+"profile.no_history" = "Nog geen luistergeschiedenis";
+
+// MARK: - Reader
+"reader.chapter" = "Hoofdstuk %d";
+"reader.of" = "van %d";
+"reader.play" = "Afspelen";
+"reader.pause" = "Pauzeren";
+"reader.speed" = "Snelheid";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "Meer dan 100 epische verhalen";
+"paywall.epic_stories_subtitle" = "Van farao's tot keizers";
+"paywall.immersive_audio" = "Meeslepend geluid";
+"paywall.immersive_audio_subtitle" = "Professionele vertelling";
+"paywall.civilizations" = "Meer dan 15 beschavingen";
+"paywall.civilizations_subtitle" = "Door tijd en ruimte";
+"paywall.premium_annual" = "Premium jaarlijks";
+"paywall.premium_weekly" = "Premium wekelijks";
+"paywall.save_85" = "Bespaar 85% • Volledige toegang";
+"paywall.trial_days" = "3 dagen gratis, daarna wekelijks";
+"paywall.then_price" = "Daarna %@/jaar";
+"paywall.then_price_week" = "3 dagen gratis proefperiode, daarna %@/week";
+"paywall.try_free" = "Gratis proberen";
+"paywall.terms" = "Voorwaarden";
+"paywall.privacy" = "Privacy";
+
+// MARK: - Profile (Additional)
+"profile.title" = "Profiel";
+"profile.go_premium" = "Word Premium";
+"profile.premium_member" = "Premium lid";
+"profile.your_statistics" = "Uw statistieken";
+"profile.chapters_read" = "Gelezen hoofdstukken";
+"profile.civilizations_explored" = "Verkende beschavingen";
+"profile.total_reading_time" = "Totale leestijd";
+"profile.favorite_chapters" = "Favoriete hoofdstukken";
+
+// MARK: - Tab Bar
+"tab.startseite" = "Start";
+"tab.episodes" = "Afleveringen";
+"tab.erkunden" = "Verkennen";
+"tab.profil" = "Profiel";

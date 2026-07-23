@@ -1,12 +1,17 @@
 // ProfileView.swift
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
+    @ObservedObject private var languageManager = LanguageManager.shared
     @StateObject private var content = ContentLoader.shared
     @State private var selectedChapter: Chapter?
-    @State private var showVoiceSelector = false
+    @State private var showPaywall = false
+    @State private var showSettings = false
+    @State private var showImagePicker = false
+    @State private var selectedPhotoItem: PhotosPickerItem?
 
     var favoriteChapters: [Chapter] {
         favoritesManager.getFavoriteChapters()
@@ -18,34 +23,76 @@ struct ProfileView: View {
 
             VStack(spacing: 0) {
                 // Fixed Header
-                VStack(spacing: 8) {
-                    Text("Profile")
+                HStack {
+                    Text("profile.title".localized)
                         .font(.serifLargeTitle())
                         .foregroundColor(.primaryText)
-                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Divider()
-                        .background(Color.appSecondary.opacity(0.3))
+                    Spacer()
+
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.accentColor)
+                    }
                 }
                 .padding(.horizontal)
                 .padding(.top, 8)
+                .padding(.bottom, 16)
                 .background(Color.backgroundColor)
 
                 // Scrollable Content
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         VStack(spacing: 16) {
-                            Image(systemName: "person.circle.fill")
-                                .font(.system(size: 80))
-                                .foregroundColor(.accentColor)
-                            
+                            Button {
+                                showImagePicker = true
+                            } label: {
+                                ZStack {
+                                    if let profileImage = profileManager.profileImage {
+                                        Image(uiImage: profileImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(Circle())
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color.accentColor, lineWidth: 2)
+                                            )
+                                    } else {
+                                        Image(systemName: "person.circle.fill")
+                                            .font(.system(size: 80))
+                                            .foregroundColor(.accentColor)
+                                    }
+
+                                    VStack {
+                                        Spacer()
+                                        HStack {
+                                            Spacer()
+                                            Image(systemName: "camera.circle.fill")
+                                                .font(.system(size: 24))
+                                                .foregroundColor(.white)
+                                                .background(
+                                                    Circle()
+                                                        .fill(Color.accentColor)
+                                                        .frame(width: 28, height: 28)
+                                                )
+                                        }
+                                    }
+                                    .frame(width: 80, height: 80)
+                                }
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
                             if !profileManager.isPremium {
                                 Button {
-                                    // TODO: RevenueCat integration
+                                    showPaywall = true
                                 } label: {
                                     HStack {
                                         Image(systemName: "crown.fill")
-                                        Text("Go Premium")
+                                        Text("profile.go_premium".localized)
                                     }
                                     .font(.serifHeadline())
                                     .foregroundColor(.white)
@@ -64,7 +111,7 @@ struct ProfileView: View {
                                 HStack {
                                     Image(systemName: "crown.fill")
                                         .foregroundColor(.accentColor)
-                                    Text("Premium Member")
+                                    Text("profile.premium_member".localized)
                                         .font(.serifHeadline())
                                         .foregroundColor(.accentColor)
                                 }
@@ -78,72 +125,41 @@ struct ProfileView: View {
                         .padding()
                         
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Your Statistics")
+                            Text("profile.your_statistics".localized)
                                 .font(.serifTitle3())
                                 .foregroundColor(.primaryText)
-                            
+
                             VStack(spacing: 12) {
                                 StatisticRow(
                                     icon: "book.fill",
-                                    title: "Chapters Read",
+                                    title: "profile.chapters_read".localized,
                                     value: "\(profileManager.totalChaptersRead())"
                                 )
-                                
+
                                 StatisticRow(
                                     icon: "globe",
-                                    title: "Civilizations Explored",
+                                    title: "profile.civilizations_explored".localized,
                                     value: "\(profileManager.civilizationsExplored())"
                                 )
-                                
+
                                 StatisticRow(
                                     icon: "clock.fill",
-                                    title: "Total Reading Time",
+                                    title: "profile.total_reading_time".localized,
                                     value: profileManager.formattedTotalReadingTime()
                                 )
-                                
+
                                 StatisticRow(
                                     icon: "heart.fill",
-                                    title: "Favorite Chapters",
+                                    title: "profile.favorite_chapters".localized,
                                     value: "\(favoritesManager.favoriteCount())"
                                 )
                             }
                         }
                         .padding(.horizontal)
-                        
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("Voice Settings")
-                                .font(.serifTitle3())
-                                .foregroundColor(.primaryText)
-                            
-                            Button {
-                                showVoiceSelector = true
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("Selected Voice")
-                                            .font(.serifCaption())
-                                            .foregroundColor(.secondaryText)
-                                        
-                                        Text(profileManager.currentVoice.displayName)
-                                            .font(.serifBody())
-                                            .foregroundColor(.primaryText)
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.accentColor)
-                                }
-                                .padding()
-                                .background(Color.cardBackground)
-                                .cornerRadius(12)
-                            }
-                        }
-                        .padding(.horizontal)
-                        
+
                         if !favoriteChapters.isEmpty {
                             VStack(alignment: .leading, spacing: 16) {
-                                Text("Favorite Chapters")
+                                Text("profile.favorite_chapters".localized)
                                     .font(.serifTitle3())
                                     .foregroundColor(.primaryText)
 
@@ -170,8 +186,11 @@ struct ProfileView: View {
                 }
             }
         }
-        .sheet(isPresented: $showVoiceSelector) {
-            VoiceSelectorView()
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+        }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(isPresented: $showPaywall)
         }
         .fullScreenCover(item: $selectedChapter) { chapter in
             if let story = content.story(for: chapter.storyId),
@@ -182,6 +201,18 @@ struct ProfileView: View {
                     civilization: civilization,
                     allChapters: content.chapters(for: story.id)
                 )
+            }
+        }
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarBackground(Color.cardBackground, for: .tabBar)
+        .photosPicker(isPresented: $showImagePicker, selection: $selectedPhotoItem, matching: .images)
+        .onChange(of: selectedPhotoItem) { oldValue, newValue in
+            Task {
+                if let newValue,
+                   let data = try? await newValue.loadTransferable(type: Data.self),
+                   let image = UIImage(data: data) {
+                    profileManager.saveProfileImage(image)
+                }
             }
         }
     }
@@ -213,7 +244,7 @@ struct FavoriteChapterRow: View {
                         Text(chapter.formattedDuration)
                     }
                     Text("•")
-                    Text("Chapter \(chapter.orderNo)")
+                    Text("reader.chapter".localized(with: chapter.orderNo))
                 }
                 .font(.serifCaption())
                 .foregroundColor(.secondaryText)
@@ -256,59 +287,5 @@ struct StatisticRow: View {
         .padding()
         .background(Color.cardBackground)
         .cornerRadius(12)
-    }
-}
-
-struct VoiceSelectorView: View {
-    @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var profileManager = ProfileManager.shared
-    
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.backgroundColor.ignoresSafeArea()
-                
-                List {
-                    ForEach(VoiceType.allCases, id: \.self) { voice in
-                        Button {
-                            profileManager.currentVoice = voice
-                            dismiss()
-                        } label: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(voice.displayName)
-                                        .font(.serifBody())
-                                        .foregroundColor(.primaryText)
-                                    
-                                    Text(voice.language)
-                                        .font(.serifCaption())
-                                        .foregroundColor(.secondaryText)
-                                }
-                                
-                                Spacer()
-                                
-                                if profileManager.currentVoice == voice {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.accentColor)
-                                }
-                            }
-                        }
-                    }
-                }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
-            }
-            .navigationTitle("Select Voice")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .font(.serifBody())
-                    .foregroundColor(.accentColor)
-                }
-            }
-        }
     }
 }

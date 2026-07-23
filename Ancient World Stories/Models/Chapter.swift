@@ -26,7 +26,7 @@ struct Chapter: Identifiable, Codable, Hashable {
         case languageCode = "language_code"
     }
 
-    init(id: UUID = UUID(), storyId: UUID, title: String, orderNo: Int, text: String, duration: Int, languageCode: String = "en-US") {
+    init(id: UUID = UUID(), storyId: UUID, title: String, orderNo: Int, text: String, duration: Int, languageCode: String = "en") {
         self.id = id
         self.storyId = storyId
         self.title = title
@@ -57,7 +57,7 @@ struct Chapter: Identifiable, Codable, Hashable {
         orderNo = try container.decode(Int.self, forKey: .orderNo)
         text = try container.decode(String.self, forKey: .text)
         duration = try container.decode(Int.self, forKey: .duration)
-        languageCode = (try? container.decode(String.self, forKey: .languageCode)) ?? "en-US"
+        languageCode = (try? container.decode(String.self, forKey: .languageCode)) ?? "en"
     }
 
     var formattedDuration: String {

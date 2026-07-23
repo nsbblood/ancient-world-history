@@ -1,0 +1,127 @@
+/*
+  Localizable.strings - Português (Portuguese)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "Início";
+"tab.explore" = "Explorar";
+"tab.profile" = "Perfil";
+
+// MARK: - General
+"app.title" = "Histórias do Mundo Antigo";
+"app.tagline" = "Descubra contos de civilizações passadas";
+"language" = "Idioma";
+"settings" = "Configurações";
+"support" = "Suporte";
+"about" = "Sobre";
+"version" = "Versão";
+"close" = "Fechar";
+"save" = "Salvar";
+"cancel" = "Cancelar";
+"retry" = "Tentar novamente";
+"loading" = "Carregando...";
+"error" = "Erro";
+
+// MARK: - Home View
+"home.explore_chapters" = "Explorar capítulos";
+"home.loading_stories" = "Carregando histórias...";
+"home.show_different" = "Mostrar outros capítulos";
+
+// MARK: - Explore View
+"explore.timeline" = "Linha do tempo";
+"explore.time_travel" = "Viagem no tempo";
+"explore.no_civilizations" = "Nenhuma civilização encontrada";
+"explore.check_back" = "Volte mais tarde para explorar civilizações antigas.";
+"explore.stories" = "Histórias";
+"explore.no_stories" = "Ainda sem histórias";
+"explore.coming_soon" = "Histórias para esta civilização chegarão em breve.";
+
+// MARK: - Stories View
+"stories.loading" = "Carregando histórias...";
+"stories.coming_soon_title" = "Histórias em breve";
+"stories.coming_soon_message" = "Novas histórias de %@ serão adicionadas em breve. Volte mais tarde!";
+
+// MARK: - Chapters View
+"chapters.title" = "Capítulos";
+"chapters.progress" = "Progresso";
+"chapters.no_chapters" = "Ainda sem capítulos disponíveis.";
+
+// MARK: - Settings View
+"settings.language" = "Idioma";
+"settings.language_description" = "Selecione seu idioma preferido para histórias e narração";
+"settings.contact_support" = "Contatar suporte";
+"settings.privacy_policy" = "Política de privacidade";
+"settings.privacy_description" = "Como tratamos seus dados";
+"settings.terms" = "Termos de serviço";
+"settings.terms_description" = "Nossos termos e condições";
+"settings.legal" = "Legal";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Viagem Através do Tempo";
+"onboarding.welcome_message" = "Descubra histórias cativantes de civilizações antigas. Da Mesopotâmia à Grécia, experimente a história como nunca antes.";
+"onboarding.explore_title" = "Explore e Ouça";
+"onboarding.explore_message" = "Navegue por um mapa interativo, descubra civilizações por era e ouça histórias com narração de áudio imersiva.";
+"onboarding.unlock_title" = "Desbloqueie Todas as Histórias";
+"onboarding.feature_stories" = "Acesso a mais de 100 histórias antigas";
+"onboarding.feature_audio" = "Narração de áudio para todos os capítulos";
+"onboarding.feature_offline" = "Modo de leitura offline";
+"onboarding.feature_weekly" = "Novas histórias adicionadas semanalmente";
+"onboarding.continue" = "Continuar";
+"onboarding.get_started" = "Começar";
+
+// MARK: - Paywall
+"paywall.title" = "Desbloqueie o mundo antigo";
+"paywall.subtitle" = "Viaje no tempo. Experimente cada civilização.";
+"paywall.loading_subscriptions" = "Carregando opções de assinatura...";
+"paywall.unable_to_load" = "Não foi possível carregar assinaturas";
+"paywall.best_value" = "MELHOR VALOR";
+"paywall.trial" = "TESTE 3 DIAS";
+"paywall.restore" = "Restaurar compras";
+"paywall.continue" = "Continuar";
+
+// MARK: - Profile
+"profile.favorites" = "Favoritos";
+"profile.listening_history" = "Histórico de audição";
+"profile.no_favorites" = "Ainda sem favoritos";
+"profile.no_history" = "Ainda sem histórico de audição";
+
+// MARK: - Reader
+"reader.chapter" = "Capítulo %d";
+"reader.of" = "de %d";
+"reader.play" = "Reproduzir";
+"reader.pause" = "Pausar";
+"reader.speed" = "Velocidade";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "Mais de 100 histórias épicas";
+"paywall.epic_stories_subtitle" = "De faraós a imperadores";
+"paywall.immersive_audio" = "Áudio imersivo";
+"paywall.immersive_audio_subtitle" = "Narração profissional";
+"paywall.civilizations" = "Mais de 15 civilizações";
+"paywall.civilizations_subtitle" = "Através do tempo e espaço";
+"paywall.premium_annual" = "Premium anual";
+"paywall.premium_weekly" = "Premium semanal";
+"paywall.save_85" = "Economize 85% • Acesso completo";
+"paywall.trial_days" = "3 dias grátis, depois semanal";
+"paywall.then_price" = "Depois %@/ano";
+"paywall.then_price_week" = "Teste grátis de 3 dias, depois %@/semana";
+"paywall.try_free" = "Testar grátis";
+"paywall.terms" = "Termos";
+"paywall.privacy" = "Privacidade";
+
+// MARK: - Profile (Additional)
+"profile.title" = "Perfil";
+"profile.go_premium" = "Tornar-se Premium";
+"profile.premium_member" = "Membro Premium";
+"profile.your_statistics" = "Suas estatísticas";
+"profile.chapters_read" = "Capítulos lidos";
+"profile.civilizations_explored" = "Civilizações exploradas";
+"profile.total_reading_time" = "Tempo total de leitura";
+"profile.favorite_chapters" = "Capítulos favoritos";
+
+// MARK: - Tab Bar
+"tab.startseite" = "Início";
+"tab.episodes" = "Episódios";
+"tab.erkunden" = "Explorar";
+"tab.profil" = "Perfil";

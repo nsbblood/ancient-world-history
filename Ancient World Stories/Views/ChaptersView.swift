@@ -4,12 +4,14 @@ import SwiftUI
 struct ChaptersView: View {
     let story: Story
     let civilization: Civilization
-    
+
     @StateObject private var content = ContentLoader.shared
+    @ObservedObject private var languageManager = LanguageManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @ObservedObject private var profileManager = ProfileManager.shared
     @State private var selectedChapter: Chapter?
-    
+    @State private var showPaywall = false
+
     var chapters: [Chapter] {
         content.chapters(for: story.id)
     }
@@ -48,7 +50,7 @@ struct ChaptersView: View {
                         if readProgress > 0 {
                             VStack(alignment: .leading, spacing: 8) {
                                 HStack {
-                                    Text("Progress")
+                                    Text("chapters.progress".localized)
                                         .font(.serifCaption())
                                         .foregroundColor(.secondaryText)
                                     Spacer()
@@ -67,12 +69,12 @@ struct ChaptersView: View {
                     .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
                     
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Chapters (\(chapters.count))")
+                        Text("\("chapters.title".localized) (\(chapters.count))")
                             .font(.serifTitle3())
                             .foregroundColor(.primaryText)
-                        
+
                         if chapters.isEmpty {
-                            Text("No chapters available yet.")
+                            Text("chapters.no_chapters".localized)
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
                                 .frame(maxWidth: .infinity)
@@ -80,9 +82,15 @@ struct ChaptersView: View {
                         } else {
                             ForEach(chapters) { chapter in
                                 Button {
-                                    selectedChapter = chapter
+                                    // First chapter is always free, rest require premium
+                                    if chapter.orderNo == 1 || profileManager.isPremium {
+                                        selectedChapter = chapter
+                                    } else {
+                                        // Show paywall for non-premium users on chapters 2+
+                                        showPaywall = true
+                                    }
                                 } label: {
-                                    ChapterRow(chapter: chapter)
+                                    ChapterRow(chapter: chapter, isLocked: chapter.orderNo > 1 && !profileManager.isPremium)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
@@ -101,5 +109,10 @@ struct ChaptersView: View {
                 allChapters: chapters
             )
         }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(isPresented: $showPaywall)
+        }
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(Color.appBackground, for: .navigationBar)
     }
 }

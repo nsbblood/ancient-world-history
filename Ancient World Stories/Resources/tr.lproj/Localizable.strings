@@ -1,0 +1,127 @@
+/*
+  Localizable.strings - Türkçe
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "Ana Sayfa";
+"tab.explore" = "Keşfet";
+"tab.profile" = "Profil";
+
+// MARK: - General
+"app.title" = "Antik Dünya Hikayeleri";
+"app.tagline" = "Geçmiş uygarlıklardan hikayeleri keşfedin";
+"language" = "Dil";
+"settings" = "Ayarlar";
+"support" = "Destek";
+"about" = "Hakkında";
+"version" = "Sürüm";
+"close" = "Kapat";
+"save" = "Kaydet";
+"cancel" = "İptal";
+"retry" = "Tekrar Dene";
+"loading" = "Yükleniyor...";
+"error" = "Hata";
+
+// MARK: - Home View
+"home.explore_chapters" = "Bölümleri Keşfet";
+"home.loading_stories" = "Hikayeler yükleniyor...";
+"home.show_different" = "Farklı bölümler göster";
+
+// MARK: - Explore View
+"explore.timeline" = "Zaman Çizelgesi";
+"explore.time_travel" = "Zaman Yolculuğu";
+"explore.no_civilizations" = "Uygarlık Bulunamadı";
+"explore.check_back" = "Keşfedilecek antik uygarlıklar için lütfen daha sonra tekrar kontrol edin.";
+"explore.stories" = "Hikayeler";
+"explore.no_stories" = "Henüz Hikaye Yok";
+"explore.coming_soon" = "Bu uygarlık için hikayeler yakında gelecek.";
+
+// MARK: - Stories View
+"stories.loading" = "Hikayeler yükleniyor...";
+"stories.coming_soon_title" = "Hikayeler Yakında";
+"stories.coming_soon_message" = "%@ için yeni hikayeler yakında buraya eklenecek. Daha sonra tekrar kontrol edin!";
+
+// MARK: - Chapters View
+"chapters.title" = "Bölümler";
+"chapters.progress" = "İlerleme";
+"chapters.no_chapters" = "Henüz bölüm mevcut değil.";
+
+// MARK: - Settings View
+"settings.language" = "Dil";
+"settings.language_description" = "Hikayeler ve anlatım için tercih ettiğiniz dili seçin";
+"settings.contact_support" = "Destek ile İletişim";
+"settings.privacy_policy" = "Gizlilik Politikası";
+"settings.privacy_description" = "Verilerinizi nasıl işlediğimiz";
+"settings.terms" = "Hizmet Şartları";
+"settings.terms_description" = "Şartlar ve koşullarımız";
+"settings.legal" = "Yasal";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Zamanda Yolculuk";
+"onboarding.welcome_message" = "Antik medeniyetlerden büyüleyici hikayeleri keşfedin. Mezopotamya'dan Yunanistan'a, tarihi daha önce hiç olmadığı gibi deneyimleyin.";
+"onboarding.explore_title" = "Keşfet & Dinle";
+"onboarding.explore_message" = "İnteraktif haritada gezinin, medeniyetleri çağlara göre keşfedin ve hikayeleri sürükleyici sesli anlatımla dinleyin.";
+"onboarding.unlock_title" = "Tüm Hikayelerin Kilidini Aç";
+"onboarding.feature_stories" = "100+ antik hikayeye erişim";
+"onboarding.feature_audio" = "Tüm bölümler için sesli anlatım";
+"onboarding.feature_offline" = "Çevrimdışı okuma modu";
+"onboarding.feature_weekly" = "Her hafta yeni hikayeler";
+"onboarding.continue" = "Devam Et";
+"onboarding.get_started" = "Başla";
+
+// MARK: - Paywall
+"paywall.title" = "Antik Dünya'nın Kilidini Aç";
+"paywall.subtitle" = "Zamanda yolculuk yapın. Her uygarlığı deneyimleyin.";
+"paywall.loading_subscriptions" = "Abonelik seçenekleri yükleniyor...";
+"paywall.unable_to_load" = "Abonelikler yüklenemedi";
+"paywall.best_value" = "EN İYİ DEĞER";
+"paywall.trial" = "3 GÜN DENEMEsİ";
+"paywall.restore" = "Satın Alımları Geri Yükle";
+"paywall.continue" = "Devam Et";
+
+// MARK: - Profile
+"profile.favorites" = "Favoriler";
+"profile.listening_history" = "Dinleme Geçmişi";
+"profile.no_favorites" = "Henüz favori yok";
+"profile.no_history" = "Henüz dinleme geçmişi yok";
+
+// MARK: - Reader
+"reader.chapter" = "Bölüm %d";
+"reader.of" = "/ %d";
+"reader.play" = "Oynat";
+"reader.pause" = "Duraklat";
+"reader.speed" = "Hız";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "100+ Epik Hikaye";
+"paywall.epic_stories_subtitle" = "Firavunlardan imparatorlara";
+"paywall.immersive_audio" = "Sürükleyici Ses";
+"paywall.immersive_audio_subtitle" = "Profesyonel anlatım";
+"paywall.civilizations" = "15+ Medeniyet";
+"paywall.civilizations_subtitle" = "Zaman ve mekân ötesi";
+"paywall.premium_annual" = "Premium Yıllık";
+"paywall.premium_weekly" = "Premium Haftalık";
+"paywall.save_85" = "%85 Tasarruf • Tam Erişim";
+"paywall.trial_days" = "3 gün ücretsiz, sonra haftalık";
+"paywall.then_price" = "Sonra %@/yıl";
+"paywall.then_price_week" = "3 gün ücretsiz deneme, sonra %@/hafta";
+"paywall.try_free" = "Ücretsiz Dene";
+"paywall.terms" = "Şartlar";
+"paywall.privacy" = "Gizlilik";
+
+// MARK: - Profile (Additional)
+"profile.title" = "Profil";
+"profile.go_premium" = "Premium'a Geç";
+"profile.premium_member" = "Premium Üye";
+"profile.your_statistics" = "İstatistikleriniz";
+"profile.chapters_read" = "Okunan Bölümler";
+"profile.civilizations_explored" = "Keşfedilen Medeniyetler";
+"profile.total_reading_time" = "Toplam Okuma Süresi";
+"profile.favorite_chapters" = "Favori Bölümler";
+
+// MARK: - Tab Bar
+"tab.startseite" = "Ana Sayfa";
+"tab.episodes" = "Bölümler";
+"tab.erkunden" = "Keşfet";
+"tab.profil" = "Profil";

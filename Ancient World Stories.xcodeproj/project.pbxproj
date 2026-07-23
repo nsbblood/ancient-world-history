@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6DCDA9332EB79C1B0012C785 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 6DCDA9322EB79C1B0012C785 /* RevenueCat */; };
+		6DCDA9352EB79C1B0012C785 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6DCDA9342EB79C1B0012C785 /* RevenueCatUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		6DCDA8C92EB6B4EA0012C785 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D6B1A802EBBE4D7009DEBFD /* StoreKitConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; name = StoreKitConfiguration.storekit; path = "Ancient World Stories/StoreKitConfiguration.storekit"; sourceTree = "<group>"; };
 		6DCDA8BB2EB6B4E80012C785 /* Ancient World Stories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ancient World Stories.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DCDA8C82EB6B4EA0012C785 /* Ancient World StoriesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ancient World StoriesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DCDA8D22EB6B4EA0012C785 /* Ancient World StoriesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Ancient World StoriesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DCDA9352EB79C1B0012C785 /* RevenueCatUI in Frameworks */,
+				6DCDA9332EB79C1B0012C785 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +83,7 @@
 		6DCDA8B22EB6B4E80012C785 = {
 			isa = PBXGroup;
 			children = (
+				6D6B1A802EBBE4D7009DEBFD /* StoreKitConfiguration.storekit */,
 				6DCDA8BD2EB6B4E80012C785 /* Ancient World Stories */,
 				6DCDA8CB2EB6B4EA0012C785 /* Ancient World StoriesTests */,
 				6DCDA8D52EB6B4EA0012C785 /* Ancient World StoriesUITests */,
@@ -112,6 +121,8 @@
 			);
 			name = "Ancient World Stories";
 			packageProductDependencies = (
+				6DCDA9322EB79C1B0012C785 /* RevenueCat */,
+				6DCDA9342EB79C1B0012C785 /* RevenueCatUI */,
 			);
 			productName = "Ancient World Stories";
 			productReference = 6DCDA8BB2EB6B4E80012C785 /* Ancient World Stories.app */;
@@ -192,9 +203,27 @@
 			knownRegions = (
 				en,
 				Base,
+				tr,
+				fr,
+				pt,
+				de,
+				es,
+				it,
+				nl,
+				sv,
+				fi,
+				ko,
+				ar,
+				no,
+				ja,
+				da,
+				nb,
 			);
 			mainGroup = 6DCDA8B22EB6B4E80012C785;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6DCDA8BC2EB6B4E80012C785 /* Products */;
 			projectDirPath = "";
@@ -402,7 +431,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -410,7 +439,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dainty.ancientworldstories.Ancient-World-Stories";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dainty.ancientworldstories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -434,7 +463,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -442,7 +471,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dainty.ancientworldstories.Ancient-World-Stories";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dainty.ancientworldstories;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -578,6 +607,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.46.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6DCDA9322EB79C1B0012C785 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		6DCDA9342EB79C1B0012C785 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DCDA9312EB79C1B0012C785 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DCDA8B32EB6B4E80012C785 /* Project object */;
 }

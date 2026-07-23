@@ -1,0 +1,127 @@
+/*
+  Localizable.strings - العربية (Arabic)
+  Ancient World Stories
+*/
+
+// MARK: - Tabs
+"tab.home" = "الرئيسية";
+"tab.explore" = "استكشف";
+"tab.profile" = "الملف الشخصي";
+
+// MARK: - General
+"app.title" = "قصص العالم القديم";
+"app.tagline" = "اكتشف حكايات من حضارات الماضي";
+"language" = "اللغة";
+"settings" = "الإعدادات";
+"support" = "الدعم";
+"about" = "حول";
+"version" = "الإصدار";
+"close" = "إغلاق";
+"save" = "حفظ";
+"cancel" = "إلغاء";
+"retry" = "إعادة المحاولة";
+"loading" = "جاري التحميل...";
+"error" = "خطأ";
+
+// MARK: - Home View
+"home.explore_chapters" = "استكشف الفصول";
+"home.loading_stories" = "جاري تحميل القصص...";
+"home.show_different" = "عرض فصول مختلفة";
+
+// MARK: - Explore View
+"explore.timeline" = "الجدول الزمني";
+"explore.time_travel" = "رحلة عبر الزمن";
+"explore.no_civilizations" = "لم يتم العثور على حضارات";
+"explore.check_back" = "يرجى التحقق لاحقًا لاستكشاف الحضارات القديمة.";
+"explore.stories" = "القصص";
+"explore.no_stories" = "لا توجد قصص حتى الآن";
+"explore.coming_soon" = "قصص هذه الحضارة قادمة قريبًا.";
+
+// MARK: - Stories View
+"stories.loading" = "جاري تحميل القصص...";
+"stories.coming_soon_title" = "القصص قادمة قريبًا";
+"stories.coming_soon_message" = "سيتم إضافة حكايات جديدة من %@ قريبًا. تحقق مرة أخرى لاحقًا!";
+
+// MARK: - Chapters View
+"chapters.title" = "الفصول";
+"chapters.progress" = "التقدم";
+"chapters.no_chapters" = "لا توجد فصول متاحة حتى الآن.";
+
+// MARK: - Settings View
+"settings.language" = "اللغة";
+"settings.language_description" = "حدد لغتك المفضلة للقصص والسرد";
+"settings.contact_support" = "اتصل بالدعم";
+"settings.privacy_policy" = "سياسة الخصوصية";
+"settings.privacy_description" = "كيف نتعامل مع بياناتك";
+"settings.terms" = "شروط الخدمة";
+"settings.terms_description" = "الشروط والأحكام الخاصة بنا";
+"settings.legal" = "قانوني";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "رحلة عبر الزمن";
+"onboarding.welcome_message" = "اكتشف قصصًا آسرة من الحضارات القديمة. من بلاد ما بين النهرين إلى اليونان، عش التاريخ كما لم يحدث من قبل.";
+"onboarding.explore_title" = "استكشف واستمع";
+"onboarding.explore_message" = "تنقل عبر خريطة تفاعلية، اكتشف الحضارات حسب العصر، واستمع إلى القصص مع سرد صوتي غامر.";
+"onboarding.unlock_title" = "افتح جميع القصص";
+"onboarding.feature_stories" = "الوصول إلى أكثر من 100 قصة قديمة";
+"onboarding.feature_audio" = "سرد صوتي لجميع الفصول";
+"onboarding.feature_offline" = "وضع القراءة دون اتصال";
+"onboarding.feature_weekly" = "قصص جديدة تُضاف أسبوعيًا";
+"onboarding.continue" = "متابعة";
+"onboarding.get_started" = "ابدأ";
+
+// MARK: - Paywall
+"paywall.title" = "افتح العالم القديم";
+"paywall.subtitle" = "رحلة عبر الزمن. عش كل حضارة.";
+"paywall.loading_subscriptions" = "جاري تحميل خيارات الاشتراك...";
+"paywall.unable_to_load" = "تعذر تحميل الاشتراكات";
+"paywall.best_value" = "أفضل قيمة";
+"paywall.trial" = "تجربة 3 أيام";
+"paywall.restore" = "استعادة المشتريات";
+"paywall.continue" = "متابعة";
+
+// MARK: - Profile
+"profile.favorites" = "المفضلة";
+"profile.listening_history" = "سجل الاستماع";
+"profile.no_favorites" = "لا توجد مفضلة حتى الآن";
+"profile.no_history" = "لا يوجد سجل استماع حتى الآن";
+
+// MARK: - Reader
+"reader.chapter" = "الفصل %d";
+"reader.of" = "من %d";
+"reader.play" = "تشغيل";
+"reader.pause" = "إيقاف مؤقت";
+"reader.speed" = "السرعة";
+
+// MARK: - Paywall (Additional)
+"paywall.epic_stories" = "أكثر من 100 قصة ملحمية";
+"paywall.epic_stories_subtitle" = "من الفراعنة إلى الأباطرة";
+"paywall.immersive_audio" = "صوت غامر";
+"paywall.immersive_audio_subtitle" = "سرد احترافي";
+"paywall.civilizations" = "أكثر من 15 حضارة";
+"paywall.civilizations_subtitle" = "عبر الزمان والمكان";
+"paywall.premium_annual" = "Premium سنوي";
+"paywall.premium_weekly" = "Premium أسبوعي";
+"paywall.save_85" = "وفر 85% • وصول كامل";
+"paywall.trial_days" = "3 أيام مجانية، ثم أسبوعي";
+"paywall.then_price" = "ثم %@/سنة";
+"paywall.then_price_week" = "تجربة مجانية لمدة 3 أيام، ثم %@/أسبوع";
+"paywall.try_free" = "جرب مجانًا";
+"paywall.terms" = "الشروط";
+"paywall.privacy" = "الخصوصية";
+
+// MARK: - Profile (Additional)
+"profile.title" = "الملف الشخصي";
+"profile.go_premium" = "احصل على Premium";
+"profile.premium_member" = "عضو Premium";
+"profile.your_statistics" = "إحصائياتك";
+"profile.chapters_read" = "الفصول المقروءة";
+"profile.civilizations_explored" = "الحضارات المستكشفة";
+"profile.total_reading_time" = "إجمالي وقت القراءة";
+"profile.favorite_chapters" = "الفصول المفضلة";
+
+// MARK: - Tab Bar
+"tab.startseite" = "الرئيسية";
+"tab.episodes" = "الحلقات";
+"tab.erkunden" = "استكشف";
+"tab.profil" = "الملف الشخصي";

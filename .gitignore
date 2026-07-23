@@ -112,3 +112,16 @@ Ancient World Stories/Configuration.swift
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Translation cache and logs
+cache/
+logs/
+translation_cache.json
+translation_progress.json
+__pycache__/
+*.pyc
+*.log
+
+# Keep but don't track changes to these folders
+scripts/
+database/

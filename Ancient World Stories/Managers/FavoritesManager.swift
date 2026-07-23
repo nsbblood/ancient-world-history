@@ -9,8 +9,15 @@ class FavoritesManager: ObservableObject {
 
     @Published var favoriteChapterIds: Set<UUID> = []
     private let favoritesKey = "favoriteChapterIds"
+    private var hasLoaded = false
 
     private init() {
+        // Don't load in init - lazy load on first access
+    }
+
+    private func ensureLoaded() {
+        guard !hasLoaded else { return }
+        hasLoaded = true
         loadFavorites()
     }
 
@@ -28,6 +35,7 @@ class FavoritesManager: ObservableObject {
     }
 
     func toggleFavorite(chapterId: UUID) {
+        ensureLoaded()
         if favoriteChapterIds.contains(chapterId) {
             favoriteChapterIds.remove(chapterId)
         } else {
@@ -37,14 +45,17 @@ class FavoritesManager: ObservableObject {
     }
 
     func isFavorite(chapterId: UUID) -> Bool {
-        favoriteChapterIds.contains(chapterId)
+        ensureLoaded()
+        return favoriteChapterIds.contains(chapterId)
     }
 
     func getFavoriteChapters() -> [Chapter] {
-        ContentLoader.shared.chapters.filter { favoriteChapterIds.contains($0.id) }
+        ensureLoaded()
+        return ContentLoader.shared.chapters.filter { favoriteChapterIds.contains($0.id) }
     }
 
     func favoriteCount() -> Int {
-        favoriteChapterIds.count
+        ensureLoaded()
+        return favoriteChapterIds.count
     }
 }

@@ -3,16 +3,19 @@ import SwiftUI
 
 struct StoriesView: View {
     let civilization: Civilization
-    @StateObject private var content = ContentLoader.shared
+    @ObservedObject private var content = ContentLoader.shared
+    @ObservedObject private var languageManager = LanguageManager.shared
     @State private var selectedStory: Story?
-    
+
     var stories: [Story] {
+        // Only show stories that have chapters available
         content.stories(for: civilization.id)
+            .filter { content.chapterCount(for: $0.id) > 0 }
     }
-    
+
     var body: some View {
         ZStack {
-            Color.backgroundColor.ignoresSafeArea()
+            Color.appBackground.ignoresSafeArea()
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -32,12 +35,34 @@ struct StoriesView: View {
                     .padding(.horizontal)
                     .padding(.top, 8)
                     
-                    if stories.isEmpty {
-                        Text("No stories available yet.")
-                            .font(.serifBody())
-                            .foregroundColor(.secondaryText)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 40)
+                    if content.isLoading {
+                        VStack(spacing: 16) {
+                            ProgressView()
+                                .tint(.accentColor)
+                            Text("stories.loading".localized)
+                                .font(.serifBody())
+                                .foregroundColor(.secondaryText)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 60)
+                    } else if stories.isEmpty {
+                        VStack(spacing: 20) {
+                            Image(systemName: "book.closed")
+                                .font(.system(size: 60))
+                                .foregroundColor(.accentColor.opacity(0.5))
+
+                            Text("stories.coming_soon_title".localized)
+                                .font(.serifTitle3())
+                                .foregroundColor(.primaryText)
+
+                            Text("stories.coming_soon_message".localized(with: civilization.name))
+                                .font(.serifBody())
+                                .foregroundColor(.secondaryText)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 40)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 60)
                     } else {
                         ForEach(stories) { story in
                             Button {
@@ -57,5 +82,7 @@ struct StoriesView: View {
         .navigationDestination(item: $selectedStory) { story in
             ChaptersView(story: story, civilization: civilization)
         }
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(Color.appBackground, for: .navigationBar)
     }
 }
