@@ -11,6 +11,7 @@ struct ChapterReaderView: View {
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var favoritesManager = FavoritesManager.shared
     @ObservedObject private var analytics = AnalyticsManager.shared
+    @ObservedObject private var audioManager = AudioManager.shared
 
     @State private var currentChapter: Chapter
     @State private var hasMarkedAsRead = false
@@ -240,6 +241,19 @@ struct ChapterReaderView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
                         Button {
+                            audioManager.setVoice(profileManager.currentVoice)
+                            audioManager.togglePlayback(for: currentChapter.text)
+                            analytics.track(event: .featureUsed, parameters: [
+                                "feature": "tts_playback",
+                                "is_playing": audioManager.isPlaying
+                            ])
+                        } label: {
+                            Image(systemName: audioManager.isPlaying ? "pause.circle.fill" : "speaker.wave.2.fill")
+                                .foregroundColor(.accentColor)
+                                .font(.system(size: 20))
+                        }
+
+                        Button {
                             withAnimation {
                                 isCinematicMode = true
                                 analytics.track(event: .featureUsed, parameters: ["feature": "cinematic_mode"])
@@ -249,7 +263,7 @@ struct ChapterReaderView: View {
                                 .foregroundColor(.accentColor)
                                 .font(.system(size: 20))
                         }
-                        
+
                         Button {
                             if isFavorite {
                                 analytics.track(event: .chapterUnfavorited, parameters: [
@@ -285,15 +299,21 @@ struct ChapterReaderView: View {
             ])
             markAsRead()
         }
+        .onDisappear {
+            audioManager.stop()
+        }
+        }
     }
 
     private func navigateToNextChapter(_ next: Chapter) {
+        audioManager.stop()
         currentChapter = next
         hasMarkedAsRead = false
         markAsRead()
     }
 
     private func navigateToPreviousChapter(_ previous: Chapter) {
+        audioManager.stop()
         currentChapter = previous
         hasMarkedAsRead = false
         markAsRead()
@@ -310,27 +330,28 @@ struct ChapterReaderView: View {
     private func generateAndShareQuote() {
         let quoteCard = QuoteCardView(chapter: currentChapter, civilization: civilization)
         let renderer = ImageRenderer(content: quoteCard)
-        renderer.scale = UIScreen.main.scale
-        
-        if let uiImage = renderer.uiImage {
-            let activityVC = UIActivityViewController(activityItems: [uiImage], applicationActivities: nil)
-            
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let window = windowScene.windows.first,
-               let rootVC = window.rootViewController {
-                
-                // iPad support
-                if let popover = activityVC.popoverPresentationController {
-                    popover.sourceView = window
-                    popover.sourceRect = CGRect(x: window.bounds.midX, y: window.bounds.midY, width: 0, height: 0)
-                    popover.permittedArrowDirections = []
+
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            renderer.scale = windowScene.screen.scale
+
+            if let uiImage = renderer.uiImage {
+                let activityVC = UIActivityViewController(activityItems: [uiImage], applicationActivities: nil)
+
+                if let window = windowScene.windows.first,
+                   let rootVC = window.rootViewController {
+
+                    if let popover = activityVC.popoverPresentationController {
+                        popover.sourceView = window
+                        popover.sourceRect = CGRect(x: window.bounds.midX, y: window.bounds.midY, width: 0, height: 0)
+                        popover.permittedArrowDirections = []
+                    }
+
+                    rootVC.present(activityVC, animated: true)
+                    analytics.track(event: .shareQuoteTapped, parameters: [
+                        "chapter_id": currentChapter.id.uuidString,
+                        "civilization_name": civilization.name
+                    ])
                 }
-                
-                rootVC.present(activityVC, animated: true)
-                analytics.track(event: .shareQuoteTapped, parameters: [
-                    "chapter_id": currentChapter.id.uuidString,
-                    "civilization_name": civilization.name
-                ])
             }
         }
     }

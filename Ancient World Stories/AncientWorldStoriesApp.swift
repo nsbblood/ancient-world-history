@@ -12,33 +12,39 @@ import RevenueCat
 struct AncientWorldStoriesApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @StateObject private var contentLoader = ContentLoader.shared
+    @ObservedObject private var profileManager = ProfileManager.shared
     @State private var selectedTab = 0
 
     init() {
-        // Configure UI appearance first (fast, synchronous)
         configureAppearance()
 
-        // Run RevenueCat in BACKGROUND THREAD (non-blocking)
-        Task.detached {
-            if !Purchases.isConfigured {
-                Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
-                print("✅ RevenueCat configured in background")
-            }
+        // RevenueCat must be configured before paywall / premium checks
+        if !Purchases.isConfigured {
+            Purchases.configure(withAPIKey: "appl_QugKNOckInPdncYbLMcQxYPdvtm")
+            print("✅ RevenueCat configured")
         }
 
-        // ProfileManager doesn't need to wait - it's lightweight now
         print("✅ App init completed - showing UI immediately")
     }
 
     var body: some Scene {
         WindowGroup {
-            if !hasCompletedOnboarding {
-                OnboardingView()
-            } else if contentLoader.civilizations.isEmpty || contentLoader.chapters.isEmpty {
-                // Show loading screen if data isn't ready yet
-                loadingScreen
-            } else {
-                mainTabView
+            Group {
+                if !hasCompletedOnboarding {
+                    OnboardingView()
+                } else if let error = contentLoader.error,
+                          contentLoader.civilizations.isEmpty || contentLoader.chapters.isEmpty {
+                    errorScreen(message: error)
+                } else if contentLoader.civilizations.isEmpty || contentLoader.chapters.isEmpty {
+                    loadingScreen
+                } else {
+                    mainTabView
+                }
+            }
+            .task {
+                profileManager.loadInitialDataIfNeeded()
+                contentLoader.loadInitialData()
+                await profileManager.checkPremiumStatus()
             }
         }
     }
@@ -61,9 +67,37 @@ struct AncientWorldStoriesApp: App {
                     .foregroundColor(.appText.opacity(0.7))
             }
         }
-        .task {
-            // Ensure data is loaded
-            contentLoader.loadInitialData()
+    }
+
+    private func errorScreen(message: String) -> some View {
+        ZStack {
+            Color.appBackground.ignoresSafeArea()
+
+            VStack(spacing: 16) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 48))
+                    .foregroundColor(.appAccent)
+
+                Text("Unable to load stories")
+                    .font(.system(size: 20, weight: .bold, design: .serif))
+                    .foregroundColor(.appText)
+
+                Text(message)
+                    .font(.system(size: 14, design: .serif))
+                    .foregroundColor(.appText.opacity(0.7))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+
+                Button("retry".localized) {
+                    contentLoader.reload()
+                }
+                .font(.system(size: 16, weight: .semibold, design: .serif))
+                .foregroundColor(.black)
+                .padding(.horizontal, 28)
+                .padding(.vertical, 12)
+                .background(Color.appAccent)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
         }
     }
 
@@ -77,7 +111,7 @@ struct AncientWorldStoriesApp: App {
 
             CivilizationsView()
                 .tabItem {
-                    Label("Episodes", systemImage: "list.bullet")
+                    Label("tab.episodes".localized, systemImage: "list.bullet")
                 }
                 .tag(1)
 
@@ -128,4 +162,3 @@ struct AncientWorldStoriesApp: App {
 #Preview {
     OnboardingView()
 }
-

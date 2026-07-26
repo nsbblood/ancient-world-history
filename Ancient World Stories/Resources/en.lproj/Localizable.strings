@@ -27,6 +27,11 @@
 "home.explore_chapters" = "Explore Chapters";
 "home.loading_stories" = "Loading stories...";
 "home.show_different" = "Show different chapters";
+"home.collections" = "Collections";
+
+// MARK: - Reading Path
+"reading_path.title" = "Personal Reading Path";
+"reading_path.subtitle" = "Step through history, one chapter at a time.";
 
 // MARK: - Explore View
 "explore.timeline" = "Timeline";

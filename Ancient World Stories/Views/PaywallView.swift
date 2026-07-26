@@ -12,10 +12,12 @@ import RevenueCat
 struct PaywallView: View {
     @Binding var isPresented: Bool
 
-    @State private var selectedPlan: String = "$rc_annual" // Default to yearly
+    @State private var selectedPlan: String = "$rc_annual"
     @State private var isProcessing = false
     @State private var offerings: Offerings?
     @State private var errorMessage: String?
+    @State private var contentOpacity: Double = 0
+    @State private var contentOffset: CGFloat = 20
     
     // Helper to find packages from any available offering
     private var yearlyPackage: Package? {
@@ -71,49 +73,57 @@ struct PaywallView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Warm parchment background (matching app theme)
-                Color.appBackground
+                // Dark cinematic background
+                Color(hex: "0A0A0F")
                     .ignoresSafeArea()
 
-                // Subtle papyrus texture overlay
-                LinearGradient(
-                    colors: [
-                        Color.appSecondary.opacity(0.3),
-                        Color.appBackground,
-                        Color.appSecondary.opacity(0.2)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-
-                // Golden light rays overlay (subtle)
+                // Warm ambient glow
                 RadialGradient(
                     colors: [
-                        Color.appAccent.opacity(0.15),
+                        Color(hex: "D4AF37").opacity(0.08),
+                        Color(hex: "8B6914").opacity(0.03),
                         Color.clear
                     ],
                     center: .top,
-                    startRadius: 50,
-                    endRadius: 400
+                    startRadius: 20,
+                    endRadius: geometry.size.height * 0.6
+                )
+                .ignoresSafeArea()
+
+                // Bottom warm glow
+                RadialGradient(
+                    colors: [
+                        Color(hex: "A98358").opacity(0.05),
+                        Color.clear
+                    ],
+                    center: .bottom,
+                    startRadius: 10,
+                    endRadius: geometry.size.height * 0.4
                 )
                 .ignoresSafeArea()
                 .onAppear {
-                    // Try to get cached offerings immediately on appear
                     loadCachedOfferingsIfAvailable()
+                    withAnimation(.easeOut(duration: 0.5).delay(0.1)) {
+                        contentOpacity = 1.0
+                        contentOffset = 0
+                    }
                 }
-                
+
                 VStack(spacing: 0) {
-                    // Top bar: Close button only
+                    // Top bar: Close button
                     HStack {
-                        Button(action: { isPresented = false }) {
+                        Button(action: {
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                isPresented = false
+                            }
+                        }) {
                             Image(systemName: "xmark")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.appText.opacity(0.7))
+                                .foregroundColor(.white.opacity(0.5))
                                 .padding(10)
                                 .background(
                                     Circle()
-                                        .fill(Color.appText.opacity(0.08))
+                                        .fill(Color.white.opacity(0.08))
                                 )
                         }
 
@@ -124,16 +134,15 @@ struct PaywallView: View {
 
                     Spacer(minLength: 0)
 
-                    // Header with crown icon and radial glow (more compact)
+                    // Header with crown icon and radial glow
                     VStack(spacing: 8) {
                         ZStack {
-                            // Warm glow
                             Circle()
                                 .fill(
                                     RadialGradient(
                                         colors: [
-                                            Color.appAccent.opacity(0.3),
-                                            Color.appAccent.opacity(0.1),
+                                            Color(hex: "D4AF37").opacity(0.2),
+                                            Color(hex: "D4AF37").opacity(0.05),
                                             Color.clear
                                         ],
                                         center: .center,
@@ -143,44 +152,46 @@ struct PaywallView: View {
                                 )
                                 .frame(width: 100, height: 100)
 
-                            // Bronze/gold crown
                             Image(systemName: "crown.fill")
                                 .font(.system(size: 44))
                                 .foregroundStyle(
                                     LinearGradient(
                                         colors: [
-                                            Color(hex: "D4AF37"), // Deep gold
-                                            Color.appAccent,
-                                            Color(hex: "8B6914")  // Dark gold
+                                            Color(hex: "F2D06B"),
+                                            Color(hex: "D4AF37"),
+                                            Color(hex: "B8860B")
                                         ],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
                                 )
-                                .shadow(color: Color.appAccent.opacity(0.4), radius: 10, x: 0, y: 4)
+                                .shadow(color: Color(hex: "D4AF37").opacity(0.5), radius: 15)
                         }
 
                         Text("paywall.title".localized)
                             .font(.system(size: 26, weight: .bold, design: .serif))
-                            .foregroundColor(.appText)
+                            .foregroundColor(.white)
                             .multilineTextAlignment(.center)
 
                         Text("paywall.subtitle".localized)
                             .font(.system(size: 13, weight: .medium, design: .serif))
-                            .foregroundColor(.secondaryText)
+                            .foregroundColor(.white.opacity(0.5))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 30)
                     }
+                    .opacity(contentOpacity)
+                    .offset(y: contentOffset)
 
                     Spacer(minLength: 0)
 
-                    // Features (more compact, only 3 features)
+                    // Features
                     VStack(spacing: 10) {
                         VibrantFeature(icon: "scroll.fill", title: "paywall.epic_stories".localized, description: "paywall.epic_stories_subtitle".localized)
                         VibrantFeature(icon: "waveform", title: "paywall.immersive_audio".localized, description: "paywall.immersive_audio_subtitle".localized)
                         VibrantFeature(icon: "globe.americas.fill", title: "paywall.civilizations".localized, description: "paywall.civilizations_subtitle".localized)
                     }
                     .padding(.horizontal, 24)
+                    .opacity(contentOpacity)
 
                     Spacer(minLength: 0)
 
@@ -215,15 +226,15 @@ struct PaywallView: View {
                                 // Error state
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .font(.system(size: 40))
-                                    .foregroundColor(.red.opacity(0.8))
+                                    .foregroundColor(.orange.opacity(0.8))
 
                                 Text("paywall.unable_to_load".localized)
                                     .font(.system(size: 16, weight: .semibold, design: .serif))
-                                    .foregroundColor(.appText)
+                                    .foregroundColor(.white)
 
                                 Text(error)
                                     .font(.system(size: 12, design: .serif))
-                                    .foregroundColor(.secondaryText)
+                                    .foregroundColor(.white.opacity(0.5))
                                     .multilineTextAlignment(.center)
                                     .padding(.horizontal)
 
@@ -233,10 +244,10 @@ struct PaywallView: View {
                                 } label: {
                                     Text("retry".localized)
                                         .font(.system(size: 14, weight: .semibold, design: .serif))
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.black)
                                         .padding(.horizontal, 24)
                                         .padding(.vertical, 10)
-                                        .background(Color.appAccent)
+                                        .background(Color(hex: "D4AF37"))
                                         .cornerRadius(8)
                                 }
                             } else {
@@ -246,7 +257,7 @@ struct PaywallView: View {
 
                                 Text("paywall.loading_subscriptions".localized)
                                     .font(.system(size: 14, design: .serif))
-                                    .foregroundColor(.secondaryText)
+                                    .foregroundColor(.white.opacity(0.5))
                             }
                         }
                         .frame(height: 150)
@@ -255,12 +266,12 @@ struct PaywallView: View {
 
                     Spacer(minLength: 0)
 
-                    // Subscribe Button (more compact)
+                    // Subscribe Button
                     Button(action: subscribe) {
                         HStack(spacing: 8) {
                             if isProcessing {
                                 ProgressView()
-                                    .tint(.white)
+                                    .tint(.black)
                             } else {
                                 Image(systemName: "crown.fill")
                                     .font(.system(size: 16, weight: .bold))
@@ -268,31 +279,32 @@ struct PaywallView: View {
                                     .font(.system(size: 18, weight: .bold, design: .serif))
                             }
                         }
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 15)
+                        .padding(.vertical, 16)
                         .background(
                             LinearGradient(
                                 colors: [
-                                    Color(hex: "D4AF37"), // Deep gold
-                                    Color.appAccent,
-                                    Color(hex: "8B6914")  // Dark gold
+                                    Color(hex: "F2D06B"),
+                                    Color(hex: "D4AF37"),
+                                    Color(hex: "C49A2B")
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .cornerRadius(14)
-                        .shadow(color: Color.appAccent.opacity(0.4), radius: 12, x: 0, y: 4)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .shadow(color: Color(hex: "D4AF37").opacity(0.35), radius: 16, x: 0, y: 6)
                         .opacity((yearlyPackage != nil || weeklyPackage != nil) ? 1.0 : 0.5)
                     }
                     .disabled(isProcessing || (yearlyPackage == nil && weeklyPackage == nil))
                     .padding(.horizontal, 20)
+                    .opacity(contentOpacity)
 
                     // Trial info
                     Text(trialInfo)
                         .font(.system(size: 11, weight: .medium, design: .serif))
-                        .foregroundColor(.secondaryText)
+                        .foregroundColor(.white.opacity(0.4))
                         .padding(.top, 6)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 20)
@@ -305,7 +317,7 @@ struct PaywallView: View {
                             }
                         }
                         .font(.system(size: 10, weight: .medium, design: .serif))
-                        .foregroundColor(.secondaryText)
+                        .foregroundColor(.white.opacity(0.3))
 
                         Button("paywall.privacy".localized) {
                             if let url = URL(string: "https://dainty.app/privacy") {
@@ -313,13 +325,13 @@ struct PaywallView: View {
                             }
                         }
                         .font(.system(size: 10, weight: .medium, design: .serif))
-                        .foregroundColor(.secondaryText)
+                        .foregroundColor(.white.opacity(0.3))
 
                         Button("paywall.restore".localized) {
                             restorePurchases()
                         }
                         .font(.system(size: 10, weight: .medium, design: .serif))
-                        .foregroundColor(.secondaryText)
+                        .foregroundColor(.white.opacity(0.3))
                     }
                     .padding(.top, 4)
                     .padding(.bottom, 16)
@@ -330,132 +342,80 @@ struct PaywallView: View {
 
     // MARK: - RevenueCat Methods
 
+    private static let yearlyPackageId = "$rc_annual"
+    private static let weeklyPackageId = "$rc_weekly"
+
     // Try to load cached offerings immediately for instant display
     private func loadCachedOfferingsIfAvailable() {
-        // Check if RevenueCat is configured
-        guard Purchases.isConfigured else {
-            print("❌ RevenueCat is not configured!")
-            errorMessage = "RevenueCat is not initialized. Please restart the app."
-            return
-        }
-
-        // Try to fetch offerings - RevenueCat will use cache if available
         Task {
-            do {
-                let offerings = try await Purchases.shared.offerings()
-
+            guard await waitForRevenueCatConfiguration() else {
                 await MainActor.run {
-                    self.offerings = offerings
-                    print("✅ Offerings loaded (from cache or network)")
-
-                    if let current = offerings.current {
-                        print("   Current offering: \(current.identifier)")
-                        print("   Available packages: \(current.availablePackages.map { $0.identifier })")
-
-                        let foundYearlyPackage = current.package(identifier: "$rc_annual")
-                        let foundWeeklyPackage = current.package(identifier: "$rc_weekly")
-
-                        if foundYearlyPackage == nil && foundWeeklyPackage == nil {
-                            self.errorMessage = "No subscription packages found. Please check RevenueCat Dashboard."
-                        }
-                    } else if offerings.all.values.first == nil {
-                        self.errorMessage = "No subscription offerings configured in RevenueCat Dashboard."
-                    }
+                    errorMessage = "Subscriptions are still initializing. Please try again in a moment."
                 }
-            } catch {
-                await MainActor.run {
-                    self.errorMessage = "Failed to load subscriptions: \(error.localizedDescription)"
-                    print("❌ RevenueCat error: \(error)")
-                }
+                return
             }
+            await loadOfferings()
         }
     }
 
     private func fetchOfferings() {
         print("🔄 Fetching RevenueCat offerings...")
-        
-        // Check if RevenueCat is configured
-        guard Purchases.isConfigured else {
-            print("❌ RevenueCat is not configured!")
-            errorMessage = "RevenueCat is not initialized. Please restart the app."
-            return
-        }
-        
-        print("✅ RevenueCat is configured")
-        
         Task {
-            do {
-                let offerings = try await Purchases.shared.offerings()
-                
+            guard await waitForRevenueCatConfiguration() else {
                 await MainActor.run {
-                    print("📦 Offerings received:")
-                    print("   - All offerings: \(offerings.all.keys.joined(separator: ", "))")
-                    
-                    self.offerings = offerings
-                    
-                    if let current = offerings.current {
-                        print("✅ Current offering: \(current.identifier)")
-                        print("   Available packages: \(current.availablePackages.map { $0.identifier })")
-                        print("   Package count: \(current.availablePackages.count)")
-                        
-                        // Check for specific packages
-                        let foundYearlyPackage = current.package(identifier: "$rc_annual")
-                        let foundWeeklyPackage = current.package(identifier: "$rc_weekly")
-                        
-                        if foundYearlyPackage == nil {
-                            print("⚠️ Yearly package (ancient.year) not found!")
-                        } else {
-                            print("✅ Yearly package found: \(foundYearlyPackage!.storeProduct.localizedTitle) - \(foundYearlyPackage!.storeProduct.localizedPriceString)")
-                        }
-                        
-                        if foundWeeklyPackage == nil {
-                            print("⚠️ Weekly package (ancient.week) not found!")
-                        } else {
-                            print("✅ Weekly package found: \(foundWeeklyPackage!.storeProduct.localizedTitle) - \(foundWeeklyPackage!.storeProduct.localizedPriceString)")
-                        }
-                        
-                        // If no packages found, show helpful error
-                        if foundYearlyPackage == nil && foundWeeklyPackage == nil {
-                            self.errorMessage = "No subscription packages found. Please check RevenueCat Dashboard:\n1. Ensure offerings are created\n2. Ensure packages 'ancient.year' and 'ancient.week' are added to the offering\n3. Ensure products are synced from App Store Connect"
-                        }
-                    } else {
-                        print("⚠️ No current offering found")
-                        print("   Available offerings: \(offerings.all.keys.joined(separator: ", "))")
-                        
-                        // Try to use the first available offering if any exist
-                        if let firstOffering = offerings.all.values.first {
-                            print("🔄 Found alternative offering: \(firstOffering.identifier)")
-                            print("   Packages: \(firstOffering.availablePackages.map { $0.identifier })")
-                            
-                            // Check if this offering has our packages
-                            let foundYearlyPackage = firstOffering.package(identifier: "$rc_annual")
-                            let foundWeeklyPackage = firstOffering.package(identifier: "$rc_weekly")
-                            
-                            if foundYearlyPackage != nil || foundWeeklyPackage != nil {
-                                // We found packages in an alternative offering, use them
-                                print("✅ Found packages in alternative offering: \(firstOffering.identifier)")
-                                // Clear error message since we can use these packages
-                                self.errorMessage = nil
-                            } else {
-                                self.errorMessage = "No subscription offerings configured in RevenueCat Dashboard.\n\nPlease:\n1. Go to RevenueCat Dashboard\n2. Create an offering (identifier: 'default')\n3. Add packages 'ancient.year' and 'ancient.week'\n4. Ensure products are synced from App Store Connect"
-                            }
-                        } else {
-                            self.errorMessage = "No subscription offerings configured in RevenueCat Dashboard.\n\nPlease:\n1. Go to RevenueCat Dashboard\n2. Create an offering (identifier: 'default')\n3. Add packages 'ancient.year' and 'ancient.week'\n4. Ensure products are synced from App Store Connect"
-                        }
-                    }
+                    errorMessage = "Subscriptions are still initializing. Please try again in a moment."
                 }
-            } catch {
-                await MainActor.run {
-                    let errorDescription = error.localizedDescription
-                    self.errorMessage = "Failed to load subscriptions: \(errorDescription)\n\nPlease check:\n1. Internet connection\n2. RevenueCat Dashboard configuration\n3. App Store Connect products"
-                    print("❌ RevenueCat error: \(error)")
-                    print("   Error type: \(type(of: error))")
-                    print("   Error details: \(error)")
-                    
-                    if let rcError = error as? ErrorCode {
-                        print("   RevenueCat error code: \(rcError)")
+                return
+            }
+            await loadOfferings()
+        }
+    }
+
+    /// RevenueCat may finish configuring slightly after first paint — wait briefly instead of failing hard.
+    private func waitForRevenueCatConfiguration(attempts: Int = 15) async -> Bool {
+        for _ in 0..<attempts {
+            if Purchases.isConfigured { return true }
+            try? await Task.sleep(nanoseconds: 200_000_000)
+        }
+        return Purchases.isConfigured
+    }
+
+    private func loadOfferings() async {
+        do {
+            let offerings = try await Purchases.shared.offerings()
+
+            await MainActor.run {
+                self.offerings = offerings
+                self.errorMessage = nil
+
+                if let current = offerings.current {
+                    let yearly = current.package(identifier: Self.yearlyPackageId)
+                    let weekly = current.package(identifier: Self.weeklyPackageId)
+
+                    if let yearly {
+                        print("✅ Yearly package: \(yearly.storeProduct.localizedPriceString)")
                     }
+                    if let weekly {
+                        print("✅ Weekly package: \(weekly.storeProduct.localizedPriceString)")
+                    }
+
+                    if yearly == nil && weekly == nil {
+                        self.errorMessage = "No subscription packages found. Expected '\(Self.yearlyPackageId)' and/or '\(Self.weeklyPackageId)' in RevenueCat."
+                    }
+                } else if let firstOffering = offerings.all.values.first {
+                    let yearly = firstOffering.package(identifier: Self.yearlyPackageId)
+                    let weekly = firstOffering.package(identifier: Self.weeklyPackageId)
+                    if yearly == nil && weekly == nil {
+                        self.errorMessage = "No subscription packages found in offering '\(firstOffering.identifier)'."
+                    }
+                } else {
+                    self.errorMessage = "No subscription offerings configured in RevenueCat."
                 }
+            }
+        } catch {
+            await MainActor.run {
+                self.errorMessage = "Failed to load subscriptions: \(error.localizedDescription)"
+                print("❌ RevenueCat error: \(error)")
             }
         }
     }
@@ -544,31 +504,22 @@ struct VibrantFeature: View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.appAccent.opacity(0.25),
-                                Color.appAccent.opacity(0.15)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(Color(hex: "D4AF37").opacity(0.12))
                     .frame(width: 36, height: 36)
 
                 Image(systemName: icon)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.appAccent)
+                    .foregroundColor(Color(hex: "D4AF37"))
             }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.system(size: 14, weight: .bold, design: .serif))
-                    .foregroundColor(.appText)
+                    .foregroundColor(.white.opacity(0.9))
 
                 Text(description)
                     .font(.system(size: 11, design: .serif))
-                    .foregroundColor(.secondaryText)
+                    .foregroundColor(.white.opacity(0.45))
             }
 
             Spacer()
@@ -594,12 +545,12 @@ struct SubscriptionCard: View {
                     HStack {
                         Text(package.storeProduct.localizedTitle)
                             .font(.system(size: 15, weight: .bold, design: .serif))
-                            .foregroundColor(.appText)
+                            .foregroundColor(.white)
 
                         if showBadge {
                             Text("paywall.best_value".localized)
                                 .font(.system(size: 9, weight: .black, design: .serif))
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 3)
                                 .background(
@@ -607,8 +558,8 @@ struct SubscriptionCard: View {
                                         .fill(
                                             LinearGradient(
                                                 colors: [
-                                                    Color(hex: "D4AF37"),
-                                                    Color.appAccent
+                                                    Color(hex: "F2D06B"),
+                                                    Color(hex: "D4AF37")
                                                 ],
                                                 startPoint: .leading,
                                                 endPoint: .trailing
@@ -636,20 +587,20 @@ struct SubscriptionCard: View {
 
                     Text(package.storeProduct.subscriptionPeriod?.unit == .year ? "paywall.save_85".localized : "paywall.trial_days".localized)
                         .font(.system(size: 11, design: .serif))
-                        .foregroundColor(.secondaryText)
+                        .foregroundColor(.white.opacity(0.45))
                 }
 
                 Spacer()
 
                 Text(package.storeProduct.localizedPriceString)
                     .font(.system(size: 22, weight: .bold, design: .serif))
-                    .foregroundColor(.appAccent)
+                    .foregroundColor(Color(hex: "D4AF37"))
             }
             .padding(14)
             .background(
                 RoundedRectangle(cornerRadius: 14)
                     .fill(
-                        isSelected ? Color.white : Color.white.opacity(0.6)
+                        isSelected ? Color.white.opacity(0.08) : Color.white.opacity(0.03)
                     )
             )
             .overlay(
@@ -658,21 +609,21 @@ struct SubscriptionCard: View {
                         isSelected ?
                         LinearGradient(
                             colors: [
-                                Color(hex: "D4AF37"),
-                                Color.appAccent
+                                Color(hex: "D4AF37").opacity(0.8),
+                                Color(hex: "A98358").opacity(0.4)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ) :
                         LinearGradient(
-                            colors: [Color.appText.opacity(0.2), Color.appText.opacity(0.1)],
+                            colors: [Color.white.opacity(0.1), Color.white.opacity(0.05)],
                             startPoint: .top,
                             endPoint: .bottom
                         ),
-                        lineWidth: isSelected ? 2 : 1
+                        lineWidth: isSelected ? 1.5 : 0.5
                     )
             )
-            .shadow(color: isSelected ? Color.appAccent.opacity(0.3) : Color.appText.opacity(0.1), radius: isSelected ? 10 : 4, x: 0, y: 3)
+            .shadow(color: isSelected ? Color(hex: "D4AF37").opacity(0.2) : Color.clear, radius: 12, x: 0, y: 4)
         }
     }
 }

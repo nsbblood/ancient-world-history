@@ -1,10 +1,292 @@
 {
-  "version": "1.0",
-  "exported_at": "2026-07-23T00:00:00.000Z",
-  "total_civilizations": 0,
-  "total_stories": 0,
-  "total_chapters": 0,
-  "civilizations": [],
-  "stories": [],
-  "chapters": []
+  "version": "1.0.0",
+  "exported_at": "2026-07-24T00:00:00Z",
+  "total_civilizations": 8,
+  "total_stories": 9,
+  "total_chapters": 15,
+  "civilizations": [
+    {
+      "id": "587e8d34-5233-48db-bd83-297ae236da7d",
+      "name": "Ancient Egypt",
+      "era_start": "3100 BC",
+      "era_end": "30 BC",
+      "region": "North Africa",
+      "description": "Land of the pharaohs, pyramids, and hieroglyphs. A civilization that mastered architecture, medicine, and the mysteries of the afterlife along the banks of the Nile.",
+      "language_code": "en"
+    },
+    {
+      "id": "6a84b773-d44d-4742-adcf-0f74d6c67de1",
+      "name": "Ancient Greece",
+      "era_start": "800 BC",
+      "era_end": "146 BC",
+      "region": "Mediterranean",
+      "description": "Birthplace of democracy, philosophy, and the Olympic games. Home to legendary thinkers like Socrates, Plato, and Aristotle.",
+      "language_code": "en"
+    },
+    {
+      "id": "6eaa3343-f394-4767-99a5-7c050626be50",
+      "name": "Roman Empire",
+      "era_start": "27 BC",
+      "era_end": "476 AD",
+      "region": "Mediterranean & Europe",
+      "description": "The eternal empire that shaped Western civilization through law, engineering, military might, and an unrivaled network of roads.",
+      "language_code": "en"
+    },
+    {
+      "id": "64d5961d-1136-44e0-b0d4-d9f98f3aaf36",
+      "name": "Sumer",
+      "era_start": "4500 BC",
+      "era_end": "1900 BC",
+      "region": "Middle East",
+      "description": "The cradle of civilization in Mesopotamia. Inventors of writing, the wheel, and the first code of laws. Builders of ziggurats that touched the heavens.",
+      "language_code": "en"
+    },
+    {
+      "id": "bb3c1962-362f-4612-99ea-979dc4b130a5",
+      "name": "Ancient China",
+      "era_start": "2070 BC",
+      "era_end": "220 AD",
+      "region": "East Asia",
+      "description": "Dynasty of dynasties. Inventors of paper, gunpowder, silk, and the compass. Builders of the Great Wall and masters of philosophy.",
+      "language_code": "en"
+    },
+    {
+      "id": "d080bf15-bef9-491c-ab51-243cf5f52bff",
+      "name": "Maya Civilization",
+      "era_start": "2000 BC",
+      "era_end": "1500 AD",
+      "region": "Americas",
+      "description": "Masters of astronomy, mathematics, and architecture. Builders of magnificent pyramids in the jungles of Central America.",
+      "language_code": "en"
+    },
+    {
+      "id": "c4abbfd3-6755-41bb-a46b-7f8ccc65c31c",
+      "name": "Persian Empire",
+      "era_start": "550 BC",
+      "era_end": "330 BC",
+      "region": "Middle East",
+      "description": "The Achaemenid Empire, the largest empire the ancient world had ever seen. A civilization of tolerance, innovation, and the Royal Road.",
+      "language_code": "en"
+    },
+    {
+      "id": "b32a5665-2d29-4321-9cc6-1f00953bd33b",
+      "name": "Vikings",
+      "era_start": "793 AD",
+      "era_end": "1066 AD",
+      "region": "Northern Europe",
+      "description": "Fearless seafarers and explorers from Scandinavia. Warriors, traders, and storytellers who reached the shores of North America.",
+      "language_code": "en"
+    }
+  ],
+  "stories": [
+    {
+      "id": "c4343034-b382-4db6-9acd-ad35e810c22b",
+      "civilization_id": "587e8d34-5233-48db-bd83-297ae236da7d",
+      "title": "The Pharaoh's Last Secret",
+      "summary": "Deep beneath the sands of Giza, an ancient secret threatens to rewrite everything we know about the first dynasty of Egypt.",
+      "chapters_count": 3,
+      "language_code": "en"
+    },
+    {
+      "id": "9e2d524b-12e7-419a-b9ac-d8095b510f9b",
+      "civilization_id": "587e8d34-5233-48db-bd83-297ae236da7d",
+      "title": "Cleopatra's Shadow",
+      "summary": "The untold story of Arsinoe, Cleopatra's forgotten sister, and her desperate struggle for survival in the deadliest court in the ancient world.",
+      "chapters_count": 2,
+      "language_code": "en"
+    },
+    {
+      "id": "104786c3-0786-4679-b66c-0e11d58d238f",
+      "civilization_id": "6a84b773-d44d-4742-adcf-0f74d6c67de1",
+      "title": "The Last Spartan",
+      "summary": "At the Battle of Thermopylae, three hundred Spartans stood against an empire. This is the story of the one who was ordered to survive.",
+      "chapters_count": 3,
+      "language_code": "en"
+    },
+    {
+      "id": "8e86d5de-f703-4f66-b922-de0eccb95e8d",
+      "civilization_id": "6eaa3343-f394-4767-99a5-7c050626be50",
+      "title": "The Eagle's Shadow",
+      "summary": "A young centurion discovers a conspiracy that threatens to tear the Roman Empire apart from within.",
+      "chapters_count": 2,
+      "language_code": "en"
+    },
+    {
+      "id": "6b328195-ce0f-4eb1-8fce-8a688d8383fb",
+      "civilization_id": "64d5961d-1136-44e0-b0d4-d9f98f3aaf36",
+      "title": "The First Scribe",
+      "summary": "In the world's first city, a young scribe discovers that the power of the written word can challenge even the gods.",
+      "chapters_count": 1,
+      "language_code": "en"
+    },
+    {
+      "id": "70a2b69a-acf6-446e-8c6d-a306335a1b65",
+      "civilization_id": "bb3c1962-362f-4612-99ea-979dc4b130a5",
+      "title": "The Jade Emperor's Mandate",
+      "summary": "When the last Shang king falls to madness, a young advisor must choose between loyalty and the future of civilization.",
+      "chapters_count": 1,
+      "language_code": "en"
+    },
+    {
+      "id": "4b843d49-e61d-470d-b8d6-cfd0fbb2c74b",
+      "civilization_id": "d080bf15-bef9-491c-ab51-243cf5f52bff",
+      "title": "The Star Watchers",
+      "summary": "In the jungle city of Tikal, a young astronomer-priestess discovers a celestial event that will change the fate of her people.",
+      "chapters_count": 1,
+      "language_code": "en"
+    },
+    {
+      "id": "026c40d6-2b0c-48f7-949c-5f4e9f9fac5f",
+      "civilization_id": "c4abbfd3-6755-41bb-a46b-7f8ccc65c31c",
+      "title": "The Royal Road",
+      "summary": "A young messenger of the Achaemenid Empire carries a message that could prevent or ignite the greatest war the ancient world has ever seen.",
+      "chapters_count": 1,
+      "language_code": "en"
+    },
+    {
+      "id": "bdbe0acc-7c25-4788-8a55-502785f6ee4d",
+      "civilization_id": "b32a5665-2d29-4321-9cc6-1f00953bd33b",
+      "title": "Ragnar's Voyage",
+      "summary": "The legendary saga of a Viking chieftain's journey to the edge of the known world, where gods and mortals walk the same shores.",
+      "chapters_count": 1,
+      "language_code": "en"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "c6fe13b7-896c-4b6d-ae3c-e0a298e3247d",
+      "story_id": "c4343034-b382-4db6-9acd-ad35e810c22b",
+      "title": "The Discovery",
+      "order_no": 1,
+      "text": "Professor Amara Khalil brushed away centuries of sand from the limestone surface, her heart racing as golden hieroglyphs emerged from the darkness. The tomb they had uncovered was not in any record — not in Manetho's chronicles, not in the Turin King List, nowhere. Yet here it was, sealed since the dawn of Egyptian civilization.\n\nHer assistant, Youssef, held the lamp closer. 'These symbols... they're older than anything we've seen at Saqqara,' he whispered. The cartouche at the center depicted a name that sent shivers down Amara's spine — a pharaoh who ruled before Narmer, before the unification of Upper and Lower Egypt.\n\n'If this is authentic,' Amara murmured, tracing the delicate carvings with gloved fingers, 'we're looking at the foundation myth of Egypt itself.' The air was thick with dust and possibility. Somewhere in the distance, the evening call to prayer echoed across the desert, a reminder that in Egypt, the ancient and modern are never far apart.\n\nAs they prepared to enter the burial chamber, the ground beneath their feet trembled — not from an earthquake, but from something far more unsettling. The walls began to glow with a faint phosphorescence, and the hieroglyphs seemed to shift and dance in the lamplight.",
+      "duration": 360,
+      "language_code": "en"
+    },
+    {
+      "id": "59937b5a-ad05-4542-8248-b7b240f4f78b",
+      "story_id": "c4343034-b382-4db6-9acd-ad35e810c22b",
+      "title": "The Hidden Chamber",
+      "order_no": 2,
+      "text": "The burial chamber opened into a space far larger than any tomb Amara had excavated in twenty years of fieldwork. The ceiling soared upward, painted with a celestial map so precise that modern astronomers would marvel at its accuracy. Stars, constellations, and celestial bodies were rendered in lapis lazuli and gold leaf that still shimmered after millennia.\n\nAt the center of the chamber stood not a sarcophagus, but a throne — carved from a single block of obsidian, inlaid with electrum and precious stones. The figure seated upon it was not a mummy wrapped in linen, but a statue so lifelike that for one terrifying moment, Amara thought it was alive.\n\n'This changes everything,' she breathed. The statue's eyes were made of rock crystal, catching the lamplight and seeming to follow their movements. In its hands, it held a scroll — not papyrus, but beaten gold, thin as paper, covered in hieratic script.\n\nYoussef began photographing the chamber methodically, his scientific training keeping his hands steady even as his mind reeled. 'The preservation is impossible,' he muttered. 'No oxidation, no decay, no microbial activity. It's as if time itself stopped at the threshold.'",
+      "duration": 420,
+      "language_code": "en"
+    },
+    {
+      "id": "16015299-7e10-4389-8f9c-d5e665dd3ad7",
+      "story_id": "c4343034-b382-4db6-9acd-ad35e810c22b",
+      "title": "The Golden Scroll",
+      "order_no": 3,
+      "text": "Amara spent three sleepless nights translating the golden scroll. The text was written in an archaic form of Egyptian that predated the Pyramid Texts by centuries, yet its grammar was sophisticated — almost poetic. It told of a king called Aha-Menes, 'He Who Endures,' who united the two lands not through conquest, but through a covenant with the gods themselves.\n\nAccording to the scroll, Aha-Menes had received divine knowledge — the secrets of irrigation, architecture, medicine, and writing — in exchange for a sacred promise: that Egypt would forever be a bridge between the mortal world and the realm of the gods. The pyramids, the temples, the elaborate burial rituals — all were part of this ancient pact.\n\n'It reads like mythology,' Amara told her colleagues during a late-night video conference, 'but the archaeological evidence is real. The materials in this tomb shouldn't exist. The engineering techniques are centuries ahead of their supposed time.'\n\nOutside her tent, the desert wind howled, carrying sand that had once been the dust of pharaohs. In the distance, the Great Pyramid stood sentinel against the stars, keeping its own counsel as it had for four thousand years.",
+      "duration": 480,
+      "language_code": "en"
+    },
+    {
+      "id": "ff19e5d8-9880-418a-84a5-676ecfbbf0a6",
+      "story_id": "9e2d524b-12e7-419a-b9ac-d8095b510f9b",
+      "title": "The Forgotten Princess",
+      "order_no": 1,
+      "text": "In the gilded halls of the Ptolemaic palace in Alexandria, Arsinoe IV watched her older sister Cleopatra charm yet another Roman ambassador. At fourteen, Arsinoe already understood the deadly game of Egyptian court politics — a game where losing meant death, not exile.\n\nThe year was 48 BC, and Egypt stood at the crossroads of history. Their father, Ptolemy XII, had died leaving a kingdom torn between his children. Cleopatra, the eldest daughter, had allied herself with Julius Caesar, the most powerful man in Rome. But Arsinoe had allies of her own.\n\n'Your sister underestimates you,' whispered Ganymedes, her tutor and advisor, as they walked through the palace gardens. The scent of lotus flowers hung heavy in the humid air, mingling with the salt breeze from the Mediterranean. 'She sees a child. I see a queen.'\n\nArsinoe pressed her lips together, watching a ibis wade through the ornamental pool. She was descended from Ptolemy, the general who had inherited Egypt from Alexander the Great. Macedonian blood and Egyptian ambition ran equally strong in her veins. 'A queen,' she repeated softly, tasting the word like honey. 'But first, I must survive.'",
+      "duration": 390,
+      "language_code": "en"
+    },
+    {
+      "id": "86968c1d-d0fe-4ea0-9a46-4e645405f19c",
+      "story_id": "9e2d524b-12e7-419a-b9ac-d8095b510f9b",
+      "title": "The Siege of Alexandria",
+      "order_no": 2,
+      "text": "The flames of Alexandria lit the night sky as Roman and Egyptian forces clashed in the streets of the greatest city in the world. The famous Library, home to the accumulated knowledge of centuries, burned at its edges as fire arrows arced overhead.\n\nArsinoe had escaped the palace through ancient tunnels that ran beneath the city — passages built by the first Ptolemies, known only to the royal family and their most trusted servants. She emerged in the Egyptian quarter, where loyal soldiers waited.\n\n'The people are with you, Princess,' General Achillas reported, kneeling before her in the lamplight of a merchant's warehouse. 'They see Cleopatra as Rome's puppet. You are Egypt's hope.'\n\nArsinoe drew herself up to her full height. She was young, yes, but she had studied the campaigns of Alexander, the strategies of Hannibal, the naval tactics that had made Egypt master of the eastern Mediterranean. 'Then we shall give them a queen worthy of Egypt,' she declared.\n\nThe siege that followed would last months. Arsinoe commanded troops with a tactical brilliance that surprised even her enemies. Caesar himself would later write of her with grudging respect — the teenage princess who held the might of Rome at bay.",
+      "duration": 450,
+      "language_code": "en"
+    },
+    {
+      "id": "e3ddce09-53be-4845-b501-bc2c1ebe9512",
+      "story_id": "104786c3-0786-4679-b66c-0e11d58d238f",
+      "title": "The Weight of the Shield",
+      "order_no": 1,
+      "text": "Aristodemos woke before dawn, as every Spartan was trained to do since the age of seven. The camp at Thermopylae was quiet except for the distant sound of waves crashing against the narrow coastal pass. Today would be the third day — the day the oracles had whispered about, the day that would either save Greece or doom it.\n\nHis shield, the aspis, leaned against the rock beside him. It bore the lambda of Lacedaemon, scratched and dented from two days of combat against the Persian horde. His mother's words echoed in his mind: 'Come back with your shield, or on it.'\n\nKing Leonidas found him sharpening his xiphos in the grey light. The king's face was calm — terrifyingly so, as if he had already accepted what was to come. 'Aristodemos,' he said quietly, 'your eyes are inflamed. The disease is spreading.'\n\nIt was true. The eye infection that had begun as a minor irritation three days ago now left Aristodemos nearly blind in one eye, the other swimming with tears. 'I can still fight, my king,' he replied, gripping his sword.\n\nLeonidas placed a hand on his shoulder. 'I know you can. But I need you to do something harder than fighting. I need you to live.'",
+      "duration": 420,
+      "language_code": "en"
+    },
+    {
+      "id": "e420f7ca-bac0-47f1-b04e-519048b0da39",
+      "story_id": "104786c3-0786-4679-b66c-0e11d58d238f",
+      "title": "The Road Home",
+      "order_no": 2,
+      "text": "The road back to Sparta was the longest journey of Aristodemos's life. Behind him, the sounds of battle had faded into a silence more terrible than any war cry. Three hundred of his brothers — his king — were dying to buy Greece precious days.\n\nAnd he was walking away.\n\nThe other dismissed soldier, Eurytus, had refused the order. Blind as he was, he had commanded his helot to lead him back to the pass, where he fought and died with his comrades. Now Aristodemos bore a shame worse than death — the shame of survival.\n\nHe reached Sparta in four days, walking without rest, without food, speaking to no one. When he passed through the gates of the city, no one came to greet him. Women turned their faces away. Children, who normally would have asked returning warriors for stories of battle, fell silent and retreated behind their mothers.\n\nHis own mother stood at the door of their home. She looked at him — at the shield he still carried — and said nothing. She simply stepped aside, neither welcoming nor rejecting. That silence was worse than any words she could have spoken.\n\nIn the agora, they gave him a name: Aristodemos the Trembler. The coward of Thermopylae.",
+      "duration": 480,
+      "language_code": "en"
+    },
+    {
+      "id": "1852cb1e-b655-44ab-9b03-20e7e74b032f",
+      "story_id": "104786c3-0786-4679-b66c-0e11d58d238f",
+      "title": "Redemption at Plataea",
+      "order_no": 3,
+      "text": "For a year, Aristodemos lived as a ghost in Sparta. No citizen would share fire with him or speak to him. He was atimos — without honor, without standing, without a place in the only society he had ever known.\n\nBut the war was not over. Xerxes had burned Athens, but the Greek fleet had destroyed the Persian navy at Salamis. Now, in 479 BC, the Persian general Mardonius had returned with a massive land army. Greece needed every warrior it could muster.\n\nAt Plataea, the Spartan army drew up in formation — five thousand citizen-soldiers, the finest warriors the world had ever produced. Aristodemos stood among them, but apart. No one would stand beside the Trembler.\n\nWhen the Persian cavalry charged, Aristodemos broke ranks. Not in retreat — in attack. He hurled himself at the enemy with a fury born of thirteen months of shame, fighting with a reckless abandon that Spartans called 'the beautiful death.' He cut through the Persian line like a blade through silk, his xiphos finding gaps in armor with terrible precision.\n\nHe died that day, as he had wished to die at Thermopylae. But even in death, Sparta's judgment was harsh. The ephors declared he had fought not with courage, but with the desperation of a man seeking to erase his shame. His valor was acknowledged, but his honor was not fully restored.\n\nHistory, however, would remember what Sparta chose to forget.",
+      "duration": 540,
+      "language_code": "en"
+    },
+    {
+      "id": "699f4a4d-aef9-4609-9647-f3400f9be6ca",
+      "story_id": "8e86d5de-f703-4f66-b922-de0eccb95e8d",
+      "title": "The Legion's March",
+      "order_no": 1,
+      "text": "The boots of the Ninth Legion struck the cobblestones of the Via Appia in perfect unison, five thousand men moving as one organism. Centurion Marcus Aurelius Crassus marched at the head of the Third Cohort, his vine-staff tucked under his arm, his eyes scanning the Italian countryside with the practiced vigilance of a decade-long veteran.\n\nRome lay three days behind them. Ahead, somewhere in the mountains of Hispania, a rebellion was brewing — or so the dispatches claimed. Marcus had learned to distrust dispatches. They were written by politicians, and politicians saw enemies everywhere except where enemies actually stood.\n\n'You're thinking too loudly again, Centurion,' muttered Quintus, his optio, marching one step behind and to the left. 'I can practically hear your thoughts echoing off your helmet.'\n\nMarcus allowed himself a thin smile. 'I'm thinking about the dispatches. Something doesn't add up. Why send an entire legion to suppress a tribal uprising that local auxiliaries could handle?'\n\nQuintus lowered his voice. 'Perhaps because it's not really about Hispania.' He paused. 'Have you noticed the new tribunes? None of them are from senatorial families. They're all equestrians — wealthy, ambitious equestrians with connections to the Praetorian Guard.'\n\nThe implication hung in the dusty air between them like a gladius waiting to fall.",
+      "duration": 450,
+      "language_code": "en"
+    },
+    {
+      "id": "6cdc341c-86e1-4f93-964c-a5bad7013801",
+      "story_id": "8e86d5de-f703-4f66-b922-de0eccb95e8d",
+      "title": "The Senator's Warning",
+      "order_no": 2,
+      "text": "They made camp at Capua, in the shadow of Vesuvius. The mountain was quiet tonight, but Marcus could never look at it without remembering the stories his grandfather told — of Spartacus, the gladiator who had made this volcano his fortress, who had shaken Rome to its foundations with an army of slaves.\n\nA messenger arrived after sunset, bearing a sealed letter with an unfamiliar sigil — a serpent coiled around a fasces. Inside, written in a hurried hand, were words that made Marcus's blood run cold:\n\n'Centurion — the legion marches to its own destruction. The rebellion in Hispania is a fiction, designed to draw loyal troops away from Rome. By the Ides, the Praetorian Guard will have chosen a new emperor. Burn this letter. Trust no one above the rank of centurion. May Fortuna protect you.'\n\nThere was no signature, but the quality of the parchment and the precision of the Latin suggested someone of senatorial rank. Marcus read it twice, committed it to memory, then held the letter over his lamp until it curled into ash.\n\n'Quintus,' he said, 'wake the other centurions. Quietly. We need to talk.'",
+      "duration": 390,
+      "language_code": "en"
+    },
+    {
+      "id": "275860e9-8649-413a-b1d2-3676f9997208",
+      "story_id": "6b328195-ce0f-4eb1-8fce-8a688d8383fb",
+      "title": "Clay and Destiny",
+      "order_no": 1,
+      "text": "In the great city of Uruk, where the ziggurat of Anu pierced the heavens and the walls built by legendary Gilgamesh stretched for six miles, a boy named Enki-dumu pressed his reed stylus into wet clay for the first time.\n\nHe was twelve years old, and he had been chosen — plucked from the streets of the potter's quarter by the temple priests, who had seen him scratching symbols in the mud with a stick. 'The gods have touched this one,' the high priest had declared. 'He sees patterns where others see only dirt.'\n\nThe eduba — the tablet house — was a hall of whispers and scratching sounds. Thirty boys sat cross-legged on reed mats, their faces screwed up in concentration as they copied lists of words: grain, sheep, beer, copper, slave. The language of commerce, which was, in those early days, the only language that mattered.\n\nBut Enki-dumu's stylus had a mind of its own. While the other boys copied inventories, his tablet filled with something different — a story. A tale of a shepherd who followed a star across the desert and found a garden where all the waters of the world began.\n\n'What is this?' demanded Master Shulgi, snatching the tablet from Enki-dumu's hands. The old scribe's eyes narrowed as he read, then widened. Then softened. He set the tablet down gently, as if it were made of something more precious than clay.\n\n'This,' he said quietly, 'is dangerous.'",
+      "duration": 480,
+      "language_code": "en"
+    },
+    {
+      "id": "310e546d-46aa-4acd-9009-5350e1cfa16e",
+      "story_id": "70a2b69a-acf6-446e-8c6d-a306335a1b65",
+      "title": "The Oracle Bones",
+      "order_no": 1,
+      "text": "The oracle bones crackled in the ceremonial fire, and Di Xin, the last king of the Shang Dynasty, leaned forward on his throne of bronze and jade, his eyes reflecting the flames with a fervor that had long since crossed the line from devotion to madness.\n\n'What do the bones say?' he demanded, his voice echoing through the ancestral hall. The walls were lined with bronze vessels — ding, gui, jue — each one representing a sacrifice to the ancestors, each one cast with the faces of taotie monsters whose empty eyes seemed to watch from every surface.\n\nBi Gan, the king's uncle and chief advisor, studied the pattern of cracks with growing dread. He had served three Shang kings in his sixty years, reading the will of heaven in fire and bone. But tonight, the ancestors were speaking clearly — more clearly than they had in generations.\n\n'Your Majesty,' Bi Gan began carefully, knowing that the wrong words could mean death, 'the ancestors are... troubled. They speak of a mandate — heaven's approval of the ruler — and they suggest...'\n\n'Suggest what?' Di Xin's hand moved to the hilt of his bronze sword. Beside him, his consort Daji smiled — a smile that courtiers had learned to fear more than any blade.\n\n'They suggest,' Bi Gan continued, 'that the mandate can be withdrawn.'",
+      "duration": 450,
+      "language_code": "en"
+    },
+    {
+      "id": "1da4dfea-a515-42f4-8f04-3cd1886a8281",
+      "story_id": "4b843d49-e61d-470d-b8d6-cfd0fbb2c74b",
+      "title": "The Observatory",
+      "order_no": 1,
+      "text": "Lady Six Sky climbed the steep steps of the great pyramid at Tikal, her white robes catching the predawn wind that swept across the jungle canopy. At the summit, the observatory awaited — a chamber aligned with impossible precision to the movements of Venus, Mars, and the Pleiades.\n\nShe was seventeen and already the most accomplished astronomer in the court of Jasaw Chan K'awiil, the divine king of Tikal. While other noble daughters learned weaving and pottery, she had memorized the Long Count calendar — all 5,125 years of it — and could predict eclipses with an accuracy that amazed even the elder priests.\n\nTonight, something was wrong with the sky. Venus, the great star they called Chak Ek', was not where it should be. Its position had shifted by a fraction — imperceptible to ordinary eyes, but to Six Sky, trained since childhood to read the heavens like a book, it was as alarming as a scream in the night.\n\nShe unrolled her bark-paper codex and began calculating, her fingers flying over the dot-and-bar numbers that her civilization had invented — the most sophisticated mathematical system in the ancient Americas, complete with the concept of zero, which the Europeans would not discover for another thousand years.\n\n'This cannot be right,' she whispered, checking her calculations a third time. But the numbers were clear: in exactly 260 days, something would happen that had not occurred in living memory.",
+      "duration": 480,
+      "language_code": "en"
+    },
+    {
+      "id": "9cfa0b7d-ca12-4fdb-ad53-e57f05715b38",
+      "story_id": "026c40d6-2b0c-48f7-949c-5f4e9f9fac5f",
+      "title": "The King's Word",
+      "order_no": 1,
+      "text": "Darius pressed the cylinder seal into the warm clay, leaving the impression of the winged Ahura Mazda hovering over a mounted archer — the symbol of the King of Kings, ruler of Persia, Media, Babylon, Egypt, and twenty-three other lands that stretched from the Indus to the Nile.\n\nThe message was for Leonidas, king of the Spartans. It contained two words, written in Greek, Aramaic, and Old Persian: 'Submit. Live.'\n\nPheidippides, the angareion — royal messenger — received the sealed tablet with trembling hands. He was the fastest runner in the empire's postal service, capable of covering the Royal Road's 1,677 miles in seven days, passing the message from station to station like a flame leaping from torch to torch.\n\nBut this message would not travel the Royal Road. This message required a single messenger, one who could look the Spartan king in the eye and convey not just words, but the full weight of Persian authority. Pheidippides would carry it alone, across mountains and seas, to the gates of Sparta.\n\n'You understand,' said the Great King, his voice soft as silk over steel, 'that the Spartans may kill the messenger.' In Persia, harming a messenger was the gravest of sins. In Sparta, they had different customs.\n\nPheidippides bowed low. 'I understand, Great King. But if my death can prevent a war, then it is a death worth dying.'",
+      "duration": 450,
+      "language_code": "en"
+    },
+    {
+      "id": "60748517-777b-40de-b976-9ea103e868a6",
+      "story_id": "bdbe0acc-7c25-4788-8a55-502785f6ee4d",
+      "title": "The Northman's Dream",
+      "order_no": 1,
+      "text": "The longship Ravnsvinge — Raven's Wing — cut through the grey waters of the North Sea like a blade through fog. At its prow, carved in the shape of a snarling dragon, Ragnar Sigurdsson stood watching the horizon with eyes the color of a winter sky.\n\nHe had dreamed again last night. Odin, the All-Father, had appeared to him in the form of a one-eyed raven, perching on the mast of his ship and speaking in riddles. 'Sail west,' the god had whispered. 'Beyond the edge of the map, beyond the sea-serpent's domain, there is a land green as Midgard's first morning. Find it, and your name will echo through the halls of time.'\n\nRagnar's crew of forty warriors — Norsemen from the fjords of Norway — pulled at their oars with steady rhythm, singing an old rowing song about Tyr's sacrifice and the binding of the great wolf Fenrir. They were hard men, scarred by raids on England and Francia, but loyal to their jarl unto death.\n\n'Where are we sailing, Ragnar?' asked Bjorn, his eldest son, a young man of eighteen winters who had already earned the name Ironside for his ferocity in battle.\n\nRagnar smiled — the smile of a man who had nothing left to lose and everything to discover. 'We sail to where the gods are young,' he said. 'We sail to the end of the world.'\n\nThe crew exchanged glances. Some gripped their Thor's hammer amulets. Others simply rowed harder. When Ragnar spoke of gods and destiny, you did not question — you followed.",
+      "duration": 480,
+      "language_code": "en"
+    }
+  ]
 }

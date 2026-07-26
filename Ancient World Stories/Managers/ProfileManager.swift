@@ -35,6 +35,10 @@ class ProfileManager: ObservableObject {
     }
 
     func checkPremiumStatus() async {
+        guard Purchases.isConfigured else {
+            print("⚠️ Skipping premium check — RevenueCat not configured yet")
+            return
+        }
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
             let hasPremium = customerInfo.entitlements["premium"]?.isActive == true

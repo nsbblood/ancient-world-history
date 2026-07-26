@@ -8,20 +8,6 @@
 import SwiftUI
 import MapKit
 
-// Helper function to extract region from MapCameraPosition
-private func extractRegionFromPosition(_ position: MapCameraPosition) -> MKCoordinateRegion? {
-    // Use Mirror to extract the associated value from the enum case
-    let mirror = Mirror(reflecting: position)
-
-    // Check if this is a region case and extract its value
-    if let child = mirror.children.first,
-       let region = child.value as? MKCoordinateRegion {
-        return region
-    }
-
-    return nil
-}
-
 struct ExploreView: View {
     @StateObject private var contentLoader = ContentLoader.shared
     @ObservedObject private var languageManager = LanguageManager.shared
@@ -29,6 +15,10 @@ struct ExploreView: View {
     @State private var showStoriesSheet = false
     @State private var timelineYear: Double = -500 // Start at 500 BC to show more civilizations
     @State private var showTimeTravel = false
+    @State private var currentRegion = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 35, longitude: 25),
+        span: MKCoordinateSpan(latitudeDelta: 60, longitudeDelta: 80)
+    )
     @State private var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 35, longitude: 25),
@@ -84,6 +74,9 @@ struct ExploreView: View {
                 MapScaleView()
                 MapPitchToggle()
             }
+            .onMapCameraChange(frequency: .onEnd) { context in
+                currentRegion = context.region
+            }
             .ignoresSafeArea()
             .overlay(alignment: .topTrailing) {
                 // Zoom controls
@@ -122,7 +115,8 @@ struct ExploreView: View {
                     .padding(.horizontal, 20)
 
                     Button {
-                        selectedCivilization = contentLoader.filteredCivilizations.randomElement()
+                        guard let randomCiv = contentLoader.filteredCivilizations.randomElement() else { return }
+                        selectedCivilization = randomCiv
                         showTimeTravel = true
                     } label: {
                         HStack(spacing: 8) {
@@ -168,46 +162,29 @@ struct ExploreView: View {
 
     // MARK: - Zoom Functions
     private func zoomIn() {
-        // Get current region, if available
-        guard let region = getCurrentRegion() else { return }
-
         withAnimation(.easeInOut(duration: 0.3)) {
             let newSpan = MKCoordinateSpan(
-                latitudeDelta: max(region.span.latitudeDelta * 0.5, 5),
-                longitudeDelta: max(region.span.longitudeDelta * 0.5, 5)
+                latitudeDelta: max(currentRegion.span.latitudeDelta * 0.5, 5),
+                longitudeDelta: max(currentRegion.span.longitudeDelta * 0.5, 5)
             )
-            cameraPosition = .region(
-                MKCoordinateRegion(
-                    center: region.center,
-                    span: newSpan
-                )
-            )
+            let newRegion = MKCoordinateRegion(center: currentRegion.center, span: newSpan)
+            currentRegion = newRegion
+            cameraPosition = .region(newRegion)
             mapZoomLevel = min(mapZoomLevel * 2, 10)
         }
     }
 
     private func zoomOut() {
-        // Get current region, if available
-        guard let region = getCurrentRegion() else { return }
-
         withAnimation(.easeInOut(duration: 0.3)) {
             let newSpan = MKCoordinateSpan(
-                latitudeDelta: min(region.span.latitudeDelta * 2, 180),
-                longitudeDelta: min(region.span.longitudeDelta * 2, 180)
+                latitudeDelta: min(currentRegion.span.latitudeDelta * 2, 180),
+                longitudeDelta: min(currentRegion.span.longitudeDelta * 2, 180)
             )
-            cameraPosition = .region(
-                MKCoordinateRegion(
-                    center: region.center,
-                    span: newSpan
-                )
-            )
+            let newRegion = MKCoordinateRegion(center: currentRegion.center, span: newSpan)
+            currentRegion = newRegion
+            cameraPosition = .region(newRegion)
             mapZoomLevel = max(mapZoomLevel * 0.5, 0.1)
         }
-    }
-
-    // Helper function to get current region from camera position
-    private func getCurrentRegion() -> MKCoordinateRegion? {
-        return extractRegionFromPosition(cameraPosition)
     }
 }
 

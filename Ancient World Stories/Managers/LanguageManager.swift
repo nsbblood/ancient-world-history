@@ -114,9 +114,7 @@ class LanguageManager: ObservableObject {
         UserDefaults.standard.synchronize()
         print("🌍 Language changed to: \(language.displayName)")
 
-        // Clear cache and reload content with new language
-        ContentLoader.shared.clearPersistentCache()
-        ContentLoader.shared.loadInitialData()
+        ContentLoader.shared.reload()
     }
 
     var currentLanguageCode: String {

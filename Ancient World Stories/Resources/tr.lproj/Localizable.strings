@@ -27,6 +27,11 @@
 "home.explore_chapters" = "Bölümleri Keşfet";
 "home.loading_stories" = "Hikayeler yükleniyor...";
 "home.show_different" = "Farklı bölümler göster";
+"home.collections" = "Koleksiyonlar";
+
+// MARK: - Reading Path
+"reading_path.title" = "Kişisel Okuma Yolu";
+"reading_path.subtitle" = "Tarihin derinliklerinde adım adım ilerle.";
 
 // MARK: - Explore View
 "explore.timeline" = "Zaman Çizelgesi";

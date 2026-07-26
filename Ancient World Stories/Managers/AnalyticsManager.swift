@@ -143,4 +143,8 @@ enum AnalyticsEvent: String {
     // MARK: - Content Refresh
     case contentRefreshed = "content_refreshed"
     case randomChaptersLoaded = "random_chapters_loaded"
+
+    // MARK: - Features
+    case featureUsed = "feature_used"
+    case shareQuoteTapped = "share_quote_tapped"
 }

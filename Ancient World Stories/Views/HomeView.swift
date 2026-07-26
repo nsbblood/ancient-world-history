@@ -50,10 +50,8 @@ struct HomeView: View {
                                     .foregroundColor(.secondaryText)
                                     .multilineTextAlignment(.center)
                                 Button("retry".localized) {
-                                    Task {
-                                        content.loadInitialData()
-                                        loadRandomChapters()
-                                    }
+                                    content.reload()
+                                    loadRandomChapters()
                                 }
                                 .font(.serifBody())
                                 .foregroundColor(.white)
@@ -148,7 +146,7 @@ struct HomeView: View {
 
                             if !content.collections.isEmpty {
                                 VStack(alignment: .leading, spacing: 16) {
-                                    Text("Collections") // Hardcoded fallback if missing localization
+                                    Text("home.collections".localized)
                                         .font(.serifTitle2())
                                         .foregroundColor(.primaryText)
                                         .padding(.horizontal)

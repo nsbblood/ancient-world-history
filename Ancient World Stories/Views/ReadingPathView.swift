@@ -32,11 +32,11 @@ struct ReadingPathView: View {
                                 .font(.system(size: 40))
                                 .foregroundColor(.appAccent)
                             
-                            Text("Kişisel Okuma Yolu")
+                            Text("reading_path.title".localized)
                                 .font(.system(size: 28, weight: .bold, design: .serif))
                                 .foregroundColor(.primaryText)
                             
-                            Text("Tarihin derinliklerinde adım adım ilerle.")
+                            Text("reading_path.subtitle".localized)
                                 .font(.system(size: 16, design: .serif))
                                 .foregroundColor(.secondaryText)
                                 .multilineTextAlignment(.center)

@@ -27,6 +27,13 @@ class ContentLoader: ObservableObject {
 
     private init() {}
 
+    func clearPersistentCache() {
+        civilizations = []
+        stories = []
+        chapters = []
+        hasInitialized = false
+    }
+
     // MARK: - Bundle-First Loading
 
     func loadInitialData() {
@@ -42,6 +49,12 @@ class ContentLoader: ObservableObject {
         }
     }
 
+    /// Force a fresh load (used after failures / language changes).
+    func reload() {
+        clearPersistentCache()
+        loadInitialData()
+    }
+
     private func loadFromBundle() async {
         isLoading = true
         error = nil
@@ -49,7 +62,7 @@ class ContentLoader: ObservableObject {
         guard let bundleURL = Bundle.main.url(forResource: bundleFileName, withExtension: "json") else {
             print("⚠️ Bundle not found, falling back to local JSON")
             loadFromLocalJSON()
-            isLoading = false
+            finalizeLoad()
             return
         }
 
@@ -74,6 +87,14 @@ class ContentLoader: ObservableObject {
             loadFromLocalJSON()
         }
 
+        finalizeLoad()
+    }
+
+    private func finalizeLoad() {
+        if civilizations.isEmpty || chapters.isEmpty {
+            error = error ?? "No stories found in the app bundle. Please reinstall the app."
+            hasInitialized = false
+        }
         isLoading = false
     }
 
@@ -129,25 +150,27 @@ class ContentLoader: ObservableObject {
     }
 
     func getDailyChapter() -> Chapter? {
-        guard !chapters.isEmpty else { return nil }
-        
+        // Daily story is marketed as free — only pick first chapters so free users aren't locked out
+        let freeChapters = chapters.filter { $0.orderNo == 1 }
+        let pool = freeChapters.isEmpty ? chapters : freeChapters
+        guard !pool.isEmpty else { return nil }
+
         let now = Date()
         let calendar = Calendar.current
         let dayOfYear = calendar.ordinality(of: .day, in: .year, for: now) ?? 1
         let year = calendar.component(.year, from: now)
-        
-        // Use a combination of year and dayOfYear to pick a consistent daily chapter
+
         let seed = year * 1000 + dayOfYear
-        // Make sure it consistently picks the same chapter, but not always chapter 1
-        // Seed is deterministic per day
-        let index = seed % chapters.count
-        return chapters[index]
+        let index = seed % pool.count
+        return pool[index]
     }
 
     var collections: [StoryCollection] {
+        // Stable ordering — reshuffling on every access made collections jump around in the UI
+        let availableStories = stories.sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+
         var cols: [StoryCollection] = []
-        let availableStories = stories.shuffled() // In a real app, this would be curated or static
-        
+
         if availableStories.count >= 3 {
             cols.append(StoryCollection(
                 id: "epic_battles",
@@ -155,10 +178,10 @@ class ContentLoader: ObservableObject {
                 subtitle: "Tales of conquest and glory",
                 iconName: "shield.fill",
                 colorHex: "E63946",
-                storyIds: availableStories.prefix(3).map { $0.id }
+                storyIds: Array(availableStories.prefix(3).map(\.id))
             ))
         }
-        
+
         if availableStories.count >= 6 {
             cols.append(StoryCollection(
                 id: "mythology",
@@ -166,10 +189,10 @@ class ContentLoader: ObservableObject {
                 subtitle: "Gods, monsters, and heroes",
                 iconName: "bolt.fill",
                 colorHex: "F4A261",
-                storyIds: availableStories.dropFirst(3).prefix(3).map { $0.id }
+                storyIds: Array(availableStories.dropFirst(3).prefix(3).map(\.id))
             ))
         }
-        
+
         if availableStories.count >= 9 {
             cols.append(StoryCollection(
                 id: "great_leaders",
@@ -177,10 +200,10 @@ class ContentLoader: ObservableObject {
                 subtitle: "Kings, Queens, and Pharaohs",
                 iconName: "crown.fill",
                 colorHex: "2A9D8F",
-                storyIds: availableStories.dropFirst(6).prefix(3).map { $0.id }
+                storyIds: Array(availableStories.dropFirst(6).prefix(3).map(\.id))
             ))
         }
-        
+
         return cols
     }
 
@@ -192,12 +215,12 @@ class ContentLoader: ObservableObject {
             .filter { storyCount(for: $0.id) > 0 }
 
         if !civsInUserLang.isEmpty {
-            return civsInUserLang.sorted { $0.eraStart < $1.eraStart }
+            return civsInUserLang.sorted { $0.startYear < $1.startYear }
         } else {
             return civilizations
                 .filter { $0.languageCode == "en" }
                 .filter { storyCount(for: $0.id) > 0 }
-                .sorted { $0.eraStart < $1.eraStart }
+                .sorted { $0.startYear < $1.startYear }
         }
     }
 
