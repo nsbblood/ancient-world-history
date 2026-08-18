@@ -88,6 +88,12 @@ iOSInjectionProject/
 # CRITICAL: Do not commit sensitive API keys!
 Configuration.swift
 Ancient World Stories/Configuration.swift
+.env
+.env.local
+!.env.example
+
+# Uretilen icerik + ham API yanitlari (generate_content.py ciktisi)
+content/
 
 # macOS
 .DS_Store
