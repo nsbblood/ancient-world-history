@@ -36,7 +36,7 @@ struct StoryCard: View {
             HStack {
                 Image(systemName: "book.closed")
                     .font(.system(size: 12))
-                Text("\(story.chaptersCount) chapters")
+                Text("stories.chapters_count".localized(with: story.chaptersCount))
                     .font(.serifCaption2())
             }
             .foregroundColor(.secondaryText)

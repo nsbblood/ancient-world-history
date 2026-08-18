@@ -16,6 +16,7 @@ struct ChapterReaderView: View {
     @State private var currentChapter: Chapter
     @State private var hasMarkedAsRead = false
     @State private var isCinematicMode = false
+    @State private var showPaywall = false
 
     init(chapter: Chapter, story: Story, civilization: Civilization, allChapters: [Chapter]) {
         self.initialChapter = chapter
@@ -41,6 +42,11 @@ struct ChapterReaderView: View {
 
     var isFavorite: Bool {
         favoritesManager.isFavorite(chapterId: currentChapter.id)
+    }
+
+    /// Same rule as the list screens: chapter 1 is free, everything else needs premium.
+    private func isLocked(_ chapter: Chapter) -> Bool {
+        chapter.orderNo > 1 && !profileManager.isPremium
     }
 
     var body: some View {
@@ -75,7 +81,7 @@ struct ChapterReaderView: View {
                                         Text(currentChapter.formattedDuration)
                                     }
                                     Text("•")
-                                    Text("Chapter \(currentChapter.orderNo)")
+                                    Text("reader.chapter".localized(with: currentChapter.orderNo))
                                 }
                                 .font(.serifCaption())
                                 .foregroundColor(isCinematicMode ? .white.opacity(0.7) : .appText.opacity(0.7))
@@ -100,7 +106,7 @@ struct ChapterReaderView: View {
                             }) {
                                 HStack(spacing: 8) {
                                     Image(systemName: "square.and.arrow.up")
-                                    Text("Share Quote")
+                                    Text("reader.share_quote".localized)
                                 }
                                 .font(.serifHeadline())
                                 .foregroundColor(.white)
@@ -132,20 +138,24 @@ struct ChapterReaderView: View {
                                             "previous_chapter_id": previous.id.uuidString,
                                             "previous_chapter_title": previous.title
                                         ])
-                                        navigateToPreviousChapter(previous)
+                                        if isLocked(previous) {
+                                            showPaywall = true
+                                        } else {
+                                            navigateToPreviousChapter(previous)
+                                        }
                                     } label: {
                                         HStack {
-                                            Image(systemName: "chevron.left")
+                                            Image(systemName: isLocked(previous) ? "lock.fill" : "chevron.left")
                                                 .foregroundColor(.accentColor)
 
                                             VStack(alignment: .leading, spacing: 2) {
-                                                Text("Previous Chapter")
+                                                Text("reader.previous_chapter".localized)
                                                     .font(.serifCaption())
                                                     .foregroundColor(.appText.opacity(0.7))
 
                                                 Text(previous.title)
                                                     .font(.serifBody())
-                                                    .foregroundColor(.appText)
+                                                    .foregroundColor(isLocked(previous) ? .appText.opacity(0.5) : .appText)
                                                     .lineLimit(1)
                                             }
 
@@ -170,23 +180,27 @@ struct ChapterReaderView: View {
                                             "next_chapter_id": next.id.uuidString,
                                             "next_chapter_title": next.title
                                         ])
-                                        navigateToNextChapter(next)
+                                        if isLocked(next) {
+                                            showPaywall = true
+                                        } else {
+                                            navigateToNextChapter(next)
+                                        }
                                     } label: {
                                         HStack {
                                             Spacer()
 
                                             VStack(alignment: .trailing, spacing: 2) {
-                                                Text("Next Chapter")
+                                                Text("reader.next_chapter".localized)
                                                     .font(.serifCaption())
                                                     .foregroundColor(.appText.opacity(0.7))
 
                                                 Text(next.title)
                                                     .font(.serifBody())
-                                                    .foregroundColor(.appText)
+                                                    .foregroundColor(isLocked(next) ? .appText.opacity(0.5) : .appText)
                                                     .lineLimit(1)
                                             }
 
-                                            Image(systemName: "chevron.right")
+                                            Image(systemName: isLocked(next) ? "lock.fill" : "chevron.right")
                                                 .foregroundColor(.accentColor)
                                         }
                                         .padding(.horizontal, 12)
@@ -231,7 +245,7 @@ struct ChapterReaderView: View {
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
-                            Text("Back")
+                            Text("reader.back".localized)
                         }
                         .font(.serifBody())
                         .foregroundColor(.accentColor)
@@ -301,6 +315,9 @@ struct ChapterReaderView: View {
         }
         .onDisappear {
             audioManager.stop()
+        }
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView(isPresented: $showPaywall)
         }
         }
     }

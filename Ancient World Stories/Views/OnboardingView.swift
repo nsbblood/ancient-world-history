@@ -119,7 +119,7 @@ struct OnboardingView: View {
                             showPaywall = true
                         }
                     }) {
-                        Text("Skip")
+                        Text("onboarding.skip".localized)
                             .font(.system(size: 14, weight: .medium, design: .serif))
                             .foregroundColor(.white.opacity(0.4))
                     }

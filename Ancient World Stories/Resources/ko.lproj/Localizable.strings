@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "즐겨찾는 챕터";
 
 // MARK: - Tab Bar
-"tab.startseite" = "홈";
 "tab.episodes" = "에피소드";
-"tab.erkunden" = "탐험";
-"tab.profil" = "프로필";
+
+// MARK: - Added
+"home.daily_story" = "오늘의 이야기";
+"home.collections" = "컬렉션";
+"reading_path.title" = "나만의 읽기 여정";
+"reading_path.subtitle" = "한 장씩, 역사를 걸어가세요.";
+"home.free_today" = "오늘 무료";
+"premium" = "프리미엄";
+"reader.previous_chapter" = "이전 장";
+"reader.next_chapter" = "다음 장";
+"reader.share_quote" = "인용문 공유";
+"reader.back" = "뒤로";
+"civilizations.title" = "고대 문명 탐험";
+"civilizations.stories" = "이야기";
+"stories.chapters_count" = "%d개의 장";
+"onboarding.skip" = "건너뛰기";

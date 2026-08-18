@@ -13,6 +13,7 @@ struct AncientWorldStoriesApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @StateObject private var contentLoader = ContentLoader.shared
     @ObservedObject private var profileManager = ProfileManager.shared
+    @Environment(\.scenePhase) private var scenePhase
     @State private var selectedTab = 0
 
     init() {
@@ -45,6 +46,12 @@ struct AncientWorldStoriesApp: App {
                 profileManager.loadInitialDataIfNeeded()
                 contentLoader.loadInitialData()
                 await profileManager.checkPremiumStatus()
+                profileManager.startObservingEntitlements()
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                // A subscription can lapse or be cancelled while the app is backgrounded.
+                guard newPhase == .active else { return }
+                Task { await profileManager.checkPremiumStatus() }
             }
         }
     }

@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "Capítulos favoritos";
 
 // MARK: - Tab Bar
-"tab.startseite" = "Inicio";
 "tab.episodes" = "Episodios";
-"tab.erkunden" = "Explorar";
-"tab.profil" = "Perfil";
+
+// MARK: - Added
+"home.daily_story" = "Historia del día";
+"home.collections" = "Colecciones";
+"reading_path.title" = "Ruta de lectura personal";
+"reading_path.subtitle" = "Recorre la historia, un capítulo a la vez.";
+"home.free_today" = "Gratis hoy";
+"premium" = "Premium";
+"reader.previous_chapter" = "Capítulo anterior";
+"reader.next_chapter" = "Capítulo siguiente";
+"reader.share_quote" = "Compartir cita";
+"reader.back" = "Atrás";
+"civilizations.title" = "Explora las civilizaciones antiguas";
+"civilizations.stories" = "historias";
+"stories.chapters_count" = "%d capítulos";
+"onboarding.skip" = "Omitir";

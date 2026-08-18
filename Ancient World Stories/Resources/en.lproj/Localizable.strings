@@ -126,7 +126,17 @@
 "profile.favorite_chapters" = "Favorite Chapters";
 
 // MARK: - Tab Bar
-"tab.home" = "Home";
 "tab.episodes" = "Episodes";
-"tab.explore" = "Explore";
-"tab.profile" = "Profile";
+
+// MARK: - Added
+"home.daily_story" = "Daily Story";
+"home.free_today" = "Free Today";
+"premium" = "Premium";
+"reader.previous_chapter" = "Previous Chapter";
+"reader.next_chapter" = "Next Chapter";
+"reader.share_quote" = "Share Quote";
+"reader.back" = "Back";
+"civilizations.title" = "Explore Ancient Civilizations";
+"civilizations.stories" = "stories";
+"stories.chapters_count" = "%d chapters";
+"onboarding.skip" = "Skip";

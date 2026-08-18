@@ -126,7 +126,17 @@
 "profile.favorite_chapters" = "Favori Bölümler";
 
 // MARK: - Tab Bar
-"tab.startseite" = "Ana Sayfa";
 "tab.episodes" = "Bölümler";
-"tab.erkunden" = "Keşfet";
-"tab.profil" = "Profil";
+
+// MARK: - Added
+"home.daily_story" = "Günün Hikayesi";
+"home.free_today" = "Bugün Ücretsiz";
+"premium" = "Premium";
+"reader.previous_chapter" = "Önceki Bölüm";
+"reader.next_chapter" = "Sonraki Bölüm";
+"reader.share_quote" = "Alıntıyı Paylaş";
+"reader.back" = "Geri";
+"civilizations.title" = "Antik Medeniyetleri Keşfet";
+"civilizations.stories" = "hikaye";
+"stories.chapters_count" = "%d bölüm";
+"onboarding.skip" = "Atla";

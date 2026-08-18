@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "お気に入りのチャプター";
 
 // MARK: - Tab Bar
-"tab.startseite" = "ホーム";
 "tab.episodes" = "エピソード";
-"tab.erkunden" = "探索";
-"tab.profil" = "プロフィール";
+
+// MARK: - Added
+"home.daily_story" = "今日の物語";
+"home.collections" = "コレクション";
+"reading_path.title" = "あなたの読書の道";
+"reading_path.subtitle" = "一章ずつ、歴史を歩もう。";
+"home.free_today" = "今日は無料";
+"premium" = "プレミアム";
+"reader.previous_chapter" = "前の章";
+"reader.next_chapter" = "次の章";
+"reader.share_quote" = "引用を共有";
+"reader.back" = "戻る";
+"civilizations.title" = "古代文明を探索";
+"civilizations.stories" = "物語";
+"stories.chapters_count" = "%d章";
+"onboarding.skip" = "スキップ";

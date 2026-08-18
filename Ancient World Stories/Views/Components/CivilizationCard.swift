@@ -28,7 +28,7 @@ struct CivilizationCard: View {
                     Text("\(storyCount)")
                         .font(.serifTitle2())
                         .foregroundColor(.accentColor)
-                    Text("stories")
+                    Text("civilizations.stories".localized)
                         .font(.serifCaption2())
                         .foregroundColor(.secondaryText)
                 }

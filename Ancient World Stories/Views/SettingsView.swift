@@ -12,6 +12,13 @@ struct SettingsView: View {
     @ObservedObject private var profileManager = ProfileManager.shared
     @ObservedObject private var languageManager = LanguageManager.shared
 
+    private var appVersion: String {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let build = info?["CFBundleVersion"] as? String ?? "1"
+        return "\(short) (\(build))"
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -94,7 +101,7 @@ struct SettingsView: View {
 
                             Spacer()
 
-                            Text("1.0.0")
+                            Text(appVersion)
                                 .font(.serifBody())
                                 .foregroundColor(.secondaryText)
                         }

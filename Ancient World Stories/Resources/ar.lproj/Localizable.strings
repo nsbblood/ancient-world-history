@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "الفصول المفضلة";
 
 // MARK: - Tab Bar
-"tab.startseite" = "الرئيسية";
 "tab.episodes" = "الحلقات";
-"tab.erkunden" = "استكشف";
-"tab.profil" = "الملف الشخصي";
+
+// MARK: - Added
+"home.daily_story" = "قصة اليوم";
+"home.collections" = "المجموعات";
+"reading_path.title" = "مسار القراءة الشخصي";
+"reading_path.subtitle" = "تجوّل عبر التاريخ، فصلاً بعد فصل.";
+"home.free_today" = "مجاني اليوم";
+"premium" = "بريميوم";
+"reader.previous_chapter" = "الفصل السابق";
+"reader.next_chapter" = "الفصل التالي";
+"reader.share_quote" = "مشاركة الاقتباس";
+"reader.back" = "رجوع";
+"civilizations.title" = "استكشف الحضارات القديمة";
+"civilizations.stories" = "قصص";
+"stories.chapters_count" = "%d فصل";
+"onboarding.skip" = "تخطٍ";

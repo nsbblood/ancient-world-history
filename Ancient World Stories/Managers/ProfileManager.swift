@@ -20,6 +20,7 @@ class ProfileManager: ObservableObject {
     @Published var profileImage: UIImage?
     private var hasLoadedData = false
     private var hasLoadedImage = false
+    private var entitlementTask: Task<Void, Never>?
 
     private init() {
         // Don't load data in init - wait for explicit call to improve app startup time
@@ -45,6 +46,18 @@ class ProfileManager: ObservableObject {
             self.isPremium = hasPremium
         } catch {
             print("❌ Error checking premium status: \(error)")
+        }
+    }
+
+    /// `isPremium` is cached in AppStorage so the UI can render instantly, which means it goes
+    /// stale when a subscription is cancelled, expires or is renewed while the app is running.
+    /// RevenueCat's customer info stream pushes every entitlement change, so mirror it here.
+    func startObservingEntitlements() {
+        guard entitlementTask == nil, Purchases.isConfigured else { return }
+        entitlementTask = Task { [weak self] in
+            for await customerInfo in Purchases.shared.customerInfoStream {
+                self?.isPremium = customerInfo.entitlements["premium"]?.isActive == true
+            }
         }
     }
 
@@ -147,12 +160,6 @@ class ProfileManager: ObservableObject {
         guard !chapters.isEmpty else { return 0 }
         let readCount = chapters.filter { readChapterIds.contains($0.id) }.count
         return Double(readCount) / Double(chapters.count)
-    }
-    
-    func canAccessContent() -> Bool {
-        if isPremium { return true }
-        let uniqueStoriesRead = Set(ContentLoader.shared.chapters.filter { readChapterIds.contains($0.id) }.map { $0.storyId })
-        return uniqueStoriesRead.count < 3
     }
     
     var currentVoice: VoiceType {

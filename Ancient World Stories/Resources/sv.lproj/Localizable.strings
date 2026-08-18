@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "Favoritkapitel";
 
 // MARK: - Tab Bar
-"tab.startseite" = "Hem";
 "tab.episodes" = "Avsnitt";
-"tab.erkunden" = "Utforska";
-"tab.profil" = "Profil";
+
+// MARK: - Added
+"home.daily_story" = "Dagens berättelse";
+"home.collections" = "Samlingar";
+"reading_path.title" = "Personlig läsväg";
+"reading_path.subtitle" = "Vandra genom historien, ett kapitel i taget.";
+"home.free_today" = "Gratis idag";
+"premium" = "Premium";
+"reader.previous_chapter" = "Föregående kapitel";
+"reader.next_chapter" = "Nästa kapitel";
+"reader.share_quote" = "Dela citat";
+"reader.back" = "Tillbaka";
+"civilizations.title" = "Utforska forntida civilisationer";
+"civilizations.stories" = "berättelser";
+"stories.chapters_count" = "%d kapitel";
+"onboarding.skip" = "Hoppa över";

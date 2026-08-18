@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "Suosikkiluvut";
 
 // MARK: - Tab Bar
-"tab.startseite" = "Koti";
 "tab.episodes" = "Jaksot";
-"tab.erkunden" = "Tutkia";
-"tab.profil" = "Profiili";
+
+// MARK: - Added
+"home.daily_story" = "Päivän tarina";
+"home.collections" = "Kokoelmat";
+"reading_path.title" = "Oma lukupolku";
+"reading_path.subtitle" = "Kulje historian halki luku kerrallaan.";
+"home.free_today" = "Tänään ilmaiseksi";
+"premium" = "Premium";
+"reader.previous_chapter" = "Edellinen luku";
+"reader.next_chapter" = "Seuraava luku";
+"reader.share_quote" = "Jaa sitaatti";
+"reader.back" = "Takaisin";
+"civilizations.title" = "Tutki muinaisia sivilisaatioita";
+"civilizations.stories" = "tarinaa";
+"stories.chapters_count" = "%d lukua";
+"onboarding.skip" = "Ohita";

@@ -12,7 +12,7 @@ struct CivilizationsView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
-                        Text("Explore Ancient Civilizations")
+                        Text("civilizations.title".localized)
                             .font(.serifTitle())
                             .foregroundColor(.primaryText)
                             .padding(.horizontal)

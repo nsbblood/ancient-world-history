@@ -98,7 +98,7 @@ struct HomeView: View {
                                                 Spacer()
                                                 HStack(spacing: 4) {
                                                     Image(systemName: "gift.fill")
-                                                    Text("Free Today")
+                                                    Text("home.free_today".localized)
                                                 }
                                                 .font(.caption.bold())
                                                 .foregroundColor(.white)
@@ -121,7 +121,7 @@ struct HomeView: View {
                                                 Image(systemName: "clock")
                                                     .font(.system(size: 12))
                                                 Text(daily.formattedDuration)
-                                                Text("• Chapter \(daily.orderNo)")
+                                                Text("• " + "reader.chapter".localized(with: daily.orderNo))
                                             }
                                             .font(.serifCaption2())
                                             .foregroundColor(.white.opacity(0.8))
@@ -199,9 +199,9 @@ struct HomeView: View {
                             } label: {
                                 HStack(spacing: 16) {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("Kişisel Okuma Yolu")
+                                        Text("reading_path.title".localized)
                                             .font(.serifHeadline())
-                                        Text("Tarihsel serüvenine devam et")
+                                        Text("reading_path.subtitle".localized)
                                             .font(.serifCaption())
                                     }
                                     .foregroundColor(.white)
@@ -264,7 +264,7 @@ struct HomeView: View {
                                                         HStack(spacing: 4) {
                                                             Image(systemName: "crown.fill")
                                                                 .font(.system(size: 12))
-                                                            Text("Premium")
+                                                            Text("premium".localized)
                                                                 .font(.serifCaption2())
                                                         }
                                                         .foregroundColor(.appAccent)
@@ -288,7 +288,7 @@ struct HomeView: View {
                                                     Image(systemName: "clock")
                                                         .font(.system(size: 12))
                                                     Text(chapter.formattedDuration)
-                                                    Text("• Chapter \(chapter.orderNo)")
+                                                    Text("• " + "reader.chapter".localized(with: chapter.orderNo))
 
                                                     if isLocked {
                                                         Spacer()

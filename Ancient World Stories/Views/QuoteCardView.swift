@@ -43,7 +43,7 @@ struct QuoteCardView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "sparkles")
                         .foregroundColor(.orange)
-                    Text("Ancient World Stories")
+                    Text("app.title".localized)
                         .font(.system(size: 14, weight: .bold, design: .serif))
                         .foregroundColor(.white.opacity(0.7))
                         .tracking(1.5)

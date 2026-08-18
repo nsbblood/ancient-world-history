@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "Favoriete hoofdstukken";
 
 // MARK: - Tab Bar
-"tab.startseite" = "Start";
 "tab.episodes" = "Afleveringen";
-"tab.erkunden" = "Verkennen";
-"tab.profil" = "Profiel";
+
+// MARK: - Added
+"home.daily_story" = "Verhaal van de dag";
+"home.collections" = "Collecties";
+"reading_path.title" = "Persoonlijk leespad";
+"reading_path.subtitle" = "Stap door de geschiedenis, hoofdstuk voor hoofdstuk.";
+"home.free_today" = "Vandaag gratis";
+"premium" = "Premium";
+"reader.previous_chapter" = "Vorig hoofdstuk";
+"reader.next_chapter" = "Volgend hoofdstuk";
+"reader.share_quote" = "Citaat delen";
+"reader.back" = "Terug";
+"civilizations.title" = "Ontdek oude beschavingen";
+"civilizations.stories" = "verhalen";
+"stories.chapters_count" = "%d hoofdstukken";
+"onboarding.skip" = "Overslaan";

@@ -121,7 +121,20 @@
 "profile.favorite_chapters" = "Capitoli preferiti";
 
 // MARK: - Tab Bar
-"tab.startseite" = "Home";
 "tab.episodes" = "Episodi";
-"tab.erkunden" = "Esplora";
-"tab.profil" = "Profilo";
+
+// MARK: - Added
+"home.daily_story" = "Storia del giorno";
+"home.collections" = "Collezioni";
+"reading_path.title" = "Percorso di lettura personale";
+"reading_path.subtitle" = "Attraversa la storia, un capitolo alla volta.";
+"home.free_today" = "Gratis oggi";
+"premium" = "Premium";
+"reader.previous_chapter" = "Capitolo precedente";
+"reader.next_chapter" = "Capitolo successivo";
+"reader.share_quote" = "Condividi la citazione";
+"reader.back" = "Indietro";
+"civilizations.title" = "Esplora le civiltà antiche";
+"civilizations.stories" = "storie";
+"stories.chapters_count" = "%d capitoli";
+"onboarding.skip" = "Salta";
